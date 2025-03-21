@@ -1,0 +1,97 @@
+/* estilo de barra de indicadores de contraseña segura */
+.switch {
+    font-size: 17px;
+    position: relative;
+    display: inline-block;
+    width: 3.5em;
+    height: 2em;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #9fccfa;
+    border-radius: 50px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2em;
+    width: 2em;
+    inset: 0;
+    background-color: white;
+    border-radius: 50px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.switch input:checked+.slider {
+    background: #0974f1;
+}
+
+.switch input:focus+.slider {
+    box-shadow: 0 0 1px #0974f1;
+}
+
+.switch input:checked+.slider:before {
+    transform: translateX(1.6em);
+}
+
+.progress {
+    height: 10px;
+}
+
+.weak {
+    width: 33%;
+    background-color: red;
+}
+
+.medium {
+    width: 66%;
+    background-color: orange;
+}
+
+.strong {
+    width: 100%;
+    background-color: green;
+}
+
+
+.btn-password-eye {
+    color: #000;
+    opacity: 0.5;
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 4px;
+    top: 30px;
+    cursor: pointer;
+}
+
+.btn-password-eye:hover {
+    opacity: 1;
+}
+
+/* estilo de botones de iconos */
+.btn-icon {
+    opacity: 0.5;
+    font-size: 30px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.btn-icon:hover {
+    opacity: 1;
+}
