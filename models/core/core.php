@@ -10,9 +10,14 @@
   define('IMG','views/imagenes/');
 
   define('DB_HOST', 'localhost');
+  define('DB_USER', 'root');
+  define('DB_PASS', '');
+  define('DB_NAME', 'db_template');
+  
+  /*define('DB_HOST', 'localhost');
   define('DB_USER', 'contador_system');
   define('DB_PASS', '%_OPVA-UzWS&');
-  define('DB_NAME', 'contador_mycom');
+  define('DB_NAME', 'contador_mycom');*/
 
   /*
   define('CORREO','pruebas@antaudacity.com');
@@ -39,6 +44,7 @@
       define('MY_REGISTRO',$_MESES[$_usuario[$_SESSION['user_id']]['mreg']].' , '.$_usuario[$_SESSION['user_id']]['yreg']);
       define('USER_NAME',explode(" ",$_usuario[$_SESSION['user_id']]['nombre'])[0].' '.$_usuario[$_SESSION['user_id']]['apellido_p']);
       define('USER_TYPE',$_usuario[$_SESSION['user_id']]['c_tipo_usuario']);
+      define('USER_TYPE_DESC',$_usuario[$_SESSION['user_id']]['DTIPOU']);
 
       if($_usuario[$_SESSION['user_id']]['dir_foto'] != ""){
         define('USER_PHOTO','views/images/profile/'.$_usuario[$_SESSION['user_id']]['DIR_FOTO']);

@@ -1,7 +1,7 @@
 
 <?php
 
-   $qMenu = 'SELECT m.c_modulo,m.nivel1,m.nivel2,m.nivel3,m.tipo,m.titulo,m.vinculo,m.icono,m.dir,m.keywords,IF(u.id='.$_SESSION["user_id"].' or m.nivel1=0 or tipo = "MEN", 1,0)AS permiso
+   /*$qMenu = 'SELECT m.c_modulo,m.nivel1,m.nivel2,m.nivel3,m.tipo,m.titulo,m.vinculo,m.icono,m.dir,m.keywords,IF(u.id='.$_SESSION["user_id"].' or m.nivel1=0 or tipo = "MEN", 1,0)AS permiso
                FROM
                    menu AS m left JOIN
                    menu_permission as p on m.c_modulo=p.c_modulo left JOIN
@@ -10,7 +10,13 @@
                WHERE m.activo = 1
                GROUP by m.c_modulo
                HAVING permiso = 1
-               ORDER by m.nivel1,m.nivel2,m.nivel3 ;';
+               ORDER by m.nivel1,m.nivel2,m.nivel3 ;';*/
+
+$qMenu ='SELECT m.c_modulo,m.nivel1,m.nivel2,m.nivel3,m.tipo,m.titulo,m.vinculo,m.icono,m.dir,m.keywords
+        FROM menu AS m left JOIN menu_permission as p on m.c_modulo=p.c_modulo left JOIN users_types as ut on ut.codigo=p.c_tipo_usuario WHERE m.activo = 1 AND 
+              (m.nivel1=0 or tipo = "MEN" or p.c_tipo_usuario ="'.USER_TYPE.'")
+        GROUP by m.c_modulo 
+        ORDER by m.nivel1,m.nivel2,m.nivel3;';
 
   $dt_menu=findtablaq($qMenu,"c_modulo");
 
@@ -108,6 +114,7 @@
       </div>
       <div class="info">
         <a href="#" class="d-block"><?php echo USER_NAME; ?></a>
+        <b style="    color: #fff;    font-size: 11px;    float: right;    margin-top: -5px;"><?php echo USER_TYPE_DESC; ?></b>
       </div>
     </div>
 
