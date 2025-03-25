@@ -52,6 +52,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     </div>
 </div>
 
+
 <div id="ModalEditUserType" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -63,12 +64,12 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 
             <div class="form-group">
                         <label for="area">Codigo Del Tipo De Usuario:</label>
-                        <input type="text" class="form-control" id="c_tipo_usuario" placeholder="Ingrese Codigo Del Tipo De Usuario" maxlength="50">
+                        <input type="text" class="form-control" id="c_tipo_usuarioEdit" placeholder="Ingrese Codigo Del Tipo De Usuario" maxlength="50" disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="firstName">Descripcion Del Tipo De Usuario:</label>
-                        <input type="text" class="form-control" id="descripcion" placeholder="Ingrese descripcion del tipo de Usuario" maxlength="50">                 
+                        <input type="text" class="form-control" id="descripcionEdit" placeholder="Ingrese descripcion del tipo de Usuario" maxlength="50">                 
                         <ul class="list-unstyled">
                         </ul>
 
@@ -76,7 +77,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                     
             </div>         
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="newUserType()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="SaveUserType()">Guardar</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -85,9 +86,9 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 
 <script>
 $(document).ready(function () {
-        getusertypes();
+        getusertype();
 });
-      function newUserType() {
+      function newusertype() {
     var c_tipo_usuario =$("#c_tipo_usuario").val();
     var descripcion =$("#descripcion").val();
 
@@ -118,7 +119,7 @@ $(document).ready(function () {
                     if (respuesta["codigo"] == "1") {
                         $('#ModalAddUser_type').modal('hide');
                         notify(respuesta["alerta"], 1500, "success", "top-end");
-                        getusertypes();
+                        getusertype();
                     } else {
                         notify(respuesta["alerta"], 1500, "error", "top-end");
                     }
@@ -127,7 +128,7 @@ $(document).ready(function () {
           }
   }
 
-  function getusertypes()
+  function getusertype()
   {
     $.ajax({
         url: "ajax.php?mode=getuserstype",
@@ -144,29 +145,23 @@ $(document).ready(function () {
         }
     });
   }
-    
-  function confirmDeleteUserTypes(id,codigo,descripcion){
-    if(c_tipo == "1"){
-        notifyConfirm("Estas seguro?","se va a eliminar el tipo de usuario "+ user,"warning","deleteUser('"+id+"')");
-    }
-  }
-
-  function GetUserTypes(id,codigo,descripcion){
+var _ID = "";
+  function GetRegisterUserTypes(id,codigo,descripcion){
       $("#edittype").html(codigo);
       $("#ModalEditUserType").modal("show");
+    
         var tablaEdit="users_types";
-      var campoIdEdit= "codigo";
-      var campoId= "id";
-      datoId="id";
-       _ID=id;
+         var datoId="id";
+         _ID=id;
+        
+
     $.ajax({
       url: "ajax.php?mode=getregister",
       type: "POST",
       data: {
         tabla:tablaEdit,
-        campoIdEdit:campoIdEdit,
-        campoId:campoId,
-        id:id
+        campoId:datoId,
+        datoId:id
       },
       error : function(request, status, error) {
         notify('Error inesperado, consulte a soporte.'+request+status+error,1500,"error","top-end");
@@ -175,57 +170,29 @@ $(document).ready(function () {
       },
        success: function(datos){
         var respuesta = JSON.parse(datos);
-          //console.log(respuesta);
-          $("#c_tipo_usuarioEdit").val(respuesta[id]["c_tipo_usuario"]);
+          $("#c_tipo_usuarioEdit").val(respuesta[id]["codigo"]);
             $("#descripcionEdit").val(respuesta[id]["descripcion"]);
       }
     });
   
 }
 
-  function saveUser(){
-    var nombres =$("#nombresEdit").val();
-    var apellido_p =$("#apellido_pEdit").val();
-    var apellido_m =$("#apellido_mEdit").val();
-    var usuario =$("#usuarioEdit").val();
-    var correo =$("#correoEdit").val();
-    var c_tipo_usuario = $("#c_tipo_usuarioEdit").val();
+  function SaveUserType(){
+    var descripcion = $("#descripcionEdit").val();
+    var id = _ID;                                                                                                                                                                           
   
-    if(nombres == "") {
-    $("#nombresEdit").focus(); 
-    notify("El campo nombres es obligatorios",1500,"error","top-end");
+    if(descripcion == ""){
+    $("#descripcionEdit").focus(); 
+    notify("El campo descripcion es obligatorios",1500,"error","top-end");
 
-    }else if(apellido_p == ""){
-    $("#apellido_pEdit").focus(); 
-    notify("El campo apellido paterno es obligatorios",1500,"error","top-end");
-
-    }else if(apellido_m == ""){
-    $("#apellido_mEdit").focus(); 
-    notify("El campo apellido materno es obligatorios",1500,"error","top-end");
-
-    }else if(usuario == ""){
-    $("#usuarioEdit").focus(); 
-    notify("El campo usuario es obligatorios",1500,"error","top-end");
-
-  } else if (correo == "") {
-          $("#correoEdit").focus();
-          notify("El campo correo es obligatorio", 1500, "error", "top-end");
-      } else if (!validateEmail(correo)) {
-          $("#correoEdit").focus();
-          notify("El formato del correo no es válido", 1500, "error", "top-end");
-      }else{
+    }else{
 
     $.ajax({
-                url: "ajax.php?mode=saveuser",
+                url: "ajax.php?mode=saveusertype",
                 type: "POST",
                 data: {
-                    id: _ID,
-                    nombres: nombres,
-                    apellido_p: apellido_p,
-                    apellido_m: apellido_m,
-                    usuario: usuario,
-                    correo: correo,
-                    c_tipo_usuario: c_tipo_usuario
+                    descripcion: descripcion,
+                    id:id
                 },
                 error: function (request, status, error) {
                     notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
@@ -234,11 +201,10 @@ $(document).ready(function () {
                     // Código antes de enviar la solicitud
                 },      
                 success: function (datos) {
-                  console.log(datos);
                     var respuesta = JSON.parse(datos);
                     if (respuesta["codigo"] == "1") {
                         $('#ModalEditUser').modal('hide');
-                        getUsers();
+                        getusertype();
                         notify(respuesta["alerta"], 1500, "success", "top-end");
                     } else {
                         notify(respuesta["alerta"], 1500, "error", "top-end");
@@ -248,6 +214,11 @@ $(document).ready(function () {
           }
   }
 
+  function confirmDeleteUserTypes(id,codigo,descripcion){
+    if(c_tipo == "1"){
+        notifyConfirm("Estas seguro?","se va a eliminar el tipo de usuario "+ user,"warning","deleteUser('"+id+"')");
+    }
+  }
     
 </script>
 
