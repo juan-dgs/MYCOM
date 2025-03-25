@@ -1,20 +1,20 @@
 <?php
 $db = new Conexion();
 
-$dt_tipo=findtablaq("SELECT t.codigo,t.descripcion
+$dt_tipo=findtablaq("SELECT t.id,t.codigo,t.descripcion
                             FROM users_types as t 
-                            WHERE t.activo= 1 order by t.descripcion;","codigo");
+                            WHERE t.activo= 1 order by t.descripcion;",id: "codigo");
 
 $HTML ='';
 if ($dt_tipo!=false){
-  $HTML .='<table id="tablaUsuarios" class="table table-bordered table-striped" style="margin-top:10px; font-family:Helvetica;">
+  $HTML .='<table id="tablaTipoDeUsuarios" class="table table-bordered table-striped" style="margin-top:10px; font-family:Helvetica;">
             <thead>
                 <tr>
                     <th>Tipo De usuario</th>
                     <th>Descripcion</th>
                 </tr>
             </thead>
-            <tbody >';
+            <tbody>';
 
   foreach ($dt_tipo as $id => $array) {
     $HTML .= '  <tr>
@@ -24,11 +24,11 @@ if ($dt_tipo!=false){
                       <td class="text-center" style="vertical-align: middle;min-width: 160px;">
                           
                           <span class="fa fa-edit btn-icon"  tittle="Editar Tipo De usuario"
-                           onclick="GetUserTypes(\''.$id.'\',\''.$dt_tipo[$id]['codigo'].' '.$dt_tipo[$id]['descripcion'].'\')">
+                           onclick="GetRegisterUserTypes(\''.$dt_tipo[$id]['id'].'\',\''.$dt_tipo[$id]['codigo'].' '.$dt_tipo[$id]['descripcion'].'\')">
                           </span> 
 
                           <span class="fa fa-trash btn-icon" style="color: darkred; margin-left: 10px;" tittle="Eliminar Tipo De usuario"
-                           onclick="confirmDeleteUserTypes(\''.$id.'\',\''.$dt_tipo[$id]['codigo'].' '. $dt_tipo[$id]['descripcion'].'\')">
+                           onclick="confirmDeleteUserTypes(\''.$dt_tipo[$id]['id'].'\',\''.$dt_tipo[$id]['codigo'].' '. $dt_tipo[$id]['descripcion'].'\')">
                           </span>
                       </td>
                 

@@ -11,7 +11,9 @@ $dt_register=findtablaq("SELECT *
 if ($dt_register!=false){
   echo json_encode($dt_register);
 }else{
-  $arr = array('CODE' => 0, 'ERROR' => 'ERROR:NO HAY REGISTROS.');
+  $arr = array('CODE' => 0, 'ERROR' => 'ERROR:NO HAY REGISTROS.'. "SELECT *
+                          FROM $tabla
+                          WHERE $campoId= '$datoId' LIMIT 1;");
   echo json_encode($arr);
 }
  ?>

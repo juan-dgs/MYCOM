@@ -11,7 +11,12 @@ $correo = $db->real_escape_string($_POST['correo']);
 $c_tipo_usuario = $db->real_escape_string($_POST['c_tipo_usuario']);
 
 
-$_valusuario=findtablaq("SELECT 1 as id,usuario,correo FROM users WHERE (usuario='$usuario' OR correo='$correo') and id!= '$id' LIMIT 1;","id");
+$_valusuario=findtablaq("SELECT 1 as id,usuario,correo 
+                            FROM users 
+                            WHERE (usuario='$usuario' 
+                            OR correo='$correo') 
+                            and id!= '$id' 
+                            LIMIT 1;","id");
 
 
   if(empty($_valusuario)) {

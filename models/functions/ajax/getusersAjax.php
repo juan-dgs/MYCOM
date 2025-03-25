@@ -19,7 +19,7 @@ if ($dt_usuario!=false){
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody >';
+            <tbody>';
 
   foreach ($dt_usuario as $id => $array) {
     $HTML .= '  <tr>
