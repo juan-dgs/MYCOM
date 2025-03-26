@@ -42,40 +42,141 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 </div>
 
 <div id="modalFormularioActiviades" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="titleFormularioActiviades"></h4>
             </div>
             <div class="modal-body" >
-                <div class="form-group">
-                    <label for="area">Codigo Del Tipo De Usuario:</label>
-                    <input type="text" class="form-control" id="c_tipo_usuario" placeholder="Ingrese Codigo Del Tipo De Usuario" maxlength="50">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label for="c_tipo_actividad">Tipo de Actividad:</label>
+                            <select  id="c_tipo_actividad"></select>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label for="c_clasifica_act">Clasificación:</label>
+                            <select  id="c_clasifica_act"></select>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label for="c_tipo_actividad">Prioridad:</label>
+                            <select  id="c_prioridad"></select>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label for="c_tipo_actividad">Cliente:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text" id="id_cliente"></div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Buscar Cliente" id="searchCliente">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label for="searchUsuarioP">Usuario Responsable:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div title="Usuario Responsable: Luis Grardoa Saucedo" class="circular" style="background: url(views/images/profile/userDefault.png);background-size: cover;width: 60px;height: 60px;border: solid 2px #fff;margin-top: -13px; "></div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Buscar Usuario" id="searchUsuarioP">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label for="searchUsuarioI">Usuarios Involucrados:</label>
+                            <div class="input-group">                               
+                                <input type="text" class="form-control" placeholder="Buscar Usuario" id="searchUsuarioI">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                            <div title="Usuario Responsable: Luis Grardoa Saucedo" class="circular" style="background: url(views/images/profile/userDefault.png);  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>
+                            <div title="Usuario Responsable: Luis Grardoa Saucedo" class="circular" style="background: url(views/images/profile/userDefault.png);  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>
+                            <div title="Usuario Responsable: Luis Grardoa Saucedo" class="circular" style="background: url(views/images/profile/userDefault.png);  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="form-group">
+                            <label for="descripcion">Descripción:</label>             
+                            <textarea id="descripcion" class="form-control" col="5"></textarea>               
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sms-4">
+                        <div class="form-group">
+                            <label for="comentario">Comentario:</label>             
+                            <textarea id="comentario" class="form-control" col="5"></textarea>               
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <label for="notas">Notas:</label>             
+                            <textarea id="notas" class="form-control" col="5"></textarea>               
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <label for="dispositivo">Dispositivo:</label>             
+                            <div class="form-inline">
+                                <label for="serie">Serie:</label>
+                                <input type="text" id="serie" class="form-control" placeholder="serie">
+                            </div>
+                            <div class="form-inline">
+                                <label for="mac">MAC:</label>
+                                <input type="text" id="mac" class="form-control" placeholder="mac">
+                            </div>
+                            <div class="form-inline">
+                                <label for="otro">Otro:</label>
+                                <input type="text" id="otro" class="form-control" placeholder="otro">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label for="otro">Fecha Inicio:</label>
+                            <input type="date" id="f_plan_i" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label for="otro">Fecha Fin:</label>
+                            <input type="date" id="f_plan_f" class="form-control">
+                        </div>
+                    </div>
+
+
                 </div>
-                c_tipo_actividad                
-                c_clasifica_act
-                c_prioridad
-                
-                id_cliente
-                id_usuario_resp
-                *involucrados*
 
-                descripcion
-                comentario
-                notas
-                dispositivo
-
-                f_plan_i
-                f_plan_f
-
-
-                 
+               
+               
                     
             </div>         
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="saveActividad()">Guardar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <div class="modal-footer" id="btnsFormularioActiviades">                
             </div>
         </div>
     </div>
@@ -105,6 +206,9 @@ $(document).ready(function(){
 
     function newActividad(){
         $("#modalFormularioActiviades").modal();
+        $("#titleFormularioActiviades").html("Captura nueva actividad");
+        $("#btnsFormularioActiviades").html('<button type="button" class="btn btn-success" onclick="saveActividad()">Guardar</button>'+
+                                            '<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>');
     }
 </script>
 

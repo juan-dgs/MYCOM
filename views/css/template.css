@@ -1,3 +1,24 @@
+/* Cambios bootstrap*/
+button.close, button.mailbox-attachment-close {
+    background-color: transparent;
+    border: 0;
+    font-size: 50px;
+    float: right;
+    color: rgb(147, 27, 27);
+    margin: 0 !important;
+    padding: 0 !important;
+    transition: .5s;
+}
+
+.modal-header {
+    display: block;
+    background: #e9e9e9;
+}
+
+.modal-header h4 {
+    font-size: 2rem;
+}
+
 /* estilo de barra de indicadores de contraseña segura */
 .switch {
     font-size: 17px;
