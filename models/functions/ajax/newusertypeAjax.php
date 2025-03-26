@@ -3,18 +3,17 @@
 $db = new Conexion();
 
 $arr = array('codigo' => '', 'alerta' => '');
-
 $c_tipo_usuario = $db->real_escape_string($_POST['c_tipo_usuario']);
 $descripcion = $db->real_escape_string($_POST['descripcion']);
 
 
 
-$_valtipo=findtablaq("SELECT 1 as codigo,descripcion FROM users_types WHERE codigo='$c_tipo_usuario' OR descripcion='$descripcion' LIMIT 1;","id");
+$_valtipo=findtablaq("SELECT 1 as id,codigo,descripcion FROM users_types WHERE codigo='$c_tipo_usuario' OR descripcion='$descripcion' LIMIT 1;","id");
 
 
   if(empty($_valtipo)) {
-    $q = "INSERT INTO users_types ( codigo, descripcion)
-            VALUES ( '$c_tipo_usuario','$descripcion');";
+    $q = "INSERT INTO users_types (codigo, descripcion)
+            VALUES ('$c_tipo_usuario', '$descripcion');";
 
     $db->query($q);
 

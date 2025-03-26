@@ -28,7 +28,7 @@ if ($dt_tipo!=false){
                           </span> 
 
                           <span class="fa fa-trash btn-icon" style="color: darkred; margin-left: 10px;" tittle="Eliminar Tipo De usuario"
-                           onclick="confirmDeleteUserTypes(\''.$dt_tipo[$id]['id'].'\',\''.$dt_tipo[$id]['codigo'].' '. $dt_tipo[$id]['descripcion'].'\')">
+                           onclick="confirmDeleteUserTypes(\''.$dt_tipo[$id]['id'].'\',\''.$dt_tipo[$id]['codigo'].'\' , \''. $dt_tipo[$id]['descripcion'].'\')">
                           </span>
                       </td>
                 

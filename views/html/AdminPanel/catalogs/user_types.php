@@ -88,13 +88,14 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 $(document).ready(function () {
         getusertype();
 });
-      function newusertype() {
+      function newUserType() {
+    $("#ModalAddUserType").modal("show");
     var c_tipo_usuario =$("#c_tipo_usuario").val();
     var descripcion =$("#descripcion").val();
 
     if(c_tipo_usuario == ""){
     $("#codigo").focus();
-    notify("El campo tipo de uduario es obligatorios",1500,"error","top-end");
+    notify("El campo tipo de usuario es obligatorios",1500,"error","top-end");
     
     }else if(descripcion == ""){
     $("#descripcion").focus();
@@ -117,9 +118,10 @@ $(document).ready(function () {
                 success: function (datos) {
                     var respuesta = JSON.parse(datos);
                     if (respuesta["codigo"] == "1") {
-                        $('#ModalAddUser_type').modal('hide');
-                        notify(respuesta["alerta"], 1500, "success", "top-end");
+                       /* $("#ModalAddUserType").modal("hide");
+                        cleanFormUsersTypes();*/
                         getusertype();
+                        notify(respuesta["alerta"], 1500, "success", "top-end");
                     } else {
                         notify(respuesta["alerta"], 1500, "error", "top-end");
                     }
@@ -142,19 +144,21 @@ $(document).ready(function () {
         },
         success: function (datos) {
             $("#contentUsers").html(datos);
+            cleanFormUsersTypes();
+
+
         }
     });
   }
+
 var _ID = "";
   function GetRegisterUserTypes(id,codigo,descripcion){
       $("#edittype").html(codigo);
-      $("#ModalEditUserType").modal("show");
-    
+        $("#ModalEditUserType").modal("show");
         var tablaEdit="users_types";
          var datoId="id";
          _ID=id;
         
-
     $.ajax({
       url: "ajax.php?mode=getregister",
       type: "POST",
@@ -203,7 +207,7 @@ var _ID = "";
                 success: function (datos) {
                     var respuesta = JSON.parse(datos);
                     if (respuesta["codigo"] == "1") {
-                        $('#ModalEditUser').modal('hide');
+                        $("#ModalEditUserType").modal("hide");
                         getusertype();
                         notify(respuesta["alerta"], 1500, "success", "top-end");
                     } else {
@@ -214,10 +218,46 @@ var _ID = "";
           }
   }
 
-  function confirmDeleteUserTypes(id,codigo,descripcion){
-    if(c_tipo == "1"){
-        notifyConfirm("Estas seguro?","se va a eliminar el tipo de usuario "+ user,"warning","deleteUser('"+id+"')");
+  function confirmDeleteUserTypes(id,c_tipo_usuario,descripcion){
+    if(c_tipo_usuario=="SPUS"){
+      notify("No se puede eliminar un usuario de tipo super usuario",1500,"error","top-end");
+      return;
+    }else{
+        notifyConfirm("Estas seguro?","se va a eliminar el tipo y la descripcion de usuario "+ descripcion,"warning","deleteUserType('"+id+"')");
     }
+  }
+
+  function deleteUserType(id){
+    $.ajax({  
+    url: "ajax.php?mode=deleteusertype",
+    type: "POST",
+    data: {
+      id:id
+    },
+    error : function(request, status, error) {
+      notify('Error inesperado, consulte a soporte.'+request+status+error,1500,"error","top-end");
+    },
+    beforeSend: function() {
+    },
+     success: function(datos){
+       var respuesta = JSON.parse(datos);
+       if (respuesta["codigo"] == "1") {
+        notify(respuesta["alerta"],1500,"success","top-end");
+        getusertype();
+        } else {
+        notify(respuesta["alerta"],2500,"error","top-end");
+        }
+    }
+  });
+  }
+
+ 
+
+  function cleanFormUsersTypes(){
+    $("#c_tipo_usuario").val("");
+    $("#descripcion").val("");
+    $("#c_tipo_usuarioEdit").val("");
+    $("#descripcionEdit").val("");
   }
     
 </script>
