@@ -10,4 +10,6 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
+
     <!-- /.content-header -->
+      <div class="container-fluid">
