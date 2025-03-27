@@ -7,7 +7,7 @@ $dt_clientes = findtablaq("SELECT id, rfc, alias, razon_social, domicilio, conta
 
 $HTML = '';
 if ($dt_clientes != false) {
-    $HTML .= '<table id="tablaclientes" class="table table-bordered table-striped" style="margin-top:10px; font-family:Helvetica;">
+    $HTML .= '<table id="tablaclientes" class="display tab-hv dataTable table table-striped nowrap row-border hover order-column table-hover" style="width: 100%;">
                 <thead>
                     <tr>
                         <th>RFC</th>

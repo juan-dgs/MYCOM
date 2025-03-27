@@ -7,7 +7,7 @@ $dt_usuario=findtablaq("SELECT u.id,u.nombre,u.apellido_p,u.apellido_m,u.dir_fot
 
 $HTML ='';
 if ($dt_usuario!=false){
-  $HTML .='<table id="tablaUsuarios" class="table table-bordered table-striped" style="margin-top:10px; font-family:Helvetica;">
+  $HTML .='<table id="tablaUsuarios" class="display tab-hv dataTable table table-striped nowrap row-border hover order-column table-hover" style="width: 100%;">
             <thead>
                 <tr>
                     <th>Foto</th>

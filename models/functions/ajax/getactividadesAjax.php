@@ -30,7 +30,7 @@ $dt_acts=findtablaq("SELECT a.folio,
 
 $HTML ='';
 if ($dt_acts!=false){
-  $HTML .='<table id="tablaActividades" class="display tab-hv dataTable table table-striped nowrap row-border hover order-column" style="width: 100%;">
+  $HTML .='<table id="tablaActividades" class="display tab-hv dataTable table table-striped nowrap row-border hover order-column table-hover" style="width: 100%;">
             <thead>
                 <tr>
                     <th>Folio</th>

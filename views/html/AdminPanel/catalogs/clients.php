@@ -152,6 +152,11 @@ function getClients(){
         },
         success: function(datos){
             $("#contentClients").html(datos);
+
+            var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
+                var arrayExport = ['excel']; //'excel'
+                datatablebase("tablaclientes", false, 500, true, true, arrayOrder, arrayExport);
+                //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
         }
     });
 }
