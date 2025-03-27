@@ -134,3 +134,15 @@ thead{
 .btn-icon:hover {
     opacity: 1;
 }
+
+
+/* estilo para fotos de perfil con efecto redondo*/
+.circular{
+    display: inline-block;
+border-radius: 150px;
+-webkit-border-radius: 150px;
+-moz-border-radius: 150px;
+box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.37);
+-webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.32);
+-moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}

@@ -5,34 +5,11 @@ include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 
 ?>
-        <link href="views/components/dataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
-        <link href="views/components/dataTables/css/buttons.bootstrap.css" rel="stylesheet" />
-        <link href="views/components/dataTables/css/responsive.bootstrap.min.css" rel="stylesheet" />
 
-
-        <script src="views/components/dataTables/jquery.dataTables.min.js"></script>
-        <script src="views/components/dataTables/dataTables.bootstrap.min.js"></script>
-        <script src="views/components/dataTables/dataTables.buttons.min.js"></script>
-        <script src="views/components/dataTables/buttons.bootstrap.min.js"></script>
-        <script src="views/components/dataTables/buttons.colVis.js"></script>
-        <script src="views/components/dataTables/buttons.html5.js"></script>
-        <script src="views/components/dataTables/buttons.print.js"></script>
-        <script src="views/components/dataTables/dataTables.responsive.min.js"></script>
-        <script src="views/components/dataTables/responsive.bootstrap.js"></script>
-
-        <script src="views/js/datatable_templates.js"></script>
 
 
 <style>
-    .circular{
-        display: inline-block;
-    border-radius: 150px;
-    -webkit-border-radius: 150px;
-    -moz-border-radius: 150px;
-    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.37);
-    -webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.32);
-    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
-    }
+ 
 
   
     .avance{

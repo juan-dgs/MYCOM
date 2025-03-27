@@ -70,7 +70,24 @@
   <!-- ADMINLTE dashboard demo (This is only for demo purposes)
   <script src="<?php echo ADMINLTE; ?>dist/js/pages/dashboard.js"></script>-->
 
-  
+  <link href="views/components/dataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+        <link href="views/components/dataTables/css/buttons.bootstrap.css" rel="stylesheet" />
+        <link href="views/components/dataTables/css/responsive.bootstrap.min.css" rel="stylesheet" />
+
+
+        <script src="views/components/dataTables/jquery.dataTables.min.js"></script>
+        <script src="views/components/dataTables/dataTables.bootstrap.min.js"></script>
+        <script src="views/components/dataTables/dataTables.buttons.min.js"></script>
+        <script src="views/components/dataTables/buttons.bootstrap.min.js"></script>
+        <script src="views/components/dataTables/buttons.colVis.js"></script>
+        <script src="views/components/dataTables/buttons.html5.js"></script>
+        <script src="views/components/dataTables/buttons.print.js"></script>
+        <script src="views/components/dataTables/dataTables.responsive.min.js"></script>
+        <script src="views/components/dataTables/responsive.bootstrap.js"></script>
+
+        <script src="views/js/datatable_templates.js"></script>
+
+
   <script src="views/components/sweet_alert/sweetalert2.all.min.js"></script>
   <script src="views/js/repository.js"></script>
 
