@@ -5,6 +5,23 @@ include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 
 ?>
+        <link href="views/components/dataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+        <link href="views/components/dataTables/css/buttons.bootstrap.css" rel="stylesheet" />
+        <link href="views/components/dataTables/css/responsive.bootstrap.min.css" rel="stylesheet" />
+
+
+        <script src="views/components/dataTables/jquery.dataTables.min.js"></script>
+        <script src="views/components/dataTables/dataTables.bootstrap.min.js"></script>
+        <script src="views/components/dataTables/dataTables.buttons.min.js"></script>
+        <script src="views/components/dataTables/buttons.bootstrap.min.js"></script>
+        <script src="views/components/dataTables/buttons.colVis.js"></script>
+        <script src="views/components/dataTables/buttons.html5.js"></script>
+        <script src="views/components/dataTables/buttons.print.js"></script>
+        <script src="views/components/dataTables/dataTables.responsive.min.js"></script>
+        <script src="views/components/dataTables/responsive.bootstrap.js"></script>
+
+        <script src="views/js/datatable_templates.js"></script>
+
 
 <style>
     .circular{
@@ -36,7 +53,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 
 </style>
 
-<button class="btn btn-primary" type="button" onclick="newActividad();"><i class="fa fa-plus"></i></button>
+<button class="btn btn-primary" type="button" onclick="newActividad();" style="    position: absolute;    z-index: 1000;"><i class="fa fa-plus"></i>Nueva Actividad</button>
 
 <div id="contentActs">
 </div>
@@ -200,13 +217,18 @@ $(document).ready(function(){
             },
             success: function(datos){
                 $("#contentActs").html(datos);
+
+                var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
+                var arrayExport = ['excel']; //'excel'
+                datatablebase("tablaActividades", false, 500, true, true, arrayOrder, arrayExport);
+                //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
             }
         });
     }
 
     function newActividad(){
         $("#modalFormularioActiviades").modal();
-        $("#titleFormularioActiviades").html("Captura nueva actividad");
+        $("#titleFormularioActiviades").html("<i class='fa fa-plus'></i> Captura nueva actividad");
         $("#btnsFormularioActiviades").html('<button type="button" class="btn btn-success" onclick="saveActividad()">Guardar</button>'+
                                             '<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>');
     }

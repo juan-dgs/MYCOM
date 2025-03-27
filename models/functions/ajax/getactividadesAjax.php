@@ -30,7 +30,7 @@ $dt_acts=findtablaq("SELECT a.folio,
 
 $HTML ='';
 if ($dt_acts!=false){
-  $HTML .='<table id="tablaActs" class="table table-bordered table-striped" style="margin-top:10px; font-family:Helvetica;">
+  $HTML .='<table id="tablaActividades" class="display tab-hv dataTable table table-striped nowrap row-border hover order-column" style="width: 100%;">
             <thead>
                 <tr>
                     <th>Folio</th>
@@ -71,6 +71,308 @@ if ($dt_acts!=false){
                     </div>
                 </td>    
             </tr>';
+
+/* TEST BORRAR */
+$HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';    $HTML .= '<tr>
+<td>'.
+    $dt_acts[$id]['folio'].' <br>'.
+    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+    $dt_acts[$id]['prioridad_desc'].' <br>'.
+    '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
+    $dt_acts[$id]['contacto'].' <br>
+</td>               
+<td>'.                    
+    ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
+    ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
+    ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+'</td>                                
+<td>'.
+    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+    ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+   $involucrados .
+    ' <hr>
+    <div class="progress avance">
+        <b>'.$dt_acts[$id]['avance'].'%</b>
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
+    </div>
+</td>    
+</tr>';
 }
 
   $HTML .= '</tbody>

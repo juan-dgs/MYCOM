@@ -1,4 +1,5 @@
 </div>
+</div>
 
 <footer class="main-footer">
   <strong><?php echo CYR; ?> </strong>
