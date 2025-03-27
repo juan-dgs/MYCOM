@@ -1,3 +1,5 @@
+//javascript para seguridad y validacion de contraseñas
+
 function checkPasswordStrength(idForm,txtId,idBar) {
     if($("#" + txtId).length === 0){
         notify("El campo de contraseña no existe ("+txtId+")",3000,"error","top-end");
@@ -80,6 +82,7 @@ function checkPasswordStrength(idForm,txtId,idBar) {
     return strength;
 }
 
+//funcion para notificaciones
 function notify(text,time,status,position) {
     Swal.fire({
         position: position,
@@ -90,6 +93,7 @@ function notify(text,time,status,position) {
       });
 }
 
+//funcion para notificaciones con confirmacion
 function notifyConfirm(question,text,status,fn){
 
     Swal.fire({
@@ -109,7 +113,7 @@ function notifyConfirm(question,text,status,fn){
 }
 
 
-
+//funcion para validar correo
 function validateEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar correos
   return regex.test(email); // Retorna true si el correo es válido, false si no lo es
@@ -132,7 +136,7 @@ function validateEmail(email) {
   });
 }*/
 
-
+//funcion para generar contraseña aleatoria
 function generarContraseña() {
   const mayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const minusculas = "abcdefghijklmnopqrstuvwxyz";
@@ -151,3 +155,8 @@ function generarContraseña() {
 
   return contraseña;
 }
+
+
+
+
+
