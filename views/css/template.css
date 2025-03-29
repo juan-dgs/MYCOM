@@ -146,3 +146,30 @@ box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.37);
 -webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.32);
 -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
 }
+
+/* Estilos para validación */
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.is-invalid:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.invalid-feedback {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+    display: none;
+}
+
+.is-invalid ~ .invalid-feedback {
+    display: block;
+}
