@@ -14,6 +14,7 @@
 
 
       $dir = PANEL.$_programadirectorio[1]['dir'];
+
       if(file_exists($dir) && $_programadirectorio[1]['dir'] != '' && $_programadirectorio[1]['permiso'] == 1){
 
         define('TITULO_MODULO', $_programadirectorio[1]['titulo']);
