@@ -4,7 +4,7 @@ $db = new Conexion();
 $arr = array('codigo' => '', 'alerta' => '');
 $id = $db->real_escape_string($_POST['id'] ?? '');
 
-// Obtener información del usuario actual (debes adaptar esto según tu sistema)
+// Obtener información del usuario actual
 session_start();
 $u_inactivo = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 
