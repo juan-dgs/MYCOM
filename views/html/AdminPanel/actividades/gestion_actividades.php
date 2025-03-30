@@ -29,6 +29,8 @@
   <link rel="stylesheet" href="<?php echo ADMINLTE; ?>plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <script src="<?php echo ADMINLTE; ?>plugins/select2/js/select2.full.min.js"></script>
 
+  <link rel="stylesheet" href="<?php echo ADMINLTE; ?>plugins/summernote/summernote-bs4.min.css">
+  <script src="<?php echo ADMINLTE; ?>plugins/summernote/summernote-bs4.min.js"></script>
 
 <style>
  
@@ -54,10 +56,10 @@
         display:none;
     }
 
+    .btn-group.note-insert {
+        display: none;
+    }
 </style>
-
-
-
 <button class="btn btn-primary" type="button" onclick="newActividad();" style="    position: absolute;    z-index: 1000;"><i class="fa fa-plus"></i>Nueva Actividad</button>
 
 <div id="contentActs">
@@ -71,12 +73,13 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="titleFormularioActiviades"></h4>
             </div>
-            <div class="modal-body" >
+            <div class="modal-body"  id="form-actividades">
                 <div class="row">
                     <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                             <label for="c_tipo_actividad">Tipo de Actividad:</label>
-                            <select class="form-control select2ModalActividades" id="c_tipo_actividad">
+                            <select class="form-control select2ModalActividades" id="c_tipo_actividad" required>
+                            <option value="">Seleciona Tipo de Actividad</option>
                             <?php     foreach ($dt_tipo as $codigo => $array) {
                               echo "<option value='".$dt_tipo[$codigo]["codigo"]."'>".$dt_tipo[$codigo]["descripcion"]."</option>";
                           } ?>
@@ -87,7 +90,7 @@
                     <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                             <label for="c_clasifica_act">Clasificación:</label>
-                            <select class="form-control select2ModalActividades" id="c_clasifica_act">
+                            <select class="form-control select2ModalActividades" id="c_clasifica_act" required>
                             <option value="">Seleciona Clasificación</option>
                             <?php     foreach ($dt_clasifica as $codigo => $array) {
                               echo "<option value='".$dt_clasifica[$codigo]["codigo"]."'>".$dt_clasifica[$codigo]["descripcion"]."</option>";
@@ -99,7 +102,7 @@
                     <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                             <label for="c_tipo_actividad">Prioridad:</label>
-                            <select class="form-control select2ModalActividades" id="c_prioridad">
+                            <select class="form-control select2ModalActividades" id="c_prioridad" required>
                             <option value="">Seleciona Prioridad</option>
                             <?php     foreach ($dt_prio as $codigo => $array) {
                               echo "<option value='".$dt_prio[$codigo]["codigo"]."' title='SLA max ".$dt_prio[$codigo]["hr_max"]." hrs - min ".$dt_prio[$codigo]["hr_min"]." hrs'>".$dt_prio[$codigo]["descripcion"]."</option>";
@@ -111,7 +114,7 @@
                     <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                             <label for="c_cliente">Cliente:</label>
-                            <select class="form-control select2ModalActividades" id="c_cliente">
+                            <select class="form-control select2ModalActividades" id="c_cliente" required>
                                 <option value="">Seleciona Cliente Responsable</option>
                                 <?php     foreach ($dt_cliente as $codigo => $array) {
                                 echo "<option value='".$dt_cliente[$codigo]["id"]."'>".$dt_cliente[$codigo]["nombre"]."</option>";
@@ -149,56 +152,56 @@
 
                     <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
-                            <label for="descripcion">Descripción:</label>             
-                            <textarea id="descripcion" class="form-control" col="5"></textarea>               
+                            <label for="descripcion">Descripción:</label>
+                            <textarea id="descripcion" required></textarea>               
                         </div>
                     </div>
 
-                    <div class="col-xs-12 col-sms-4">
+                    <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
-                            <label for="comentario">Comentario:</label>             
-                            <textarea id="comentario" class="form-control" col="5"></textarea>               
+                            <label for="comentarios" id="comentarioContC" onclick='collapse("comentarioCont");'><i class="fa fa-angle-down"></i>Comentario:</label> 
+                            <div id="comentarioCont" class="collapse">
+                                <textarea id="comentarios" class="form-control" ></textarea>               
+                            </div>            
                         </div>
                     </div>
 
-                    <div class="col-xs-12 col-sm-4">
+                    <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
-                            <label for="notas">Notas:</label>             
-                            <textarea id="notas" class="form-control" col="5"></textarea>               
+                            <label for="notas" id="notasContC"  onclick='collapse("notasCont");'><i class="fa fa-angle-down"></i>Notas:</label> 
+                            <div id="notasCont" class="collapse">            
+                                <textarea id="notas" class="form-control" ></textarea>
+                            </div>               
                         </div>
                     </div>
-
-                    <div class="col-xs-12 col-sm-4">
-                        <div class="form-group">
-                            <label for="dispositivo">Dispositivo:</label>             
-                            <div class="form-inline">
-                                <label for="serie">Serie:</label>
-                                <input type="text" id="serie" class="form-control" placeholder="serie">
+                            
+                    <div class="col-xs-12 col-sm-6">
+                        <label id="rangoContC"  onclick='collapse("rangoCont");'><i class="fa fa-angle-down"></i>Rango de Fechas Plan:</label> 
+                        <div id="rangoCont" class="collapse">            
+                            <div class="form-group">
+                                <label for="f_plan_i">Fecha Inicio:</label>
+                                <input type="date" id="f_plan_i" class="form-control">
                             </div>
-                            <div class="form-inline">
-                                <label for="mac">MAC:</label>
-                                <input type="text" id="mac" class="form-control" placeholder="mac">
-                            </div>
-                            <div class="form-inline">
-                                <label for="otro">Otro:</label>
-                                <input type="text" id="otro" class="form-control" placeholder="otro">
+                    
+                            <div class="form-group">
+                                <label for="f_plan_f">Fecha Fin:</label>
+                                <input type="date" id="f_plan_f" class="form-control">
                             </div>
                         </div>
                     </div>
 
                     <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
-                            <label for="otro">Fecha Inicio:</label>
-                            <input type="date" id="f_plan_i" class="form-control">
+                            <label for="dispositivo" id="rangoDisC"  onclick='collapse("rangoDis");'><i class="fa fa-angle-down"></i>Dispositivo:</label> 
+                            <div id="rangoDis" class="collapse">
+                                <input type="text" id="serie" class="form-control" placeholder="Numero de Serie">
+                                <input type="text" id="mac" class="form-control" placeholder="Mac Adress">
+                                <input type="text" id="otro" class="form-control" placeholder="Otro">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-xs-12 col-sm-6">
-                        <div class="form-group">
-                            <label for="otro">Fecha Fin:</label>
-                            <input type="date" id="f_plan_f" class="form-control">
-                        </div>
-                    </div>
+                 
 
 
                 </div>
@@ -214,17 +217,37 @@
 </div>
 
 <script>
+    var select2Act;
 $(document).ready(function(){
     getActividades();
 
-    $('.select2ModalActividades').select2({
+    select2Act = $('.select2ModalActividades').select2({
       theme: 'bootstrap4',
       dropdownParent: $('#modalFormularioActiviades')
     });
     
-    
+    $('#descripcion').summernote({
+        height: 100
+    });
+    $('#comentarios').summernote({
+        height: 100
+    });
+    $('#notas').summernote({
+        height: 100
+    });
+
     setTimeout(defineFnCUR(), 3000);
 });
+
+function collapse(id){
+    if($("#"+id).hasClass("show")){
+        $("#"+id+"C i").attr("class","fa fa-angle-down");
+    }else{
+        $("#"+id+"C i").attr("class","fa fa-angle-up");
+    }
+
+    $("#"+id).collapse('toggle');
+}
 
 function defineFnCUR(){
         $(".select2ModalActividades").change(function(){
@@ -278,7 +301,7 @@ function defineFnCUR(){
 
                 var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
                 var arrayExport = ['excel']; //'excel'
-                datatablebase("tablaActividades", false, 500, true, true, arrayOrder, arrayExport);
+                datatablebase("tablaActividades", false, 400, true, true, arrayOrder, arrayExport);
                 //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
             }
         });
@@ -287,9 +310,101 @@ function defineFnCUR(){
     function newActividad(){
         $("#modalFormularioActiviades").modal();
         $("#titleFormularioActiviades").html("<i class='fa fa-plus'></i> Captura nueva actividad");
-        $("#btnsFormularioActiviades").html('<button type="button" class="btn btn-success" onclick="saveActividad()">Guardar</button>'+
+        $("#btnsFormularioActiviades").html('<button type="button" class="btn btn-success" onclick="saveNewActividad()">Guardar</button>'+
+                                            '<button type="button" class="btn btn-default" onclick="limpiaFormulario(\'form-actividades\')">Limpiar</button>'+
                                             '<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>');
     }
+
+    function validaFormulario(idForm){
+        $(".validaFormError").remove();
+        var valida = true;
+        $("#"+idForm+" [required]").each(function(){
+            var labelCampo = $(this).siblings("label");
+            if($(this).val()==''){
+                labelCampo.append("<b class='validaFormError' style='color:#ff00007d;'>*[Campo Requerido]</b>")
+                valida = false;
+            }else{
+                labelCampo.children(".validaFormError").remove();
+            }
+        });    
+
+        return valida;
+    }
+
+    function limpiaFormulario(idForm){
+        $("#"+idForm+" .collapse").collapse('hide');
+        select2Act.val(null).trigger("change");
+
+        
+        $("#"+idForm+" input,#"+idForm+" select,#"+idForm+" textarea").each(function(){
+            $(this).val('');
+        });
+
+        $('#descripcion').summernote('code','');
+        $('#comentarios').summernote('code','');
+        $('#notas').summernote('code','');
+
+    }
+
+    function saveNewActividad(){
+        if(validaFormulario("form-actividades")){
+            var tipo = $('#c_tipo_actividad').val();
+            var clasificacion = $('#c_clasifica_act').val();
+            var prioridad = $('#c_prioridad').val();
+            var cliente = $('#c_cliente').val();
+            var u_responsable = $('#c_usuario_responsable').val();
+            var u_involucrados = $('#c_usuarios_ivolucrados').val();
+            var descripcion = $('#descripcion').val();
+            var comentarios = $('#comentarios').val();
+            var notas = $('#notas').val();
+            var fi = $('#f_plan_i').val();
+            var ff = $('#f_plan_f').val();
+            var dispositivo = '';
+            dispositivo +=($('#serie').val()!=''?'<b>Serie:</b>'+$('#serie').val()+'<br>':'');
+            dispositivo +=($('#mac').val()!=''?'<b>Mac:</b>'+$('#otro').val()+'<br>':'');
+            dispositivo +=($('#otro').val()!=''?'<b>'+$('#serie').val()+'</b><br>':'');
+
+
+            $.ajax({
+            url: "ajax.php?mode=newactividad",
+            type: "POST",
+            data: {tipo:tipo,
+                    clasificacion:clasificacion,
+                    prioridad:prioridad,
+                    cliente:cliente,
+                    u_responsable:u_responsable,
+                    u_involucrados:u_involucrados,
+                    descripcion:descripcion,
+                    comentarios:comentarios,
+                    notas:notas,
+                    fi:fi,
+                    ff:ff,
+                    dispositivo:dispositivo},                    
+            error : function(request, status, error) {
+                notify('Error inesperado, consulte a soporte.'+request+status+error,1500,"error","top-end");
+            },
+            beforeSend: function() {
+            },
+            success: function(datos){
+                console.log(datos);
+                var respuesta = JSON.parse(datos);
+                if(respuesta.codigo == "1") {
+                    $('#modalFormularioActiviades').modal('hide');
+                    getActividades();
+                    notify(respuesta.alerta, 1500, "success", "top-end");
+                } else {
+                    notify(respuesta.alerta, 1500, "error", "top-end");
+                }
+            }
+        });
+        }else{
+            notify("ERROR: Llene correctamente el formulario.",1500,"error","top-end");
+        }
+    }
+
+    
+
+
 </script>
 
 
