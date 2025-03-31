@@ -47,7 +47,7 @@
       define('USER_TYPE_DESC',$_usuario[$_SESSION['user_id']]['DTIPOU']);
 
       if($_usuario[$_SESSION['user_id']]['dir_foto'] != ""){
-        define('USER_PHOTO','views/images/profile/'.$_usuario[$_SESSION['user_id']]['DIR_FOTO']);
+        define('USER_PHOTO','views/images/profile/'.$_usuario[$_SESSION['user_id']]['dir_foto']);
       }else{
         define('USER_PHOTO','views/images/profile/userDefault.png');
       }

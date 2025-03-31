@@ -44,11 +44,11 @@ if ($dt_acts!=false){
     $involucrados = '';
     
     foreach(explode(',' ,$dt_acts[$id]['involucrados']) as $i) {
-        $involucrados.=($i!=''?'<div title="Usuario Involucrado: '. explode('|',$dt_acts[$id]['involucrados'])[1] .'" class="circular" style="background: url(views/images/profile/'.(explode('|',$dt_acts[$id]['involucrados'])[2]!=''?explode('|',$dt_acts[$id]['involucrados'])[2]:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'');
+        $involucrados.=($i!=''?'<div title="Usuario Involucrado: '. explode('|',$i)[1] .'" class="circular" style="background: url(views/images/profile/'.(explode('|',$i)[2]!=''?explode('|',$i)[2]:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'');
     }
 
     $HTML .= '<tr>
-                <td>'.
+                <td style="width: 200px;">'.
                     $dt_acts[$id]['folio'].' <br>'.
                     $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
                     $dt_acts[$id]['prioridad_desc'].' <br>'.
@@ -59,19 +59,29 @@ if ($dt_acts!=false){
                     ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
                     ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
                     ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
+                    ($dt_acts[$id]['dispositivo']!=''?$dt_acts[$id]['dispositivo'].' <br>':'').
                 '</td>                                
-                <td>'.
-                    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
+                <td style="width: 250px;position:relative;">'.
+                    ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:55px; height: 55px;  border: solid 2px #fff; "></div>':'').
                     ($dt_acts[$id]['id_usuario_finaliza']!='' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza']?'<div title="Usuario Finaliza: '.$dt_acts[$id]['uf_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['uf_foto']!=''?$dt_acts[$id]['uf_foto']:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'').
                    $involucrados .
                     ' <hr>
-                    <div class="progress avance">
+                    <div class="progress avance" style="position:relative;">
                         <b>'.$dt_acts[$id]['avance'].'%</b>
                       <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
-                    </div>
-                </td>    
+                        <button type="button" class="btn btn-default" style="    position: absolute;    right: 0;    ">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                      </div>
+                      <div id="rangoFechas" style="    width: 100%;    text-align: center;">'.
+                    ($dt_acts[$id]['f_plan_i']!=''?'<b>Plan Inicio:</b>'.$dt_acts[$id]['f_plan_i'].' ':'').
+                    ($dt_acts[$id]['f_plan_f']!=''?'<b>Plan Fin:</b>'.$dt_acts[$id]['f_plan_f'].'':'').
+                    '<button type="button" class="btn btn-default" style="position: absolute;right: 10px;top: 10px;" onclick="editActividad(\''.$dt_acts[$id]['folio'].'\')">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                </div></td>    
             </tr>';
-
+            
 }
 
   $HTML .= '</tbody>
