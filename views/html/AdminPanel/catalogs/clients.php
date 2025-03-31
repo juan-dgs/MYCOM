@@ -5,7 +5,7 @@ include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
-<script src="views/js/clientsForm.js"></script>
+<script src="views/js/repository.js"></script>
 
 <div class="row">
     <div class="col-md-12">
@@ -16,7 +16,6 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                 </button>
 
                 <div id="contentClients">
-                    <!-- Aquí se cargará la tabla de clientes -->
                 </div>
             </div>
         </div>
@@ -37,7 +36,6 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                         <div class="form-group">
                             <label for="rfc">RFC:</label>
                             <input type="text" class="form-control" id="rfc" placeholder="Ingrese RFC (Opcional)" maxlength="13">
-                            <small class="text-muted">Formato: XXXX000000XXX</small>
                         </div>
                         <div class="form-group">
                             <label for="alias">Alias: <span class="text-danger">*</span></label>
@@ -96,7 +94,6 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                         <div class="form-group">
                             <label for="rfcEdit">RFC:</label>
                             <input type="text" class="form-control" id="rfcEdit" placeholder="Ingrese RFC (Opcional)" maxlength="13">
-                            <small class="text-muted">Formato: XXXX000000XXX</small>
                         </div>
                         <div class="form-group">
                             <label for="aliasEdit">Alias: <span class="text-danger">*</span></label>
@@ -143,12 +140,6 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 <script>
 $(document).ready(function(){
     getClients();
-    
-    // Validar RFC mientras se escribe
-    $('#rfc, #rfcEdit').on('input', function() {
-        var rfc = $(this).val().toUpperCase();
-        $(this).val(rfc);
-    });
 });
 
 function getClients(){
@@ -159,12 +150,9 @@ function getClients(){
         error: function(request, status, error) {
             notify('Error al cargar clientes: ' + error, 1500, "error", "top-end");
         },
-        beforeSend: function() {
-            $("#contentClients").html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>');
-        },
         success: function(datos){
             $("#contentClients").html(datos);
-            // Inicializar DataTable
+            // Inicializar DataTable si es necesario
             if($.fn.DataTable.isDataTable('#tablaClientes')) {
                 $('#tablaClientes').DataTable().destroy();
             }
@@ -172,9 +160,7 @@ function getClients(){
                 responsive: true,
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json'
-                },
-                dom: '<"top"lf>rt<"bottom"ip><"clear">',
-                pageLength: 10
+                }
             });
         }
     });
@@ -206,13 +192,6 @@ function newClient() {
     if(correo !== "" && !validateEmail(correo)) {
         $("#correo").focus();
         notify("El formato del correo no es válido", 1500, "error", "top-end");
-        return;
-    }
-
-    // Validar RFC si se ingresó
-    if(rfc !== "" && !validateRFC(rfc)) {
-        $("#rfc").focus();
-        notify("El formato del RFC no es válido", 1500, "error", "top-end");
         return;
     }
 
@@ -270,9 +249,6 @@ function deleteClient(id){
         error: function(request, status, error) {
             notify('Error al eliminar: ' + error, 1500, "error", "top-end");
         },
-        beforeSend: function() {
-            // Mostrar loader
-        },
         success: function(datos){
             try {
                 var respuesta = JSON.parse(datos);
@@ -281,9 +257,6 @@ function deleteClient(id){
             } catch(e) {
                 notify("Error al procesar la respuesta", 1500, "error", "top-end");
             }
-        },
-        complete: function() {
-            // Ocultar loader
         }
     });
 }
@@ -304,11 +277,6 @@ function getClient(id, nombre){
         data: { id: id },
         error: function(request, status, error) {
             notify('Error al obtener datos: ' + error, 1500, "error", "top-end");
-            $("#ModalEditClient").modal("hide");
-        },
-        beforeSend: function() {
-            // Mostrar loader en el modal
-            $("#clientFormEdit").html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>');
         },
         success: function(datos){
             try {
@@ -317,10 +285,6 @@ function getClient(id, nombre){
                     notify(respuesta.error, 1500, "error", "top-end");
                     $("#ModalEditClient").modal("hide");
                 } else {
-                    // Restaurar el formulario
-                    $("#clientFormEdit").html($("#clientFormEdit").html());
-                    
-                    // Llenar los campos
                     $("#idEdit").val(respuesta.id || "");
                     $("#rfcEdit").val(respuesta.rfc || "");
                     $("#aliasEdit").val(respuesta.alias || "");
@@ -332,7 +296,6 @@ function getClient(id, nombre){
                 }
             } catch(e) {
                 notify("Error al procesar datos del cliente", 1500, "error", "top-end");
-                $("#ModalEditClient").modal("hide");
             }
         }
     });
@@ -365,13 +328,6 @@ function saveClient(){
     if(correo !== "" && !validateEmail(correo)) {
         $("#correoEdit").focus();
         notify("El formato del correo no es válido", 1500, "error", "top-end");
-        return;
-    }
-
-    // Validar RFC si se ingresó
-    if(rfc !== "" && !validateRFC(rfc)) {
-        $("#rfcEdit").focus();
-        notify("El formato del RFC no es válido", 1500, "error", "top-end");
         return;
     }
 
@@ -419,26 +375,6 @@ function saveClient(){
 function validateEmail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
-}
-
-// Función para validar RFC
-function validateRFC(rfc) {
-    var re = /^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$/;
-    return re.test(rfc);
-}
-
-// Función para notificaciones
-function notify(message, duration, type, position) {
-    // Implementa tu sistema de notificaciones (ej: Toastify, SweetAlert, etc.)
-    console.log(message);
-}
-
-// Función para confirmaciones
-function notifyConfirm(title, text, icon, callback) {
-    // Implementa tu sistema de confirmación (ej: SweetAlert)
-    if (confirm(title + "\n" + text)) {
-        callback();
-    }
 }
 </script>
 
