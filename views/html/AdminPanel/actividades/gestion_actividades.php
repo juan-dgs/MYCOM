@@ -23,11 +23,13 @@
 
 ?>
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
-  <link rel="stylesheet" href="<?php echo ADMINLTE; ?>plugins/select2/css/select2.min.css">
+  <!--link rel="stylesheet" href="<?php echo ADMINLTE; ?>plugins/select2/css/select2.min.css"-->
   <link rel="stylesheet" href="<?php echo ADMINLTE; ?>plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-  <script src="<?php echo ADMINLTE; ?>plugins/select2/js/select2.full.min.js"></script>
+  <!--script src="<?php echo ADMINLTE; ?>plugins/select2/js/select2.full.min.js"></script-->
 
   <link rel="stylesheet" href="<?php echo ADMINLTE; ?>plugins/summernote/summernote-bs4.min.css">
   <script src="<?php echo ADMINLTE; ?>plugins/summernote/summernote-bs4.min.js"></script>
@@ -67,7 +69,7 @@
       
 
 <div id="modalFormularioActiviades" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -157,7 +159,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                             <label for="comentarios" id="comentarioContC" onclick='collapse("comentarioCont");'><i class="fa fa-angle-down"></i>Comentario:</label> 
                             <div id="comentarioCont" class="collapse">
@@ -166,7 +168,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-xs-12 col-sm-6">
                         <div class="form-group">
                             <label for="notas" id="notasContC"  onclick='collapse("notasCont");'><i class="fa fa-angle-down"></i>Notas:</label> 
                             <div id="notasCont" class="collapse">            
@@ -314,6 +316,45 @@ function defineFnCUR(){
                                             '<button type="button" class="btn btn-default" onclick="limpiaFormulario(\'form-actividades\')">Limpiar</button>'+
                                             '<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>');
     }
+
+    function editActividad(folio){
+        $("#modalFormularioActiviades").modal();
+        $("#titleFormularioActiviades").html("<i class='fas fa-pencil-alt'></i> Editar actividad folio " + folio);
+        $("#btnsFormularioActiviades").html('<button type="button" class="btn btn-success" onclick="saveChangesActividad()">Guardar</button>'+
+                                            '<button type="button" class="btn btn-default" onclick="limpiaFormulario(\'form-actividades\')">Limpiar</button>'+
+                                            '<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>');
+    
+
+        $.ajax({
+            url: "ajax.php?mode=getregister",
+            type: "POST",
+            data: {
+                tabla:'actividades',
+                campoId:'folio',
+                datoId:folio
+            },
+            error : function(request, status, error) {
+                notify('Error inesperado, consulte a soporte.'+request+status+error,1500,"error","top-end");
+            },
+            beforeSend: function() {
+            },
+            success: function(datos){
+                var respuesta = JSON.parse(datos);
+                //console.log(respuesta[1]["c_tipo_act"]);
+
+                $("#c_tipo_actividad").val(respuesta[1]["c_tipo_act"]);
+                $('#c_tipo_actividad').trigger('change');
+                /*$("#nombresEdit").val(respuesta[id]["nombre"]);
+                $("#apellido_pEdit").val(respuesta[id]["apellido_p"]);
+                $("#apellido_mEdit").val(respuesta[id]["apellido_m"]);
+                $("#usuarioEdit").val(respuesta[id]["usuario"]);
+                $("#correoEdit").val(respuesta[id]["correo"]);
+                $("#c_tipo_usuarioEdit").val(respuesta[id]["c_tipo_usuario"]);*/
+
+
+            }
+        });
+       }
 
     function validaFormulario(idForm){
         $(".validaFormError").remove();

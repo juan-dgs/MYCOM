@@ -4,9 +4,9 @@ $campoId =$db->real_escape_string($_POST['campoId']);
 $datoId = $db->real_escape_string($_POST['datoId']);
 
 
-$dt_register=findtablaq("SELECT *
-                          FROM $tabla
-                          WHERE $campoId= '$datoId' LIMIT 1;","id");
+$dt_register=findtablaq("SELECT 1 as idx,t.*
+                          FROM $tabla as t
+                          WHERE $campoId= '$datoId' LIMIT 1;","idx");
 
 if ($dt_register!=false){
   echo json_encode($dt_register);

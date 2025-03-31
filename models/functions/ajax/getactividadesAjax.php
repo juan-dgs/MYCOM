@@ -76,7 +76,7 @@ if ($dt_acts!=false){
                       <div id="rangoFechas" style="    width: 100%;    text-align: center;">'.
                     ($dt_acts[$id]['f_plan_i']!=''?'<b>Plan Inicio:</b>'.$dt_acts[$id]['f_plan_i'].' ':'').
                     ($dt_acts[$id]['f_plan_f']!=''?'<b>Plan Fin:</b>'.$dt_acts[$id]['f_plan_f'].'':'').
-                    '<button type="button" class="btn btn-default" style="position: absolute;   right: 10px;    top: 10px;    ">
+                    '<button type="button" class="btn btn-default" style="position: absolute;right: 10px;top: 10px;" onclick="editActividad(\''.$dt_acts[$id]['folio'].'\')">
                             <i class="fas fa-pencil-alt"></i>
                         </button>
                 </div></td>    
