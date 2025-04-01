@@ -34,7 +34,7 @@ try {
     
     $whereClause = count($whereConditions) > 0 ? "WHERE (" . implode(" OR ", $whereConditions) . ") AND activo = 1" : "";
     
-    $_valcliente = findtablaq("SELECT id_cliente as id, rfc, correo FROM act_c_clientes $whereClause LIMIT 1", "id");
+    $_valcliente = findtablaq("SELECT id FROM act_c_clientes $whereClause LIMIT 1", "id");
 
     if(empty($_valcliente)) {
         // Construir consulta INSERT con campos opcionales

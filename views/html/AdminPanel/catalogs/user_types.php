@@ -3,332 +3,261 @@ include(HTML.'AdminPanel/masterPanel/head.php');
 include(HTML.'AdminPanel/masterPanel/navbar.php');
 include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
+
 ?>
 
-<script src="views/js/usersForm.js"></script>
-
-<style>
-    .required-field::after {
-        content: " *";
-        color: #ff0000;
-    }
-    .tooltip-inner {
-        max-width: 200px;
-        padding: 8px;
-        color: #fff;
-        text-align: center;
-        background-color: #ff0000;
-        border-radius: 4px;
-    }
-</style>
-
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#modaladdclient">
-                    <span class="glyphicon glyphicon-plus"></span> agregar cliente
+                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddUserType">
+                    <span class="glyphicon glyphicon-plus"></span> Agregar Tipo De Usuario
                 </button>
 
-                <div id="contentclients" style="margin-top: 20px;">
-                    <!-- aquí se cargará la tabla de clientes -->
+                <div id="contentUsersType">
                 </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+ <div id="ModalAddUserType" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Agregar Tipo De Usuario</h4>
+            </div>
+            <div class="modal-body" id="userForm">
+
+            <div class="form-group">
+                        <label for="area">Codigo Del Tipo De Usuario:</label>
+                        <input type="text" class="form-control" id="c_tipo_usuario" placeholder="Ingrese Codigo Del Tipo De Usuario" maxlength="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="firstName">Descripcion Del Tipo De Usuario:</label>
+                        <input type="text" class="form-control" id="descripcion" placeholder="Ingrese nombre Del Tipo De Usuario" maxlength="50">                 
+                        <ul class="list-unstyled">
+                        </ul>
+
+                    </div>
+                    
+            </div>         
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="newUserType()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- modal para agregar cliente -->
-<div id="modaladdclient" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">agregar cliente</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="rfc">rfc:</label>
-                            <input type="text" class="form-control" id="rfc" placeholder="ingrese rfc" maxlength="20">
-                        </div>
-                        <div class="form-group">
-                            <label for="alias" class="required-field" title="campo obligatorio" data-toggle="tooltip">alias:</label>
-                            <input type="text" class="form-control" id="alias" placeholder="ingrese alias" maxlength="50" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="razon_social" class="required-field" title="campo obligatorio" data-toggle="tooltip">razón social:</label>
-                            <input type="text" class="form-control" id="razon_social" placeholder="ingrese razón social" maxlength="100" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="domicilio">domicilio:</label>
-                            <input type="text" class="form-control" id="domicilio" placeholder="ingrese domicilio" maxlength="200">
-                        </div>
-                        <div class="form-group">
-                            <label for="contacto">contacto:</label>
-                            <input type="text" class="form-control" id="contacto" placeholder="ingrese contacto" maxlength="100">
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono">teléfono:</label>
-                            <input type="text" class="form-control" id="telefono" placeholder="ingrese teléfono" maxlength="20">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="correo">correo:</label>
-                            <input type="email" class="form-control" id="correo" placeholder="ingrese correo" maxlength="100">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="newclient()">guardar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- modal para editar cliente -->
-<div id="modaleditclient" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+<div id="ModalEditUserType" class="modal fade" role="dialog">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">editar cliente: <span id="editclientname"></span></h4>
+                <h4 class="modal-title">Editar Tipo De Usuario</h4>
             </div>
-            <div class="modal-body">
-                <input type="hidden" id="editclientid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="rfcedit">rfc:</label>
-                            <input type="text" class="form-control" id="rfcedit" placeholder="ingrese rfc" maxlength="20">
-                        </div>
-                        <div class="form-group">
-                            <label for="aliasedit" class="required-field" title="campo obligatorio" data-toggle="tooltip">alias:</label>
-                            <input type="text" class="form-control" id="aliasedit" placeholder="ingrese alias" maxlength="50" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="razon_socialedit" class="required-field" title="campo obligatorio" data-toggle="tooltip">razón social:</label>
-                            <input type="text" class="form-control" id="razon_socialedit" placeholder="ingrese razón social" maxlength="100" required>
-                        </div>
+            <div class="modal-body" id="codigoedit">
+
+            <div class="form-group">
+                        <label for="area">Codigo Del Tipo De Usuario:</label>
+                        <input type="text" class="form-control" id="c_tipo_usuarioEdit" placeholder="Ingrese Codigo Del Tipo De Usuario" maxlength="50" disabled>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="domicilioedit">domicilio:</label>
-                            <input type="text" class="form-control" id="domicilioedit" placeholder="ingrese domicilio" maxlength="200">
-                        </div>
-                        <div class="form-group">
-                            <label for="contactoedit">contacto:</label>
-                            <input type="text" class="form-control" id="contactoedit" placeholder="ingrese contacto" maxlength="100">
-                        </div>
-                        <div class="form-group">
-                            <label for="telefonoedit">teléfono:</label>
-                            <input type="text" class="form-control" id="telefonoedit" placeholder="ingrese teléfono" maxlength="20">
-                        </div>
+
+                    <div class="form-group">
+                        <label for="firstName">Descripcion Del Tipo De Usuario:</label>
+                        <input type="text" class="form-control" id="descripcionEdit" placeholder="Ingrese descripcion del tipo de Usuario" maxlength="50">                 
+                        <ul class="list-unstyled">
+                        </ul>
+
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="correoedit">correo:</label>
-                            <input type="email" class="form-control" id="correoedit" placeholder="ingrese correo" maxlength="100">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    
+            </div>         
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="saveclient()">guardar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">cerrar</button>
+                <button type="button" class="btn btn-success" onclick="SaveUserType()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-$(document).ready(function(){
-    // inicializar tooltips
-    $('[data-toggle="tooltip"]').tooltip();
-    
-    getclients();
+$(document).ready(function () {
+        getusertype();
 });
+      function newUserType() {
+    $("#ModalAddUserType").modal("show");
+    var c_tipo_usuario =$("#c_tipo_usuario").val();
+    var descripcion =$("#descripcion").val();
 
-// función para cargar los clientes
-function getclients(){
+    if(c_tipo_usuario == ""){
+    $("#codigo").focus();
+    notify("El campo tipo de usuario es obligatorios",1500,"error","top-end");
+    
+    }else if(descripcion == ""){
+    $("#descripcion").focus();
+    notify("El campo descripcion es obligatorios",1500,"error","top-end");
+
+      }else{ 
+            $.ajax({
+                url: "ajax.php?mode=newusertype",
+                type: "POST",
+                data: {
+                    c_tipo_usuario: c_tipo_usuario,
+                    descripcion: descripcion
+                },
+                error: function (request, status, error) {
+                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+                },
+                beforeSend: function () {
+                    // Código antes de enviar la solicitud
+                },
+                success: function (datos) {
+                    var respuesta = JSON.parse(datos);
+                    if (respuesta["codigo"] == "1") {
+                       /* $("#ModalAddUserType").modal("hide");
+                        cleanFormUsersTypes();*/
+                        getusertype();
+                        notify(respuesta["alerta"], 1500, "success", "top-end");
+                    } else {
+                        notify(respuesta["alerta"], 1500, "error", "top-end");
+                    }
+                }
+            });
+          }
+  }
+
+  function getusertype() {
     $.ajax({
-        url: "ajax.php?mode=getclients",
+        url: "ajax.php?mode=getuserstype",
         type: "POST",
         data: {},
         error: function(request, status, error) {
-            notify('error al cargar clientes: '+request+status+error, 1500, "error", "top-end");
+            notify('Error al cargar clientes: ' + error, 1500, "error", "top-end");
         },
-        success: function(datos){
-            $("#contentclients").html(datos);
+        success: function(datos) {
+            $("#contentUsersType").html(datos);
+            
+            var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
+                var arrayExport = ['excel']; //'excel'
+                datatablebase("tablaTipoDeUsuarios", false, 400, true, true, arrayOrder, arrayExport);
+                //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
         }
     });
 }
 
-// función para abrir modal de edición con datos del cliente
-function getclient(id, alias){
-    $("#editclientname").html(alias);
-    $("#modaleditclient").modal("show");
-    
+var _ID = "";
+  function GetRegisterUserTypes(id,codigo,descripcion){
+      $("#edittype").html(codigo);
+        $("#ModalEditUserType").modal("show");
+        var tablaEdit="users_types";
+         var datoId="id";
+         _ID=id;
+        
     $.ajax({
-        url: "ajax.php?mode=getclient",
-        type: "POST",
-        data: { id: id },
-        error: function(request, status, error) {
-            notify('error al cargar cliente: '+request+status+error, 1500, "error", "top-end");
-        },
-        success: function(datos){
-            var cliente = JSON.parse(datos);
-            $("#editclientid").val(id);
-            $("#rfcedit").val(cliente.rfc);
-            $("#aliasedit").val(cliente.alias);
-            $("#razon_socialedit").val(cliente.razon_social);
-            $("#domicilioedit").val(cliente.domicilio);
-            $("#contactoedit").val(cliente.contacto);
-            $("#telefonoedit").val(cliente.telefono);
-            $("#correoedit").val(cliente.correo);
-        }
+      url: "ajax.php?mode=getregister",
+      type: "POST",
+      data: {
+        tabla:tablaEdit,
+        campoId:datoId,
+        datoId:id
+      },
+      error : function(request, status, error) {
+        notify('Error inesperado, consulte a soporte.'+request+status+error,1500,"error","top-end");
+      },
+      beforeSend: function() {
+      },
+       success: function(datos){
+        var respuesta = JSON.parse(datos);
+          $("#c_tipo_usuarioEdit").val(respuesta[1]["codigo"]);
+            $("#descripcionEdit").val(respuesta[1]["descripcion"]);
+      }
     });
+  
 }
 
-// función para guardar un nuevo cliente
-function newclient(){
-    var rfc = $("#rfc").val();
-    var alias = $("#alias").val();
-    var razon_social = $("#razon_social").val();
-    var domicilio = $("#domicilio").val();
-    var contacto = $("#contacto").val();
-    var telefono = $("#telefono").val();
-    var correo = $("#correo").val();
-    
-    // validaciones básicas
-    if(alias.trim() === "") {
-        notify("el campo alias es obligatorio", 1500, "error", "top-end");
-        $("#alias").focus();
-        return;
-    }
-    if(razon_social.trim() === "") {
-        notify("el campo razón social es obligatorio", 1500, "error", "top-end");
-        $("#razon_social").focus();
-        return;
-    }
-    
+  function SaveUserType(){
+    var descripcion = $("#descripcionEdit").val();
+    var id = _ID;                                                                                                                                                                           
+  
+    if(descripcion == ""){
+    $("#descripcionEdit").focus(); 
+    notify("El campo descripcion es obligatorios",1500,"error","top-end");
+
+    }else{
+
     $.ajax({
-        url: "ajax.php?mode=newclient",
-        type: "POST",
-        data: {
-            rfc: rfc,
-            alias: alias,
-            razon_social: razon_social,
-            domicilio: domicilio,
-            contacto: contacto,
-            telefono: telefono,
-            correo: correo
-        },
-        error: function(request, status, error) {
-            notify('error al guardar cliente: '+request+status+error, 1500, "error", "top-end");
-        },
-        success: function(datos){
-            var respuesta = JSON.parse(datos);
-            if(respuesta.codigo == "1") {
-                $('#modaladdclient').modal('hide');
-                getclients();
-                // limpiar formulario
-                $("#rfc, #alias, #razon_social, #domicilio, #contacto, #telefono, #correo").val("");
-                notify(respuesta.alerta, 1500, "success", "top-end");
-            } else {
-                notify(respuesta.alerta, 1500, "error", "top-end");
-            }
-        }
-    });
-}
+                url: "ajax.php?mode=saveusertype",
+                type: "POST",
+                data: {
+                    descripcion: descripcion,
+                    id:id
+                },
+                error: function (request, status, error) {
+                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+                },
+                beforeSend: function () {
+                    // Código antes de enviar la solicitud
+                },      
+                success: function (datos) {
+                    var respuesta = JSON.parse(datos);
+                    if (respuesta["codigo"] == "1") {
+                        $("#ModalEditUserType").modal("hide");
+                        getusertype();
+                        notify(respuesta["alerta"], 1500, "success", "top-end");
+                    } else {
+                        notify(respuesta["alerta"], 1500, "error", "top-end");
+                    }
+                }
+            }); 
+          }
+  }
 
-// función para guardar cambios en cliente existente
-function saveclient(){
-    var id = $("#editclientid").val();
-    var rfc = $("#rfcedit").val();
-    var alias = $("#aliasedit").val();
-    var razon_social = $("#razon_socialedit").val();
-    var domicilio = $("#domicilioedit").val();
-    var contacto = $("#contactoedit").val();
-    var telefono = $("#telefonoedit").val();
-    var correo = $("#correoedit").val();
-    
-    // validaciones básicas
-    if(alias.trim() === "") {
-        notify("el campo alias es obligatorio", 1500, "error", "top-end");
-        $("#aliasedit").focus();
-        return;
+  function confirmDeleteUserTypes(id,c_tipo_usuario,descripcion){
+    if(c_tipo_usuario=="SPUS"){
+      notify("No se puede eliminar un usuario de tipo super usuario",1500,"error","top-end");
+      return;
+    }else{
+        notifyConfirm("Estas seguro?","se va a eliminar el tipo y la descripcion de usuario "+ descripcion,"warning","deleteUserType('"+id+"')");
     }
-    if(razon_social.trim() === "") {
-        notify("el campo razón social es obligatorio", 1500, "error", "top-end");
-        $("#razon_socialedit").focus();
-        return;
+  }
+
+  function deleteUserType(id){
+    $.ajax({  
+    url: "ajax.php?mode=deleteusertype",
+    type: "POST",
+    data: {
+      id:id
+    },
+    error : function(request, status, error) {
+      notify('Error inesperado, consulte a soporte.'+request+status+error,1500,"error","top-end");
+    },
+    beforeSend: function() {
+    },
+     success: function(datos){
+       var respuesta = JSON.parse(datos);
+       if (respuesta["codigo"] == "1") {
+        notify(respuesta["alerta"],1500,"success","top-end");
+        getusertype();
+        } else {
+        notify(respuesta["alerta"],2500,"error","top-end");
+        }
     }
+  });
+  }
+
+ 
+
+  function cleanFormUsersTypes(){
+    $("#c_tipo_usuario").val("");
+    $("#descripcion").val("");
+    $("#c_tipo_usuarioEdit").val("");
+    $("#descripcionEdit").val("");
+  }
     
-    $.ajax({
-        url: "ajax.php?mode=saveclient",
-        type: "POST",
-        data: {
-            id: id,
-            rfc: rfc,
-            alias: alias,
-            razon_social: razon_social,
-            domicilio: domicilio,
-            contacto: contacto,
-            telefono: telefono,
-            correo: correo
-        },
-        error: function(request, status, error) {
-            notify('error al actualizar cliente: '+request+status+error, 1500, "error", "top-end");
-        },
-        success: function(datos){
-            var respuesta = JSON.parse(datos);
-            if(respuesta.codigo == "1") {
-                $('#modaleditclient').modal('hide');
-                getclients();
-                notify(respuesta.alerta, 1500, "success", "top-end");
-            } else {
-                notify(respuesta.alerta, 1500, "error", "top-end");
-            }
-        }
-    });
-}
-
-// función para eliminar cliente
-function confirmdeleteclient(id, alias){
-    notifyconfirm(
-        "¿estás seguro?", 
-        "se va a eliminar el cliente: " + alias, 
-        "warning", 
-        "deleteclient('"+id+"')"
-    );
-}
-
-function deleteclient(id){
-    $.ajax({
-        url: "ajax.php?mode=deleteclient",
-        type: "POST",
-        data: { id: id },
-        error: function(request, status, error) {
-            notify('error al eliminar cliente: '+request+status+error, 1500, "error", "top-end");
-        },
-        success: function(datos){
-            var respuesta = JSON.parse(datos);
-            notify(respuesta.alerta, 1500, "success", "top-end");
-            getclients();
-        }
-    });
-}
 </script>
 
 <?php include(HTML.'AdminPanel/masterPanel/foot.php'); ?>

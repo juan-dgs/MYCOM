@@ -213,21 +213,24 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
 
   });
 
-  function getUsers(){
+  function getUsers() {
     $.ajax({
-      url: "ajax.php?mode=getUsers",
-      type: "POST",
-      data: {},
-      error : function(request, status, error) {
-        notify('Error inesperado, consulte a soporte.'+request+status+error,1500,"error","top-end");
-      },
-      beforeSend: function() {
-      },
-       success: function(datos){
-          $("#contentUsers").html(datos);
-      }
+        url: "ajax.php?mode=getusers",
+        type: "POST",
+        data: {},
+        error: function(request, status, error) {
+            notify('Error al cargar clientes: ' + error, 1500, "error", "top-end");
+        },
+        success: function(datos) {
+            $("#contentUsers").html(datos);
+            
+            var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
+                var arrayExport = ['excel']; //'excel'
+                datatablebase("tablaUsuarios", false, 400, true, true, arrayOrder, arrayExport);
+                //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
+        }
     });
-  }
+}
 
   function newUser() {
     var nombres =$("#nombres").val();
@@ -365,12 +368,12 @@ var _ID=0;
        success: function(datos){
         var respuesta = JSON.parse(datos);
           //console.log(respuesta);
-          $("#nombresEdit").val(respuesta[id]["nombre"]);
-          $("#apellido_pEdit").val(respuesta[id]["apellido_p"]);
-          $("#apellido_mEdit").val(respuesta[id]["apellido_m"]);
-          $("#usuarioEdit").val(respuesta[id]["usuario"]);
-          $("#correoEdit").val(respuesta[id]["correo"]);
-          $("#c_tipo_usuarioEdit").val(respuesta[id]["c_tipo_usuario"]);
+          $("#nombresEdit").val(respuesta[1]["nombre"]);
+          $("#apellido_pEdit").val(respuesta[1]["apellido_p"]);
+          $("#apellido_mEdit").val(respuesta[1]["apellido_m"]);
+          $("#usuarioEdit").val(respuesta[1]["usuario"]);
+          $("#correoEdit").val(respuesta[1]["correo"]);
+          $("#c_tipo_usuarioEdit").val(respuesta[1]["c_tipo_usuario"]);
 
 
       }

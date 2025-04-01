@@ -7,11 +7,12 @@ $dt_tipo=findtablaq("SELECT t.id,t.codigo,t.descripcion
 
 $HTML ='';
 if ($dt_tipo!=false){
-  $HTML .='<table id="tablaTipoDeUsuarios" class="table table-bordered table-striped" style="margin-top:10px; font-family:Helvetica;">
+  $HTML .='<table id="tablaTipoDeUsuarios" class="display tab-hv dataTable table table-striped nowrap row-border hover order-column table-hover" style="width: 100%;">
             <thead>
                 <tr>
                     <th>Tipo De usuario</th>
                     <th>Descripcion</th>
+                    <th class="text-center" style="min-width: 160px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>';

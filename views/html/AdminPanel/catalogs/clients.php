@@ -85,7 +85,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Cliente: <span id="editNombreSel"></span></h4>
+                <h4 class="modal-title">Editar Cliente: <span id="editClientSel"></span></h4>
             </div>
             <div class="modal-body" id="clientFormEdit">
                 <input type="hidden" id="idEdit">
@@ -142,7 +142,7 @@ $(document).ready(function(){
     getClients();
 });
 
-function getClients(){
+function getClients() {
     $.ajax({
         url: "ajax.php?mode=getclients",
         type: "POST",
@@ -150,18 +150,13 @@ function getClients(){
         error: function(request, status, error) {
             notify('Error al cargar clientes: ' + error, 1500, "error", "top-end");
         },
-        success: function(datos){
+        success: function(datos) {
             $("#contentClients").html(datos);
-            // Inicializar DataTable si es necesario
-            if($.fn.DataTable.isDataTable('#tablaClientes')) {
-                $('#tablaClientes').DataTable().destroy();
-            }
-            $('#tablaClientes').DataTable({
-                responsive: true,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json'
-                }
-            });
+            
+            var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
+                var arrayExport = ['excel']; //'excel'
+                datatablebase("tablaClientes", false, 400, true, true, arrayOrder, arrayExport);
+                //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
         }
     });
 }
@@ -266,36 +261,41 @@ function cleanFormClients(){
 }
 
 var _ID = 0;
-function getClient(id, nombre){
-    $("#editNombreSel").html(nombre);
+function getClient(id, rfc) {
+    $("#editClientSel").html(rfc);
     $("#ModalEditClient").modal("show");
+    var tabla = "act_c_clientes";
+    var campoId = "id";
     _ID = id;
     
     $.ajax({
-        url: "ajax.php?mode=getclient",
+        url: "ajax.php?mode=getregister",
         type: "POST",
-        data: { id: id },
+        data: {
+            tabla: tabla,
+            campoId: campoId,
+            datoId: id
+        },
         error: function(request, status, error) {
             notify('Error al obtener datos: ' + error, 1500, "error", "top-end");
         },
-        success: function(datos){
+        success: function(datos) {
             try {
                 var respuesta = JSON.parse(datos);
-                if(respuesta.error) {
+                if (respuesta.error) {
                     notify(respuesta.error, 1500, "error", "top-end");
                     $("#ModalEditClient").modal("hide");
                 } else {
-                    $("#idEdit").val(respuesta.id || "");
-                    $("#rfcEdit").val(respuesta.rfc || "");
-                    $("#aliasEdit").val(respuesta.alias || "");
-                    $("#razon_socialEdit").val(respuesta.razon_social || "");
-                    $("#domicilioEdit").val(respuesta.domicilio || "");
-                    $("#contactoEdit").val(respuesta.contacto || "");
-                    $("#correoEdit").val(respuesta.correo || "");
-                    $("#telefonoEdit").val(respuesta.telefono || "");
+                    $("#rfcEdit").val(respuesta[1]["rfc"]);
+                    $("#aliasEdit").val(respuesta[1]["alias"]);
+                    $("#razon_socialEdit").val(respuesta[1]["razon_social"]);
+                    $("#domicilioEdit").val(respuesta[1]["domicilio"]);
+                    $("#contactoEdit").val(respuesta[1]["contacto"]);
+                    $("#correoEdit").val(respuesta[1]["correo"]);
+                    $("#telefonoEdit").val(respuesta[1]["telefono"]);
                 }
             } catch(e) {
-                notify("Error al procesar datos del cliente", 1500, "error", "top-end");
+                notify("Error al procesar datos del cliente: " + e.message, 1500, "error", "top-end");
             }
         }
     });
@@ -330,52 +330,16 @@ function saveClient(){
         notify("El formato del correo no es válido", 1500, "error", "top-end");
         return;
     }
-
-    // Mostrar loader
-    var btn = $("#ModalEditClient").find(".btn-success");
-    btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
-
-    $.ajax({
-        url: "ajax.php?mode=saveclient",
-        type: "POST",
-        dataType: 'json',
-        data: {
-            id: id,
-            rfc: rfc,
-            alias: alias,
-            razon_social: razon_social,
-            domicilio: domicilio,
-            contacto: contacto,
-            correo: correo,
-            telefono: telefono
-        },
-        success: function(respuesta) {
-            if(respuesta && typeof respuesta.codigo !== 'undefined') {
-                if(respuesta.codigo == 1) {
-                    $('#ModalEditClient').modal('hide');
-                    notify(respuesta.alerta, 1500, "success", "top-end");
-                    getClients();
-                } else {
-                    notify(respuesta.alerta || "Error al guardar", 1500, "error", "top-end");
-                }
-            } else {
-                notify("Respuesta del servidor no válida", 1500, "error", "top-end");
-            }
-        },
-        error: function(xhr, status, error) {
-            notify("Error de conexión: " + error, 1500, "error", "top-end");
-        },
-        complete: function() {
-            btn.prop('disabled', false).html('Guardar');
-        }
-    });
 }
+
+ 
 
 // Función para validar email
 function validateEmail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
+
 </script>
 
 <?php include(HTML.'AdminPanel/masterPanel/foot.php'); ?>
