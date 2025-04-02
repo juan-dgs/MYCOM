@@ -37,6 +37,11 @@ thead{
 }
 
 
+/*cambios template ADMIN LTE*/
+.nav-treeview{
+    background: #00000030 !important;
+}
+
 /* estilo de barra de indicadores de contraseña segura */
 .switch {
     font-size: 17px;
