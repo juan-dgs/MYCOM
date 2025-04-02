@@ -3,8 +3,13 @@
     <?php
 $db = new Conexion();
 
-$dt_acts=findtablaq("SELECT a.folio,
-                                        a.c_tipo_act,t.descripcion as tipo_desc,
+$qValidaPermisos =' AND (a.id_usuario_resp="'.USER_ID.'" OR a.folio in (SELECT i.folio FROM act_r_involucrados as i WHERE i.id_usuario = "'.USER_ID.'"))';
+if (USER_TYPE=='SPUS'){
+  $qValidaPermisos ='';
+}
+
+
+$dt_acts=findtablaq("SELECT a.folio,a.c_tipo_act,t.descripcion as tipo_desc,
                                         a.c_clasifica_act,c.descripcion as clasificacion_desc , 
                                         a.c_prioridad,p.descripcion as prioridad_desc,p.color_hex,p.icono,
                                         a.id_cliente,cl.alias as nombre_cliente, cl.razon_social as razon,cl.contacto,
@@ -25,6 +30,7 @@ $dt_acts=findtablaq("SELECT a.folio,
                                     LEFT JOIN users as ur on a.id_usuario_resp = ur.id
                                     LEFT JOIN users as uf on a.id_usuario_finaliza = uf.id
                                     LEFT JOIN act_c_estatus as s on a.c_estatus = s.codigo
+                                WHERE 1=1 $qValidaPermisos
                                 ORDER BY fh_captura desc;"
                         ,"folio");
 
@@ -47,6 +53,19 @@ if ($dt_acts!=false){
         $involucrados.=($i!=''?'<div title="Usuario Involucrado: '. explode('|',$i)[1] .'" class="circular" style="background: url(views/images/profile/'.(explode('|',$i)[2]!=''?explode('|',$i)[2]:'userDefault.png').');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>':'');
     }
 
+    $htmlDispositivo = '';
+    if(count(explode('|',$dt_acts[$id]['dispositivo']))==3){
+      if(explode('|',$dt_acts[$id]['dispositivo'])[0]!=''){
+        $htmlDispositivo .='<b>Serie:</b>'.explode('|',$dt_acts[$id]['dispositivo'])[0]."<br>";
+      }
+      if(explode('|',$dt_acts[$id]['dispositivo'])[1]!=''){
+        $htmlDispositivo .='<b>Mac:</b>'.explode('|',$dt_acts[$id]['dispositivo'])[1]."<br>";
+      }
+      if(explode('|',$dt_acts[$id]['dispositivo'])[2]!=''){
+        $htmlDispositivo .='<b>Otro:</b>'.explode('|',$dt_acts[$id]['dispositivo'])[2]."<br>";
+      }
+    }
+
     $HTML .= '<tr>
                 <td style="width: 200px;">'.
                     $dt_acts[$id]['folio'].' <br>'.
@@ -59,7 +78,7 @@ if ($dt_acts!=false){
                     ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
                     ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
                     ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
-                    ($dt_acts[$id]['dispositivo']!=''?$dt_acts[$id]['dispositivo'].' <br>':'').
+                    $htmlDispositivo.
                 '</td>                                
                 <td style="width: 250px;position:relative;">'.
                     ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:55px; height: 55px;  border: solid 2px #fff; "></div>':'').
@@ -69,17 +88,21 @@ if ($dt_acts!=false){
                     <div class="progress avance" style="position:relative;">
                         <b>'.$dt_acts[$id]['avance'].'%</b>
                       <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
-                        <button type="button" class="btn btn-default" style="    position: absolute;    right: 0;    ">
+                        <button type="button" class="btn btn-default" style="    position: absolute;    right: 0;    " onclick="openComentarios(\''.$dt_acts[$id]['folio'].'\')">
                             <i class="fas fa-sync-alt"></i>
                         </button>
                       </div>
                       <div id="rangoFechas" style="    width: 100%;    text-align: center;">'.
                     ($dt_acts[$id]['f_plan_i']!=''?'<b>Plan Inicio:</b>'.$dt_acts[$id]['f_plan_i'].' ':'').
-                    ($dt_acts[$id]['f_plan_f']!=''?'<b>Plan Fin:</b>'.$dt_acts[$id]['f_plan_f'].'':'').
-                    '<button type="button" class="btn btn-default" style="position: absolute;right: 10px;top: 10px;" onclick="editActividad(\''.$dt_acts[$id]['folio'].'\')">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>
-                </div></td>    
+                    ($dt_acts[$id]['f_plan_f']!=''?'<b>Plan Fin:</b>'.$dt_acts[$id]['f_plan_f'].'':'');
+
+                    if (USER_TYPE=='SPUS'){
+                      $HTML .='<button type="button" class="btn btn-default" style="position: absolute;right: 10px;top: 10px;" onclick="editActividad(\''.$dt_acts[$id]['folio'].'\')">
+                              <i class="fas fa-pencil-alt"></i>
+                          </button>';
+                    }
+                    
+      $HTML .= '</div></td>    
             </tr>';
             
 }
@@ -87,7 +110,10 @@ if ($dt_acts!=false){
   $HTML .= '</tbody>
           </table>';
 }else {
-  $HTML = "SIN DATOS EN LA TABLA.";
+  $HTML = '<div class="alert alert-warning" role="alert">
+              NO TIENES ACTIVIDADES REGISTRADAS.
+            </div>';
+
 }
 
 

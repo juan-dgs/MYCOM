@@ -1,8 +1,11 @@
 <?php
 /*NUCLEO DE LA APLICACION*/
   session_start();
+  date_default_timezone_set("America/Caracas");
+  setlocale(LC_TIME, 'es_VE.UTF-8','esp');
 
-  define('TITULO','TEMPLATE CORE');
+
+  define('TITULO','MYCOM');
   define('CYR', 'Copyright &copy; ' .date('Y',time()) );
   define('HTML', 'views/html/');
   define('PANEL', 'views/html/AdminPanel/');
@@ -42,6 +45,7 @@
 
 
       define('MY_REGISTRO',$_MESES[$_usuario[$_SESSION['user_id']]['mreg']].' , '.$_usuario[$_SESSION['user_id']]['yreg']);
+      define('USER_ID',$_SESSION['user_id']);
       define('USER_NAME',explode(" ",$_usuario[$_SESSION['user_id']]['nombre'])[0].' '.$_usuario[$_SESSION['user_id']]['apellido_p']);
       define('USER_TYPE',$_usuario[$_SESSION['user_id']]['c_tipo_usuario']);
       define('USER_TYPE_DESC',$_usuario[$_SESSION['user_id']]['DTIPOU']);
