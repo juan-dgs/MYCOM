@@ -12,7 +12,7 @@ $cliente = $db->real_escape_string($_POST['cliente'] ?? '');
 $u_responsable = $db->real_escape_string($_POST['u_responsable'] ?? '');
 $u_responsable = ($u_responsable==''?'NULL':"'".$u_responsable."'");
 
-$u_involucrados = $_POST['u_involucrados'];
+$u_involucrados = (isset($_POST['u_involucrados'])?$_POST['u_involucrados']:'');
 
 $descripcion = $db->real_escape_string($_POST['descripcion'] ?? '');
 $comentarios = $db->real_escape_string($_POST['comentarios'] ?? '');
