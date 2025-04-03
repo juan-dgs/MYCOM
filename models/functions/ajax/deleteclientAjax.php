@@ -3,6 +3,7 @@ $db = new Conexion();
 
 $arr = array('codigo' => '', 'alerta' => '');
 
+// Sanitizar el ID recibido
 $id = $db->real_escape_string($_POST['id']);
 
 // Verificar si el cliente existe y está activo
@@ -10,7 +11,7 @@ $dt_valcliente = findtablaq("SELECT id FROM act_c_clientes WHERE id = $id AND ac
 
 if ($dt_valcliente != false) {
     // Consulta para desactivar el cliente
-    $q = "UPDATE act_c_clientes SET activo = '0', fh_inactivo = NOW() WHERE id = $id";
+    $q = "UPDATE act_c_clientes SET activo = '0', fh_inactivo = NOW(),u_inactivo = '".USER_ID."' WHERE id = $id";
     
     $db->query($q);
 
