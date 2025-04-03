@@ -121,63 +121,58 @@ function getClasifications() {
 }
 
 function newClasification() {
-    var codigo = $("#codigo").val().trim();
-    var descripcion = $("#descripcion").val().trim();
+    const $btn = $("#ModalAddClasificacion").find(".btn-success");
+    const codigo = $("#codigo").val().trim();
+    const descripcion = $("#descripcion").val().trim();
 
     // Validaciones
-    if(codigo === "") {
+    if(!codigo) {
         $("#codigo").focus(); 
         notify("El campo código es obligatorio", 1500, "error", "top-end");
         return;
     }
     
-    if(descripcion === "") {
+    if(!descripcion) {
         $("#descripcion").focus(); 
         notify("El campo descripción es obligatorio", 1500, "error", "top-end");
         return;
     }
 
-    var btn = $("#ModalAddClasificacion").find(".btn-success");
-    btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
 
     $.ajax({
-        url: "ajax.php?mode=newclasification",
+        url: "newclasification", 
         type: "POST",
         dataType: 'json',
         data: {
             codigo: codigo,
             descripcion: descripcion
-        },
-        success: function(respuesta) {
-            if(respuesta && typeof respuesta.codigo !== 'undefined') {
-                if(respuesta.codigo == 1) {
-                    $('#ModalAddClasificacion').modal('hide');
-                    cleanFormClasificaciones();
-                    notify(respuesta.alerta, 1500, "success", "top-end");
-                    getClasificaciones();
-                } else {
-                    notify(respuesta.alerta || "Error al guardar", 1500, "error", "top-end");
-                }
-            } else {
-                notify("Respuesta del servidor no válida", 1500, "error", "top-end");
-            }
-        },
-        error: function(xhr, status, error) {
-            notify("Error de conexión: " + error, 1500, "error", "top-end");
-        },
-        complete: function() {
-            btn.prop('disabled', false).html('Guardar');
         }
+    })
+    .done(function(respuesta) {
+        if(respuesta?.codigo === 1) {
+            $('#ModalAddClasificacion').modal('hide');
+            cleanFormClasificaciones();
+            notify(respuesta.alerta, 1500, "success", "top-end");
+            getClasifications(); // Nombre consistente
+        } else {
+            notify(respuesta?.alerta || "Error al guardar", 1500, "error", "top-end");
+        }
+    })
+    .fail(function(xhr, status, error) {
+        notify(`Error de conexión: ${error}`, 1500, "error", "top-end");
+    })
+    .always(function() {
+        $btn.prop('disabled', false).html('Guardar');
     });
 }
 
 function confirmDeleteClasificacion(id, descripcion){
-    notifyConfirm("¿Estás seguro?", "Se va a desactivar la clasificación: " + descripcion, "warning","deleteClasificacion('"+id+"')");
+    notifyConfirm("¿Estás seguro?", "Se va a desactivar la clasificación: " + descripcion, "warning","deleteClasification('"+id+"')");
 }
 
 function deleteClasificacion(id) {
     $.ajax({  
-        url: "ajax.php?mode=deleteclasificacion",
+        url: "ajax.php?mode=deleteclasification",
         type: "POST",
         data: { id: id },
         dataType: 'json',
@@ -185,7 +180,7 @@ function deleteClasificacion(id) {
             if(respuesta && typeof respuesta.codigo !== 'undefined') {
                 if(respuesta.codigo == 1) {
                     notify(respuesta.alerta, 1500, "success", "top-end");
-                    getClasificaciones();
+                    getClasifications();
                 } else {
                     notify(respuesta.alerta || "Error al eliminar clasificación", 1500, "error", "top-end");
                 }
@@ -263,7 +258,7 @@ function saveClasificacion() {
     btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
 
     $.ajax({
-        url: "ajax.php?mode=saveclasificacion",
+        url: "ajax.php?mode=saveclasification",
         type: "POST",
         dataType: 'json',
         data: {
@@ -276,7 +271,7 @@ function saveClasificacion() {
                 if(respuesta.codigo == 1) {
                     notify(respuesta.alerta, 2000, "success", "top-end");
                     $("#ModalEditClasificacion").modal("hide");
-                    getClasificaciones();
+                    getClasifications();
                 } else {
                     notify(respuesta.alerta, 2500, "error", "top-end");
                 }
