@@ -20,7 +20,10 @@ $dt_acts=findtablaq("SELECT a.folio,a.c_tipo_act,t.descripcion as tipo_desc,
                                         a.c_estatus,s.descripcion as estatus_desc,avance,
                                           (SELECT GROUP_CONCAT(i.id,'|',ui.nombre,' ',ui.apellido_p,'|',ui.dir_foto) as i 
                                           FROM act_r_involucrados as i LEFT JOIN users as ui on i.id_usuario = ui.id 
-                                          WHERE i.folio = a.folio) as involucrados
+                                          WHERE i.folio = a.folio) as involucrados,
+                                          (SELECT GROUP_CONCAT(ad.dir) as a 
+                                          FROM act_r_adjuntos as ad  
+                                          WHERE ad.folio_act =a.folio) as adjuntos
                                 FROM actividades as a 
                                     LEFT JOIN act_c_tipos as t on a.c_tipo_act = t.codigo
                                     LEFT JOIN act_c_clasificacion as c on a.c_clasifica_act = c.codigo
@@ -66,6 +69,50 @@ if ($dt_acts!=false){
       }
     }
 
+      $htmlAdjuntos ='';
+      if($dt_acts[$id]['adjuntos']!=''){
+        $htmlAdjuntos .= '<button title="Ver Adjuntos" class="btn btn-default btn-lg" type="button" onclick="verAdjuntos(\''.$dt_acts[$id]['folio'].'\');">'.count(explode(',',$dt_acts[$id]['adjuntos'])).'  <i class="fas fa-paperclip"></i></button>';
+        //if(count(explode(',',$dt_acts[$id]['adjuntos']))<=3){   
+            $contador = 0;
+            foreach(explode(',' ,$dt_acts[$id]['adjuntos']) as $f) {
+              $dir = 'views/images/attachments/'.substr($dt_acts[$id]['folio'],0,2).'/'.$dt_acts[$id]['folio'].'/'.$f;
+
+              switch(explode('.',$f)[1]){
+                case 'jpg':
+                case 'png':
+                case 'gif':
+                  $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="'.$dir.'" width="100px;">'; 
+                  break;
+
+                  case 'doc':
+                case 'docx':
+                  $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/doc.png" width="80px;">'; 
+                  break;
+
+                case 'xls':
+                case 'xlsx':
+                  $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/xls.png" width="80px;">'; 
+                  break;
+
+                case 'pdf':
+                  $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/pdf.png" width="80px;">'; 
+                  break;
+
+                 default:
+                    $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/otro.png" width="80px;">'; 
+                  break;
+              }
+              $contador ++;
+              if($contador>=5){
+                break;
+              }
+            }
+          //}
+          
+ 
+            
+      }
+
     $HTML .= '<tr>
                 <td style="width: 200px;">'.
                     $dt_acts[$id]['folio'].' <br>'.
@@ -79,6 +126,7 @@ if ($dt_acts!=false){
                     ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
                     ($dt_acts[$id]['notas']!=''?'<b>Notas: </b>'.$dt_acts[$id]['notas'].' <br>':'').
                     $htmlDispositivo.
+                    $htmlAdjuntos.
                 '</td>                                
                 <td style="width: 250px;position:relative;">'.
                     ($dt_acts[$id]['id_usuario_resp']!=''?'<div title="Usuario Responsable: '.$dt_acts[$id]['ur_nombre'].'" class="circular" style="background: url(views/images/profile/'.($dt_acts[$id]['ur_foto']!=''?$dt_acts[$id]['ur_foto']:'userDefault.png').');  background-size:  cover; width:55px; height: 55px;  border: solid 2px #fff; "></div>':'').
@@ -88,7 +136,7 @@ if ($dt_acts!=false){
                     <div class="progress avance" style="position:relative;">
                         <b>'.$dt_acts[$id]['avance'].'%</b>
                       <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'.$dt_acts[$id]['avance'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$dt_acts[$id]['avance'].'%"></div>
-                        <button type="button" class="btn btn-default" style="    position: absolute;    right: 0;    " onclick="openComentarios(\''.$dt_acts[$id]['folio'].'\')">
+                        <button type="button" class="btn btn-default" style="    position: absolute;right: 0;"  onclick="openComentarios(\''.$dt_acts[$id]['folio'].'\',\''.$dt_acts[$id]['id_usuario_resp'].'\')">
                             <i class="fas fa-sync-alt"></i>
                         </button>
                       </div>

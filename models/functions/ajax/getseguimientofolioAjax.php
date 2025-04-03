@@ -8,7 +8,7 @@ $db = new Conexion();
 $folio = $db->real_escape_string($_POST['folio']);
 
 $q = "SELECT c.*,if(id_u='".USER_ID."',1,0) as val,concat(u.nombre,' ',u.apellido_p,' ',u.apellido_m) as nombre,u.dir_foto,u.activo,u.c_tipo_usuario as tipo_u FROM ( 
-                            SELECT concat('0',id) AS id,id_usuario_captura as id_u,descripcion as comentario,fh_captura as fh_registra,0 as avance  FROM actividades WHERE folio ='$folio' UNION ALL 
+                            SELECT concat('0',id) AS id,id_usuario_captura as id_u,descripcion as comentario,fh_captura as fh_registra,avance  FROM actividades WHERE folio ='$folio' UNION ALL 
                             SELECT concat('A',id) AS id,id_u_registra as id_u,GROUP_CONCAT(DISTINCT dir) AS comentario,max(fh_registra) as fh_registra ,0 as avance FROM act_r_adjuntos WHERE folio_act ='$folio' GROUP BY id_u_registra,date(fh_registra) UNION ALL 
                             SELECT concat('C',id) AS id,id_u_registra as id_u,comentario,fh_registra, avance FROM act_r_comentarios WHERE folio_act ='$folio' 
                     ) as c LEFT JOIN users as u on c.id_u = u.id 
@@ -28,18 +28,43 @@ if ($dt_item!=false){
                     <div class="direct-chat-text  '.(substr($id,0,1)=='A'?'text-center':'').' ">';
 
                     if(substr($id,0,1)!='A'){
-                        $HTML .= $dt_item[$id]['comentario'].($dt_item[$id]['avance']>0?'<b style="position: absolute; top: 0; right: 0;  opacity: .2;">'.$dt_item[$id]['avance'].'%</b>':'');
+                        $HTML .= $dt_item[$id]['comentario'].($dt_item[$id]['avance']>0?'<b style="position: absolute; top: 0; right: 0;  opacity: .2;" class="'.$id.' '.(substr($id,0,1)=='0'?'porAvanceTot':'porAvance').'">'.$dt_item[$id]['avance'].'%</b>':'');
                     }else{
                         if($dt_item[$id]['comentario']!=''){
-                            foreach (explode(',',$dt_item[$id]['comentario']) as $i) {
-                                $HTML .='<img src="views/images/adjuntos/'.substr($folio,0,2).'/'.$folio.'/'.$i.'" height="100px;">';                          
+                            foreach (explode(',',$dt_item[$id]['comentario']) as $f) {
+                                $dir = 'views/images/attachments/'.substr($folio,0,2).'/'.$folio.'/'.$f;
+                                switch(explode('.',$f)[1]){
+                                    case 'jpg':
+                                    case 'png':
+                                    case 'gif':
+                                      $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="'.$dir.'" height="100px;">'; 
+                                      break;
+                    
+                                      case 'doc':
+                                    case 'docx':
+                                      $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/doc.png" width="80px;">'; 
+                                      break;
+                    
+                                    case 'xls':
+                                    case 'xlsx':
+                                      $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/xls.png" width="80px;">'; 
+                                      break;
+                    
+                                    case 'pdf':
+                                      $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/pdf.png" width="80px;">'; 
+                                      break;
+                    
+                                     default:
+                                        $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/otro.png" width="80px;">'; 
+                                      break;
+                                  }   
+
+                               //$HTML .='<img src="views/images/adjuntos/'.substr($folio,0,2).'/'.$folio.'/'.$i.'" height="100px;">';                          
                             }
                         }
-                    }
-                   
-                    $HTML .= '</div>
+                    }                   
+        $HTML .= '</div>
                 </div>';
-                //C:\xampp\htdocs\MYCOM\views\images\adjuntos\25\25T040006
 
   }
 }else {
