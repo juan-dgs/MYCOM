@@ -153,10 +153,9 @@ function getClients() {
         success: function(datos) {
             $("#contentClients").html(datos);
             
-            var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
-                var arrayExport = ['excel']; //'excel'
-                datatablebase("tablaClientes", false, 400, true, true, arrayOrder, arrayExport);
-                //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
+            var arrayOrder = [[3, 'asc']]; // Ordenar por Razón Social por defecto
+            var arrayExport = ['excel'];
+            datatablebase("tablaClientes", false, 400, true, true, arrayOrder, arrayExport);
         }
     });
 }
@@ -183,14 +182,12 @@ function newClient() {
         return;
     }
     
-    // Validar correo solo si se ingresó
     if(correo !== "" && !validateEmail(correo)) {
         $("#correo").focus();
         notify("El formato del correo no es válido", 1500, "error", "top-end");
         return;
     }
 
-    // Mostrar loader
     var btn = $("#ModalAddClient").find(".btn-success");
     btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
 
@@ -230,28 +227,39 @@ function newClient() {
     });
 }
 
-function confirmDeleteClient(id, client){
-    notifyConfirm("¿Estás seguro?", "Se va a desactivar el cliente: " + client, "warning", function(){
-        deleteClient(id);
-    });
-}
+function confirmDeleteClient(id, razon_social){
+    notifyConfirm("¿Estás seguro?", "Se va a desactivar el cliente: " + razon_social, "warning","deleteClient('"+id+"')");
+    }
 
-function deleteClient(id){
+function deleteClient(id) {
+    
     $.ajax({  
         url: "ajax.php?mode=deleteclient",
         type: "POST",
         data: { id: id },
-        error: function(request, status, error) {
-            notify('Error al eliminar: ' + error, 1500, "error", "top-end");
-        },
-        success: function(datos){
-            try {
-                var respuesta = JSON.parse(datos);
-                notify(respuesta.alerta, 1500, respuesta.codigo == 1 ? "success" : "error", "top-end");
-                getClients();
-            } catch(e) {
-                notify("Error al procesar la respuesta", 1500, "error", "top-end");
+        dataType: 'json',
+        success: function(respuesta) {
+            
+            if(respuesta && typeof respuesta.codigo !== 'undefined') {
+                if(respuesta.codigo == 1) {
+                    notify(respuesta.alerta, 1500, "success", "top-end");
+                    getClients();
+                    
+                } else {
+                    notify(respuesta.alerta || "Error al eliminar cliente", 1500, "error", "top-end");
+                }
+            } else {
+                notify("Respuesta del servidor no válida", 1500, "error", "top-end");
+                console.error("Respuesta inesperada:", respuesta);
             }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en la petición AJAX:", {
+                status: status,
+                error: error,
+                responseText: xhr.responseText
+            });
+            notify('Error al comunicarse con el servidor: ' + error, 1500, "error", "top-end");
         }
     });
 }
@@ -260,20 +268,17 @@ function cleanFormClients(){
     $("#rfc, #alias, #razon_social, #domicilio, #contacto, #correo, #telefono").val("");
 }
 
-var _ID = 0;
 function getClient(id, rfc) {
     $("#editClientSel").html(rfc);
     $("#ModalEditClient").modal("show");
-    var tabla = "act_c_clientes";
-    var campoId = "id";
-    _ID = id;
+    $("#idEdit").val(id);
     
     $.ajax({
         url: "ajax.php?mode=getregister",
         type: "POST",
         data: {
-            tabla: tabla,
-            campoId: campoId,
+            tabla: "act_c_clientes",
+            campoId: "id",
             datoId: id
         },
         error: function(request, status, error) {
@@ -301,7 +306,7 @@ function getClient(id, rfc) {
     });
 }
 
-function saveClient(){
+function saveClient() {
     var id = $("#idEdit").val();
     var alias = $("#aliasEdit").val().trim();
     var razon_social = $("#razon_socialEdit").val().trim();
@@ -311,35 +316,67 @@ function saveClient(){
     var correo = $("#correoEdit").val().trim();
     var telefono = $("#telefonoEdit").val().trim();
 
-    // Validaciones
     if(alias === "") {
-        $("#aliasEdit").focus(); 
+        $("#aliasEdit").focus();
         notify("El campo alias es obligatorio", 1500, "error", "top-end");
         return;
     }
     
     if(razon_social === "") {
-        $("#razon_socialEdit").focus(); 
+        $("#razon_socialEdit").focus();
         notify("El campo razón social es obligatorio", 1500, "error", "top-end");
         return;
     }
     
-    // Validar correo solo si se ingresó
     if(correo !== "" && !validateEmail(correo)) {
         $("#correoEdit").focus();
         notify("El formato del correo no es válido", 1500, "error", "top-end");
         return;
     }
+
+    var btn = $("#ModalEditClient").find(".btn-success");
+    btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
+
+    $.ajax({
+        url: "ajax.php?mode=saveclient",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id,
+            alias: alias,
+            razon_social: razon_social,
+            rfc: rfc,
+            domicilio: domicilio,
+            contacto: contacto,
+            correo: correo,
+            telefono: telefono
+        },
+        success: function(respuesta) {
+            if(respuesta && typeof respuesta.codigo !== 'undefined') {
+                if(respuesta.codigo == 1) {
+                    notify(respuesta.alerta, 2000, "success", "top-end");
+                    $("#ModalEditClient").modal("hide");
+                    getClients();
+                } else {
+                    notify(respuesta.alerta, 2500, "error", "top-end");
+                }
+            } else {
+                notify("Respuesta del servidor no válida", 1500, "error", "top-end");
+            }
+        },
+        error: function(xhr, status, error) {
+            notify("Error de conexión: " + error, 1500, "error", "top-end");
+        },
+        complete: function() {
+            btn.prop('disabled', false).html('Guardar');
+        }
+    });
 }
 
- 
-
-// Función para validar email
 function validateEmail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
-
 </script>
 
 <?php include(HTML.'AdminPanel/masterPanel/foot.php'); ?>

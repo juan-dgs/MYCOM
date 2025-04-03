@@ -27,82 +27,80 @@ try {
         exit;
     }
 
-    // Verificar si ya existe el RFC o correo (solo si se proporcionaron)
+    // Verificar duplicados SOLO si se proporcionaron RFC o correo
     $whereConditions = [];
     if(!empty($rfc)) $whereConditions[] = "rfc = '$rfc'";
     if(!empty($correo)) $whereConditions[] = "correo = '$correo'";
     
-    $whereClause = count($whereConditions) > 0 ? "WHERE (" . implode(" OR ", $whereConditions) . ") AND activo = 1" : "";
-    
-    $_valcliente = findtablaq("SELECT id FROM act_c_clientes $whereClause LIMIT 1", "id");
+    // Solo verificar duplicados si hay condiciones
+    if(count($whereConditions) > 0) {
+        $whereClause = "WHERE (" . implode(" OR ", $whereConditions) . ") AND activo = 1";
+        $_valcliente = findtablaq("SELECT id, rfc, correo FROM act_c_clientes $whereClause LIMIT 1", "id");
 
-    if(empty($_valcliente)) {
-        // Construir consulta INSERT con campos opcionales
-        $columns = [];
-        $values = [];
-        
-        // Campos obligatorios
-        $columns[] = 'alias';
-        $values[] = "'$alias'";
-        
-        $columns[] = 'razon_social';
-        $values[] = "'$razon_social'";
-        
-        // Campos opcionales (solo si tienen valor)
-        if(!empty($rfc)) {
-            $columns[] = 'rfc';
-            $values[] = "'$rfc'";
+        if(!empty($_valcliente)) {
+            // Verificar qué campo está duplicado
+            $alerta = "";
+            if(!empty($rfc) && isset($_valcliente[1]['rfc']) && strtolower($rfc) == strtolower($_valcliente[1]['rfc'])) {
+                $alerta = "<b>Error!</b> Ya existe un cliente con el RFC: $rfc";
+            }
+            if(!empty($correo) && isset($_valcliente[1]['correo']) && strtolower($correo) == strtolower($_valcliente[1]['correo'])) {
+                $alerta .= $alerta ? "<br>" : "";
+                $alerta .= "<b>Error!</b> Ya existe un cliente con el correo: $correo";
+            }
+            
+            $arr = array('codigo' => 0, 'alerta' => $alerta ?: 'Error de duplicación no especificado');
+            echo json_encode($arr);
+            exit;
         }
-        
-        if(!empty($domicilio)) {
-            $columns[] = 'domicilio';
-            $values[] = "'$domicilio'";
-        }
-        
-        if(!empty($contacto)) {
-            $columns[] = 'contacto';
-            $values[] = "'$contacto'";
-        }
-        
-        if(!empty($correo)) {
-            $columns[] = 'correo';
-            $values[] = "'$correo'";
-        }
-        
-        if(!empty($telefono)) {
-            $columns[] = 'telefono';
-            $values[] = "'$telefono'";
-        }
-        
-        // Campos fijos
-        $columns[] = 'fh_registro';
-        $values[] = "NOW()";
-        
-        $columns[] = 'activo';
-        $values[] = "1";
-
-        // Construir y ejecutar query
-        $q = "INSERT INTO act_c_clientes (" . implode(", ", $columns) . ") 
-              VALUES (" . implode(", ", $values) . ")";
-
-        if($db->query($q)) {
-            $arr = array('codigo' => 1, 'alerta' => 'Cliente registrado correctamente');
-        } else {
-            throw new Exception("Error al registrar cliente: " . $db->error);
-        }
-    } else {
-        // Verificar qué campo está duplicado
-        $alerta = "";
-        if(!empty($rfc) && isset($_valcliente[1]['rfc']) && strtolower($rfc) == strtolower($_valcliente[1]['rfc'])) {
-            $alerta = "<b>Error!</b> Ya existe un cliente con el RFC: $rfc";
-        }
-        if(!empty($correo) && isset($_valcliente[1]['correo']) && strtolower($correo) == strtolower($_valcliente[1]['correo'])) {
-            $alerta .= $alerta ? "<br>" : "";
-            $alerta .= "<b>Error!</b> Ya existe un cliente con el correo: $correo";
-        }
-        
-        $arr = array('codigo' => 0, 'alerta' => $alerta ?: 'Error de duplicación no especificado');
     }
+
+    // Construir consulta INSERT con campos opcionales
+    $columns = ['alias', 'razon_social']; // Campos obligatorios
+    $values = ["'$alias'", "'$razon_social'"];
+
+    // Campos opcionales (solo si tienen valor)
+    if(!empty($rfc)) {
+        $columns[] = 'rfc';
+        $values[] = "'$rfc'";
+    }
+    
+    if(!empty($domicilio)) {
+        $columns[] = 'domicilio';
+        $values[] = "'$domicilio'";
+    }
+    
+    if(!empty($contacto)) {
+        $columns[] = 'contacto';
+        $values[] = "'$contacto'";
+    }
+    
+    if(!empty($correo)) {
+        $columns[] = 'correo';
+        $values[] = "'$correo'";
+    }
+    
+    if(!empty($telefono)) {
+        $columns[] = 'telefono';
+        $values[] = "'$telefono'";
+    }
+    
+    // Campos fijos
+    $columns[] = 'fh_registro';
+    $values[] = "NOW()";
+    
+    $columns[] = 'activo';
+    $values[] = "1";
+
+    // Construir y ejecutar query
+    $q = "INSERT INTO act_c_clientes (" . implode(", ", $columns) . ") 
+          VALUES (" . implode(", ", $values) . ")";
+
+    if($db->query($q)) {
+        $arr = array('codigo' => 1, 'alerta' => 'Cliente registrado correctamente');
+    } else {
+        throw new Exception("Error al registrar cliente: " . $db->error);
+    }
+
 } catch(Exception $e) {
     $arr = array('codigo' => 0, 'alerta' => $e->getMessage());
 }
