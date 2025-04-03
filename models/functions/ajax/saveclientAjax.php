@@ -1,15 +1,12 @@
 <?php
+// ajax.php?mode=saveclient
+
 $db = new Conexion();
-
-// Configurar cabecera para respuesta JSON
-header('Content-Type: application/json');
-
-// Inicializar array de respuesta
 $arr = array('codigo' => 0, 'alerta' => 'Error desconocido');
 
 try {
     // Sanitizar inputs
-    $id = $db->real_escape_string($_POST['id'] ?? '');
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
     $alias = $db->real_escape_string($_POST['alias'] ?? '');
     $razon_social = $db->real_escape_string($_POST['razon_social'] ?? '');
     $rfc = $db->real_escape_string($_POST['rfc'] ?? '');
@@ -20,89 +17,97 @@ try {
 
     // Validar campos obligatorios
     if(empty($alias)) {
-        $arr = array('codigo' => 0, 'alerta' => 'El campo alias es obligatorio');
-        echo json_encode($arr);
-        exit;
+        throw new Exception('El campo alias es obligatorio');
     }
     
     if(empty($razon_social)) {
-        $arr = array('codigo' => 0, 'alerta' => 'El campo razón social es obligatorio');
-        echo json_encode($arr);
-        exit;
+        throw new Exception('El campo razón social es obligatorio');
     }
 
-    // Verificar duplicados (RFC o correo) solo si se proporcionan valores
-    $whereConditions = [];
-    if(!empty($rfc)) $whereConditions[] = "rfc = '$rfc'";
-    if(!empty($correo)) $whereConditions[] = "correo = '$correo'";
-    
-    $whereClause = count($whereConditions) > 0 ? 
-                   "WHERE (" . implode(" OR ", $whereConditions) . ") AND id != '$id' AND activo = 1" : 
-                   "WHERE 1=0"; // Condición que nunca se cumple si no hay campos para verificar
-    
-    $_valcliente = findtablaq("SELECT id as id, rfc, correo FROM act_c_clientes $whereClause LIMIT 1", "id");
+    // Validar formato de correo si se proporcionó
+    if(!empty($correo) && !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+        throw new Exception('El formato del correo electrónico no es válido');
+    }
 
-    if(empty($_valcliente)) {
-        // Construir consulta UPDATE dinámica
-        $updates = [];
-        $updates[] = "alias = '$alias'";
-        $updates[] = "razon_social = '$razon_social'";
+    // Verificar duplicados
+    if($id == 0) { // Solo para nuevos registros
+        $whereConditions = [];
+        $paramsToCheck = [];
         
-        // Campos opcionales (solo si se proporcionan)
         if(!empty($rfc)) {
-            $updates[] = "rfc = '$rfc'";
-        } else {
-            $updates[] = "rfc = NULL";
-        }
-        
-        if(!empty($domicilio)) {
-            $updates[] = "domicilio = '$domicilio'";
-        } else {
-            $updates[] = "domicilio = NULL";
-        }
-        
-        if(!empty($contacto)) {
-            $updates[] = "contacto = '$contacto'";
-        } else {
-            $updates[] = "contacto = NULL";
+            $whereConditions[] = "rfc = '$rfc'";
+            $paramsToCheck['rfc'] = $rfc;
         }
         
         if(!empty($correo)) {
-            $updates[] = "correo = '$correo'";
-        } else {
-            $updates[] = "correo = NULL";
+            $whereConditions[] = "correo = '$correo'";
+            $paramsToCheck['correo'] = $correo;
         }
         
-        if(!empty($telefono)) {
-            $updates[] = "telefono = '$telefono'";
-        } else {
-            $updates[] = "telefono = NULL";
+        if(!empty($whereConditions)) {
+            $whereClause = "WHERE (" . implode(" OR ", $whereConditions) . ") AND activo = 1";
+            $sql = "SELECT id, rfc, correo FROM act_c_clientes $whereClause LIMIT 1";
+            $result = $db->query($sql);
+            
+            if($result && $result->num_rows > 0) {
+                $existing = $result->fetch_assoc();
+                $errors = [];
+                
+                foreach($paramsToCheck as $field => $value) {
+                    if(isset($existing[$field]) && !empty($existing[$field])) {
+                        $errors[] = "Ya existe un cliente con $field: " . htmlspecialchars($value);
+                    }
+                }
+                
+                if(!empty($errors)) {
+                    throw new Exception(implode("<br>", $errors));
+                }
+            }
         }
+    }
 
-        // Ejecutar actualización
-        $update = "UPDATE act_c_clientes SET " . implode(", ", $updates) . " WHERE id = '$id'";
+    // Construir consulta
+    if($id > 0) {
+        // ACTUALIZAR cliente existente
+        $updates = [
+            "alias = '$alias'",
+            "razon_social = '$razon_social'",
+            !empty($rfc) ? "rfc = '$rfc'" : "rfc = NULL",
+            !empty($domicilio) ? "domicilio = '$domicilio'" : "domicilio = NULL",
+            !empty($contacto) ? "contacto = '$contacto'" : "contacto = NULL",
+            !empty($correo) ? "correo = '$correo'" : "correo = NULL",
+            !empty($telefono) ? "telefono = '$telefono'" : "telefono = NULL"
+        ];
         
-        if($db->query($update)) {
-            $arr = array('codigo' => 1, 'alerta' => 'Cliente actualizado correctamente');
-        } else {
-            throw new Exception("Error al actualizar cliente: " . $db->error);
-        }
+        $query = "UPDATE act_c_clientes SET " . implode(", ", array_filter($updates)) . " WHERE id = $id";
     } else {
-        // Verificar qué campo está duplicado
-        $alerta = "";
-        if(!empty($rfc) && isset($_valcliente[1]['rfc']) && strtolower($rfc) == strtolower($_valcliente[1]['rfc'])) {
-            $alerta = "<b>Error!</b> Ya existe otro cliente con el RFC: $rfc";
-        }
-        if(!empty($correo) && isset($_valcliente[1]['correo']) && strtolower($correo) == strtolower($_valcliente[1]['correo'])) {
-            $alerta .= $alerta ? "<br>" : "";
-            $alerta .= "<b>Error!</b> Ya existe otro cliente con el correo: $correo";
-        }
+        // INSERTAR nuevo cliente
+        $columns = ['alias', 'razon_social', 'fh_registro', 'activo'];
+        $values = ["'$alias'", "'$razon_social'", "NOW()", "1"];
         
-        $arr = array('codigo' => 0, 'alerta' => $alerta ?: 'Error de duplicación no especificado');
+        if(!empty($rfc)) { $columns[] = 'rfc'; $values[] = "'$rfc'"; }
+        if(!empty($domicilio)) { $columns[] = 'domicilio'; $values[] = "'$domicilio'"; }
+        if(!empty($contacto)) { $columns[] = 'contacto'; $values[] = "'$contacto'"; }
+        if(!empty($correo)) { $columns[] = 'correo'; $values[] = "'$correo'"; }
+        if(!empty($telefono)) { $columns[] = 'telefono'; $values[] = "'$telefono'"; }
+        
+        $query = "INSERT INTO act_c_clientes (" . implode(", ", $columns) . ") 
+                 VALUES (" . implode(", ", $values) . ")";
+    }
+
+    if($db->query($query)) {
+        $arr = array(
+            'codigo' => 1, 
+            'alerta' => $id > 0 ? 'Cliente actualizado correctamente' : 'Cliente registrado correctamente'
+        );
+    } else {
+        throw new Exception("Error en la base de datos: " . $db->error);
     }
 } catch(Exception $e) {
     $arr = array('codigo' => 0, 'alerta' => $e->getMessage());
 }
 
-echo json_encode($arr);
+header('Content-Type: application/json');
+echo json_encode($arr, JSON_UNESCAPED_UNICODE);
+exit();
 ?>

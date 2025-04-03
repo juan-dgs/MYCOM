@@ -28,6 +28,7 @@ if ($dt_clientes != false) {
                     <th>RFC</th>
                     <th>Alias</th>
                     <th>Razón Social</th>
+                    <th>Domicilio</th>
                     <th>Contacto</th>
                     <th>Correo</th>
                     <th>Teléfono</th>
@@ -42,6 +43,7 @@ if ($dt_clientes != false) {
                   <td>'.(!empty($dt_clientes[$id]['rfc']) ? htmlspecialchars($dt_clientes[$id]['rfc']) : 'NA').'</td>
                   <td>'.htmlspecialchars($dt_clientes[$id]['alias']).'</td>
                   <td>'.htmlspecialchars($dt_clientes[$id]['razon_social']).'</td>
+                  <td>'.(!empty($dt_clientes[$id]['domicilio']) ? htmlspecialchars($dt_clientes[$id]['domicilio']) : 'NA').'</td>
                   <td>'.(!empty($dt_clientes[$id]['contacto']) ? htmlspecialchars($dt_clientes[$id]['contacto']) : 'NA').'</td>
                   <td>'.(!empty($dt_clientes[$id]['correo']) ? htmlspecialchars($dt_clientes[$id]['correo']) : 'NA').'</td>
                   <td>'.(!empty($dt_clientes[$id]['telefono']) ? htmlspecialchars($dt_clientes[$id]['telefono']) : 'NA').'</td>
