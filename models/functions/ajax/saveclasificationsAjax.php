@@ -1,53 +1,34 @@
 <?php
-// saveclasificationsAjax.php
-
 $db = new Conexion();
-header('Content-Type: application/json');
 
-$arr = array('codigo' => 0, 'alerta' => 'Error desconocido');
+$id = $db->real_escape_string($_POST['id']);
+$descripcion = $db->real_escape_string($_POST['descripcion']);
 
-try {
-    // Sanitizar inputs
-    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-    $codigo = $db->real_escape_string($_POST['codigo'] ?? '');
-    $descripcion = $db->real_escape_string($_POST['descripcion'] ?? '');
+// Validar si ya existe la descripción
+$_valdesc = findtablaq("SELECT 1 as id FROM act_c_clasificacion 
+                        WHERE descripcion='$descripcion' AND id!='$id' AND activo=1 LIMIT 1", "id");
 
-    // Validar campos obligatorios
-    if(empty($codigo)) {
-        throw new Exception('El campo código es obligatorio');
-    }
+if(empty($_valdesc)) {
+    $update = "UPDATE act_c_clasificacion SET descripcion='$descripcion' 
+               WHERE id='$id' AND activo=1";
     
-    if(empty($descripcion)) {
-        throw new Exception('El campo descripción es obligatorio');
-    }
-
-    // Construir consulta UPDATE o INSERT
-    if($id > 0) {
-        // Actualización de clasificación existente
-        $q = "UPDATE act_c_clasificacion SET 
-              codigo = '$codigo',
-              descripcion = '$descripcion'
-              WHERE id = $id";
+    $db->query($update);
+    
+    if($db->error) {
+        try {
+            throw new Exception("MySQL error $db->error <br> Query:<br> ", $db->errno);
+        } catch(Exception $e) {
+            $resultado = "Error no. ".$e->getCode(). "-" .$e->getMessage() . "<br>";
+            $resultado .= nl2br($e->getTraceAsString());
+            $alerta = '<b>Error!</b> '.$resultado;
+            $arr = array('codigo' => 0, 'alerta' => $alerta);
+        }
     } else {
-        // Inserción de nueva clasificación
-        $q = "INSERT INTO act_c_clasificacion 
-              (codigo, descripcion, fh_registro, activo) 
-              VALUES 
-              ('$codigo', '$descripcion', NOW(), 1)";
+        $arr = array('codigo' => 1, 'alerta' => 'Clasificación actualizada correctamente.');
     }
-
-    if($db->query($q)) {
-        $arr = array(
-            'codigo' => 1, 
-            'alerta' => $id > 0 ? 'Clasificación actualizada correctamente' : 'Clasificación registrada correctamente'
-        );
-    } else {
-        throw new Exception("Error en la base de datos: " . $db->error);
-    }
-} catch(Exception $e) {
-    $arr = array('codigo' => 0, 'alerta' => $e->getMessage());
+} else {
+    $arr = array('codigo' => 0, 'alerta' => '<b>Error!</b> Ya existe una clasificación con esa descripción.');
 }
 
-echo json_encode($arr, JSON_UNESCAPED_UNICODE);
-exit;
+echo json_encode($arr);
 ?>
