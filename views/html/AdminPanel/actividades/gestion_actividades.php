@@ -35,6 +35,18 @@
   <script src="<?php echo ADMINLTE; ?>plugins/summernote/summernote-bs4.min.js"></script>
 
 
+  <!-- FILE INPUT -->
+  <link rel="stylesheet" href="views/components/fileinput/css/fileinput.min.css">
+  <link rel="stylesheet" href="views/components/fileinput/css/fileinput-rtl.min.css">
+
+    <script src="views/components/fileinput/js/plugins/buffer.min.js"></script>
+    <script src="views/components/fileinput/js/plugins/filetype.min.js"></script>
+    <script src="views/components/fileinput/js/plugins/piexif.min.js"></script>
+    <script src="views/components/fileinput/js/plugins/sortable.min.js"></script>
+    <script src="views/components/fileinput/js/fileinput.min.js"></script>
+    <script src="views/components/fileinput/themes/fa5/theme.min.js"></script>
+    <script src="views/components/fileinput/js/locales/es.js"></script>
+
 <style>
  .box {
     position: relative;
@@ -523,9 +535,9 @@
         text-align: center;
     }
 
-    .direct-chat-text img{
-        margin: 0 5px;
-        border-radius: 8px;
+    .direct-chat-text img,.img-adjunto{
+        margin: 0 5px 5px 0px;
+                border-radius: 8px;
         cursor: pointer;
     }
 </style>
@@ -705,103 +717,48 @@ if (USER_TYPE=='SPUS'){
             <div class="modal-body" >    
                 <div class="box box-primary direct-chat direct-chat-primary">                   
                     <div class="box-body">
-                    <div id="chatContent" class="direct-chat-messages">
-                        
-                    <div class="direct-chat-msg">
-                            <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-left">Alexander Pierce</span>
-                                <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                            </div>
-                            <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_1.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                                Is this template really for free? That's unbelievable!
-                            </div>
+                        <div id="chatContent" class="direct-chat-messages">
                         </div>
-                
-                        <div class="direct-chat-msg right">
-                            <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
+                        <div class="box-footer">
+
+                            <div id='chat-form-comentarios' class='collapse in'>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Escribe avances o comentarios del folio" class="form-control" id='txtComentarios'>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary btn-flat" onclick='guardarAvance();'>Guardar</button>
+                                    </span>
+                                </div>
+                                <div class="input-group" style='    width: 200px;    float: right;    margin-right: 90px;margin-top: 10px;' id='form-avance'>
+                                        <span class="input-group-btn">
+                                            <b>Avance: </b>
+                                        </span>
+                                        <input type="number"  class="form-control" id='txtAvance' ultimo_avance='0'>
+                                        <span class="input-group-btn">
+                                            <b>%</b>
+                                        </span>
+                                </div> 
+
+                                <button type="button" class="btn btn-default pull-left" style='margin-top: 10px;' onclick="collapse('chat-form-adjuntos,chat-form-comentarios');inicializaFileInputAdjuntos();">Adjuntos <i class="fas fa-paperclip"></i></button>
+
                             </div>
-                                <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                                You better believe it!
+
+                            <div id='chat-form-adjuntos' class='collapse' >
+                                    <div id='contFI'>
+                                        <input id="adjuntosFI" name="archivos[]" type="file" multiple="true" class="fileinput file-loading" />
+                                    </div>
+
+                                    <button type="button" class="btn btn-default pull-left" style='margin-top: 10px;' onclick="collapse('chat-form-adjuntos,chat-form-comentarios');destruirFileInputAdjuntos();">Comentarios</button>
                             </div>
+
                         </div>
-
-                        <div class="direct-chat-msg right">
-                            <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                            </div>
-                                <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                                You better believe it!
-                            </div>
-                        </div>
-
-                        <div class="direct-chat-msg right">
-                            <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                            </div>
-                                <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                                You better believe it!
-                            </div>
-                        </div>
-
-                        <div class="direct-chat-msg right">
-                            <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                            </div>
-                                <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                                You better believe it!
-                            </div>
-                        </div>
-
-                        <div class="direct-chat-msg right">
-                            <div class="direct-chat-info clearfix">
-                                <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                            </div>
-                                <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                                You better believe it!
-                            </div>
-                        </div>
-
-
-
-
-
-                    </div>
-                
-                  
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                    <div>
-                        <div class="input-group">
-                        <input type="text" name="message" placeholder="Type Message ..." class="form-control">
-                            <span class="input-group-btn">
-                                <button type="submit" class="btn btn-primary btn-flat">Guardar</button>
-                            </span>
-                        </div>
-                    </div>
-                    </div>
-                    <!-- /.box-footer-->
                 </div>
     
             </div>         
-            <div class="modal-footer" id="btnsSeguimiento">                
-            </div>
         </div>
     </div>
 </div>
 
+</div>
 <script>
     var select2Act;
 $(document).ready(function(){
@@ -822,17 +779,24 @@ $(document).ready(function(){
         height: 100
     });
 
-    setTimeout(defineFnCUR(), 3000);
+    setTimeout(function () { defineFnCUR(); }, 500);
+
 });
 
 function collapse(id){
-    if($("#"+id).hasClass("show")){
-        $("#"+id+"C i").attr("class","fa fa-angle-down");
-    }else{
-        $("#"+id+"C i").attr("class","fa fa-angle-up");
-    }
 
-    $("#"+id).collapse('toggle');
+    $.each(id.split(","), function( index, idx ) {
+        if($("#"+idx+"C i").length>0){
+            if($("#"+idx).hasClass("show")){
+                $("#"+idx+"C i").attr("class","fa fa-angle-down");
+            }else{
+                $("#"+idx+"C i").attr("class","fa fa-angle-up");
+            }
+        }
+
+        $("#"+idx).collapse('toggle');
+    });
+    
 }
 
 function defineFnCUR(){
@@ -893,7 +857,7 @@ function defineFnCUR(){
 
                 var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
                 var arrayExport = ['excel']; //'excel'
-                datatablebase("tablaActividades", false, 400, true, true, arrayOrder, arrayExport);
+                datatablebase("tablaActividades", false, 500, true, true, arrayOrder, arrayExport);
                 //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
             }
         });
@@ -1174,10 +1138,17 @@ function defineFnCUR(){
         }
     }
 
-    function openComentarios(folio){
+    var _USERR =0;
+    function openComentarios(folio,userR){
         _FOLIO = folio;
+        _USERR = userR;
+
+        destruirFileInputAdjuntos();
+        $("#chat-form-comentarios").collapse('show');
+        $("#chat-form-adjuntos").collapse('hide');
 
         $("#modalSeguimientoActiviades").modal("show");
+
         $("#titleSeguimiento").html("<i class='fas fa-sync-alt'></i> Seguimiento Folio "+ folio);
 
         $.ajax({
@@ -1191,8 +1162,125 @@ function defineFnCUR(){
             },
             success: function(datos){
                 $("#chatContent").html(datos);
+
+                if(userR != '<?PHP echo USER_ID; ?>'&&'SPUS'!='<?PHP echo USER_TYPE; ?>'){
+                    $('#txtAvance').prop('disabled',true);
+                }else{
+                    $('#txtAvance').prop('disabled',false);
+                }
+
+                $('#txtAvance').val(0);
+                $('#txtAvance').attr("ultimo_avance",0);
+
+                $(".porAvanceTot").each(function(){
+                    $('#txtAvance').val(parseInt($(this).html().replace("%","")));
+                    $('#txtAvance').attr("ultimo_avance",parseInt($(this).html().replace("%","")));
+                });
+
+                setTimeout(function () { scrollTo('chatContent'); }, 500);
+
             }
         });
+    }
+
+    function scrollTo(id){
+        $("#"+id).scrollTop(10000);
+    }
+
+    function guardarAvance(){
+        var avance = $("#txtAvance").val();
+        var avanceAntes = $("#txtAvance").attr('ultimo_avance');
+        var comentarios = $("#txtComentarios").val();
+
+        if(parseInt(avance)<parseInt(avanceAntes)){
+            notify('Error el Avance no puede ser menor al ultimo avance.',1500,"error","top-end");
+            $("#txtAvance").focus();
+        }else if(parseInt(avance) > 100){
+            notify('Error el Avance no puede ser mayor a 100%',1500,"error","top-end");
+            $("#txtAvance").val(100);
+            $("#txtAvance").focus();
+        }else if(comentarios ==''){
+            notify('Error escribe un comentario.',1500,"error","top-end");
+            $("#txtComentarios").focus();
+        }else{
+            $.ajax({
+                url: "ajax.php?mode=saveseguimientofolio",
+                type: "POST",
+                data: {folio:_FOLIO,
+                        comentarios:comentarios,
+                        avance:avance
+                },                    
+                error : function(request, status, error) {
+                    notify('Error inesperado, consulte a soporte.'+request+status+error,1500,"error","top-end");
+                },
+                beforeSend: function() {
+                },
+                success: function(datos){
+                    console.log(datos);
+                    var respuesta = JSON.parse(datos);
+                    if (respuesta["codigo"] == "1") {
+                        openComentarios(_FOLIO,_USERR);
+                        getActividades();
+                        $("#txtComentarios").val('');
+                        notify(respuesta["alerta"], 1500, "success", "top-end");
+                    } else {
+                        notify(respuesta["alerta"], 1500, "error", "top-end");
+                    }
+                }
+            });
+        }
+    }
+
+        function destruirFileInputAdjuntos() {
+            $("#adjuntosFI").remove();
+            $("#contFI").html('<input id="adjuntosFI" name="archivos[]" type="file" multiple="true" class="fileinput file-loading" />');
+        }
+
+        function inicializaFileInputAdjuntos() {
+        var extradata = {};
+
+            extradata["modo"] = 'actividades_adjuntos';
+            extradata["id"] = _FOLIO;
+
+
+        $("#adjuntosFI").fileinput({
+            initialPreview: [],
+            initialPreviewAsData: true,
+            initialPreviewConfig: [],
+            uploadUrl: "ajax.php?mode=uploadfiles",
+            uploadAsync: true,
+            validateInitialCount: true,
+            overwriteInitial: false,
+            language: "es",
+            previewFileType: "Imagen",
+            browseClass: "btn btn-info",
+            browseLabel: "Seleccionar Archivos",
+            browseIcon: "<i class=\"fas fa-folder\"></i> ",
+            removeClass: "btn btn-danger",
+            removeLabel: "Eliminar",
+            removeIcon: "<i class=\"fas fa-trash-restore\"></i> ",
+            uploadClass: "btn btn-success",
+            uploadLabel: "Subir",
+            uploadIcon: "<i class=\"fas fa-upload\"></i> ",
+            allowedFileExtensions: ["jpg", "png", "gif","pdf","xls","xlsx","doc","docx"],
+            minFileCount: 1,
+            maxFileCount: 20,
+            uploadExtraData: extradata,
+            fileActionSettings: {
+                dragIcon: "<i class=\"glyphicon glyphicon-move\" aria-hidden=\"true\"></i>"
+            }
+        }).on('fileuploaded', function (e, params) {
+            if(params.response.status=='success'){
+                openComentarios(_FOLIO,_USERR);
+                getActividades();
+                notify("Completado! Se subieron los adjuntos correctamente.", 1500, "success", "top-end");
+                destruirFileInputAdjuntos();
+            }else{
+                notify("ERROR! Ocurrio un al subir uno o mas archivos.", 1500, "error", "top-end");
+                console.log(params.response);
+            }
+        });
+        
     }
 
 
