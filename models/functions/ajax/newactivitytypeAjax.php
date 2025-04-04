@@ -2,9 +2,9 @@
 $db = new Conexion();
 
 $arr = array('codigo' => '', 'alerta' => '');
-$codigo = $db->real_escape_string($_POST['codigo']);
+$codigo = strtoupper($db->real_escape_string($_POST['codigo']));
 $descripcion = $db->real_escape_string($_POST['descripcion']);
-$pre = $db->real_escape_string($_POST['pre']);
+$pre = strtoupper($db->real_escape_string($_POST['pre']));
 
 // Validación back-end para el código (4 caracteres)
 if(strlen($codigo) != 4) {
@@ -13,12 +13,13 @@ if(strlen($codigo) != 4) {
     exit;
 }
 
-// Validación back-end para el prefijo (1 letra)
-if(strlen($pre) != 1 || !preg_match('/^[a-zA-Z]$/', $pre)) {
-    $arr = array('codigo' => 0, 'alerta' => '<b>Error!</b> El prefijo debe ser exactamente 1 letra');
+// Validación back-end para el prefijo (1 letra mayúscula)
+if(strlen($pre) != 1 || !preg_match('/^[A-Z]$/', $pre)) {
+    $arr = array('codigo' => 0, 'alerta' => '<b>Error!</b> El prefijo debe ser exactamente 1 letra mayúscula');
     echo json_encode($arr);
     exit;
 }
+
 
 $_valtipo = findtablaq("SELECT 1 as id, codigo, descripcion, pre FROM act_c_tipos WHERE codigo='$codigo' OR descripcion='$descripcion' OR pre='$pre' LIMIT 1;", "id");
 

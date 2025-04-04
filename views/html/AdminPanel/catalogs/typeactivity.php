@@ -86,51 +86,52 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 $(document).ready(function() {
     getActivityTypes();
     
-    // Validación en tiempo real para el prefijo (1 letra)
+    // Convertir a mayúsculas y validar prefijo (1 letra)
     $("#pre").on('input', function() {
-        var pre = $(this).val();
+        var pre = $(this).val().toUpperCase();
         if(pre.length > 1) {
-            $(this).val(pre.substring(0,1));
+            pre = pre.substring(0,1);
         }
-        $(this).val($(this).val().replace(/[^a-zA-Z]/g, ''));
+        $(this).val(pre.replace(/[^A-Z]/g, ''));
     });
     
-    // Validación en tiempo real para el código (4 caracteres)
+    // Convertir a mayúsculas y validar código (4 caracteres)
     $("#codigo").on('input', function() {
-        var codigo = $(this).val();
+        var codigo = $(this).val().toUpperCase();
         if(codigo.length > 4) {
-            $(this).val(codigo.substring(0,4));
+            codigo = codigo.substring(0,4);
         }
+        $(this).val(codigo);
+    });
+
+    // Convertir a mayúsculas al perder foco (por si acaso)
+    $("#pre, #codigo").on('blur', function() {
+        $(this).val($(this).val().toUpperCase());
     });
 });
 
 function newActivityType() {
-    var codigo = $("#codigo").val();
+    var codigo = $("#codigo").val().toUpperCase();
     var descripcion = $("#descripcion").val();
-    var pre = $("#pre").val();
+    var pre = $("#pre").val().toUpperCase();
 
-    // Validaciones
+    // Resto de validaciones igual...
     if(codigo == "") {
         $("#codigo").focus();
         notify("El campo código es obligatorio", 1500, "error", "top-end");
-        return;
     } else if(codigo.length != 4) {
         $("#codigo").focus();
         notify("El código debe tener exactamente 4 caracteres", 1500, "error", "top-end");
-        return;
     } else if(descripcion == "") {
         $("#descripcion").focus();
         notify("El campo descripción es obligatorio", 1500, "error", "top-end");
-        return;
     } else if(pre == "") {
         $("#pre").focus();
         notify("El campo prefijo es obligatorio", 1500, "error", "top-end");
-        return;
-    } else if(pre.length != 1 || !/^[a-zA-Z]$/.test(pre)) {
+    } else if(pre.length != 1 || !/^[A-Z]$/.test(pre)) {
         $("#pre").focus();
-        notify("El prefijo debe ser exactamente 1 letra", 1500, "error", "top-end");
-        return;
-    }
+        notify("El prefijo debe ser exactamente 1 letra mayúscula", 1500, "error", "top-end");
+    } else { 
         $.ajax({
             url: "ajax.php?mode=newactivitytype",
             type: "POST",
@@ -155,6 +156,7 @@ function newActivityType() {
             }
         });
     }
+}
 
 
 function getActivityTypes() {

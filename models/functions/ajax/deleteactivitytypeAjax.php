@@ -7,7 +7,7 @@ $id = $db->real_escape_string($_POST['id']);
 $dt_valtipo = findtablaq("SELECT 1 as id, codigo FROM act_c_tipos WHERE id=$id AND activo=1 LIMIT 1;", "id");
 
 if(($dt_valtipo != false)) {
-    $dt_valactividades = findtablaq("SELECT id FROM actividades WHERE c_tipo = '".$dt_valtipo[1]['codigo']."' AND activo = 1;", "id");
+    $dt_valactividades = findtablaq("SELECT id FROM actividades WHERE c_tipo_act = '".$dt_valtipo[1]['codigo']."' AND c_estatus = 1;", "id");
     
     if(($dt_valactividades == false)) {
         $q = "UPDATE act_c_tipos SET activo=0, fh_inactivo=NOW() WHERE id=$id;";
