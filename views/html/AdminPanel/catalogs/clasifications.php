@@ -35,13 +35,13 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="codigo">Código: <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required" id="codigo" placeholder="Ingrese código" maxlength="20" required>
+                            <input type="text" class="form-control required" id="codigo" placeholder="Ingrese código" maxlength="4" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="descripcion">Descripción: <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required" id="descripcion" placeholder="Ingrese descripción" maxlength="100" required>
+                            <input type="text" class="form-control required" id="descripcion" placeholder="Ingrese descripción" maxlength="40" required>
                         </div>
                     </div>
                 </div>
@@ -90,7 +90,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="saveClasificacion()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="saveClasification()">Guardar</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -140,7 +140,7 @@ function newClasification() {
 
 
     $.ajax({
-        url: "newclasification", 
+        url: "ajax.php?mode=newclasification", 
         type: "POST",
         dataType: 'json',
         data: {
@@ -149,13 +149,13 @@ function newClasification() {
         }
     })
     .done(function(respuesta) {
-        if(respuesta?.codigo === 1) {
+        if(respuesta.codigo === 1) {
             $('#ModalAddClasificacion').modal('hide');
-            cleanFormClasificaciones();
+            cleanFormClasifications();
             notify(respuesta.alerta, 1500, "success", "top-end");
             getClasifications(); // Nombre consistente
         } else {
-            notify(respuesta?.alerta || "Error al guardar", 1500, "error", "top-end");
+            notify(respuesta.alerta || "Error al guardar", 1500, "error", "top-end");
         }
     })
     .fail(function(xhr, status, error) {
@@ -166,11 +166,11 @@ function newClasification() {
     });
 }
 
-function confirmDeleteClasificacion(id, descripcion){
+function confirmDeleteClasification(id, descripcion){
     notifyConfirm("¿Estás seguro?", "Se va a desactivar la clasificación: " + descripcion, "warning","deleteClasification('"+id+"')");
 }
 
-function deleteClasificacion(id) {
+function deleteClasification(id) {
     $.ajax({  
         url: "ajax.php?mode=deleteclasification",
         type: "POST",
@@ -200,11 +200,11 @@ function deleteClasificacion(id) {
     });
 }
 
-function cleanFormClasificaciones(){
+function cleanFormClasifications(){
     $("#codigo, #descripcion").val("");
 }
 
-function getClasification(id, codigo) {
+function getRegisterClasification(id, codigo) {
     $("#editClasificacionSel").html(codigo);
     $("#ModalEditClasificacion").modal("show");
     $("#idEdit").val(id);
@@ -213,31 +213,49 @@ function getClasification(id, codigo) {
         url: "ajax.php?mode=getregister",
         type: "POST",
         data: {
-            tabla: "clasificaciones",
+            tabla: "act_c_clasificacion",  // Asegúrate que coincida con tu tabla real
             campoId: "id",
             datoId: id
         },
         error: function(request, status, error) {
             notify('Error al obtener datos: ' + error, 1500, "error", "top-end");
+            $("#ModalEditClasificacion").modal("hide");
         },
         success: function(datos) {
             try {
-                var respuesta = JSON.parse(datos);
-                if (respuesta.error) {
-                    notify(respuesta.error, 1500, "error", "top-end");
+                // Verifica si la respuesta es un objeto JSON válido
+                if (typeof datos === 'string') {
+                    datos = JSON.parse(datos);
+                }
+                
+                // Manejo de errores del servidor
+                if (datos.error) {
+                    notify(datos.error, 1500, "error", "top-end");
                     $("#ModalEditClasificacion").modal("hide");
+                    return;
+                }
+                
+                // Verifica la estructura de datos esperada
+                if (datos.codigo && datos.descripcion) {
+                    $("#codigoEdit").val(datos.codigo);
+                    $("#descripcionEdit").val(datos.descripcion);
+                } else if (datos[1] && datos[1].codigo) {
+                    // Compatibilidad con estructura antigua
+                    $("#codigoEdit").val(datos[1]["codigo"]);
+                    $("#descripcionEdit").val(datos[1]["descripcion"]);
                 } else {
-                    $("#codigoEdit").val(respuesta[1]["codigo"]);
-                    $("#descripcionEdit").val(respuesta[1]["descripcion"]);
+                    throw new Error("Estructura de datos no reconocida");
                 }
             } catch(e) {
-                notify("Error al procesar datos de la clasificación: " + e.message, 1500, "error", "top-end");
+                console.error("Error al procesar respuesta:", datos);
+                notify("Error al procesar datos. Ver consola para detalles.", 1500, "error", "top-end");
+                $("#ModalEditClasificacion").modal("hide");
             }
         }
     });
 }
 
-function saveClasificacion() {
+function saveClasification() {
     var id = $("#idEdit").val();
     var codigo = $("#codigoEdit").val().trim();
     var descripcion = $("#descripcionEdit").val().trim();
@@ -258,7 +276,7 @@ function saveClasificacion() {
     btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
 
     $.ajax({
-        url: "ajax.php?mode=saveclasification",
+        url: "ajax.php?mode=saveclasifications",
         type: "POST",
         dataType: 'json',
         data: {

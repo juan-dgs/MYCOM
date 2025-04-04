@@ -1,61 +1,43 @@
 <?php
-// newclasificacionAjax.php
+$db = new Conexion();
 
-header('Content-Type: application/json');
-require_once 'Conexion.php';
+$arr = array('codigo' => '', 'alerta' => '');
+$codigo = $db->real_escape_string($_POST['codigo']);
+$descripcion = $db->real_escape_string($_POST['descripcion']);
 
-$response = ['codigo' => 0, 'alerta' => 'Error desconocido'];
+// Validar si ya existe el código o descripción
+$_valclasif = findtablaq("SELECT 1 as id, codigo, descripcion FROM act_c_clasificacion 
+                          WHERE codigo='$codigo' OR descripcion='$descripcion' 
+                          AND activo=1 LIMIT 1", "id");
 
-try {
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        throw new Exception('Método no permitido', 405);
-    }
+if(empty($_valclasif)) {
+    $q = "INSERT INTO act_c_clasificacion (codigo, descripcion, activo, fh_registro) 
+          VALUES ('$codigo', '$descripcion', 1, NOW())";
 
-    $codigo = isset($_POST['codigo']) ? trim($_POST['codigo']) : '';
-    $descripcion = isset($_POST['descripcion']) ? trim($_POST['descripcion']) : '';
+    $db->query($q);
 
-    if (empty($codigo)) {
-        throw new Exception('El campo código es obligatorio');
-    }
-
-    if (empty($descripcion)) {
-        throw new Exception('El campo descripción es obligatorio');
-    }
-
-    $db = new Conexion();
-    if ($db->connect_error) {
-        throw new Exception('Error de conexión a la base de datos');
-    }
-
-    $codigo = $db->real_escape_string($codigo);
-    $descripcion = $db->real_escape_string($descripcion);
-
-    $check = $db->query("SELECT id FROM act_c_clasificacion WHERE codigo = '$codigo' AND activo = 1");
-    if ($check && $check->num_rows > 0) {
-        throw new Exception('El código de clasificación ya existe');
-    }
-
-    $sql = "INSERT INTO act_c_clasificacion 
-            (codigo, descripcion, fh_registro, activo) 
-            VALUES 
-            ('$codigo', '$descripcion', NOW(), 1)";
-
-    if ($db->query($sql)) {
-        $response = [
-            'codigo' => 1,
-            'alerta' => 'Clasificación creada correctamente',
-            'id' => $db->insert_id  // Opcional: devolver el ID generado
-        ];
+    if($db->error) {
+        try {
+            throw new Exception("MySQL error $db->error <br> Query:<br> ", $db->errno);
+        } catch(Exception $e) {
+            $resultado = "Error no. ".$e->getCode(). "-" .$e->getMessage() . "<br>";
+            $resultado .= nl2br($e->getTraceAsString());
+            $alerta = '<b>Error!</b> '.$resultado;
+            $arr = array('codigo' => 0, 'alerta' => $alerta);
+        }
     } else {
-        throw new Exception('Error al guardar: ' . $db->error);
+        $arr = array('codigo' => 1, 'alerta' => 'Clasificación creada correctamente.');
     }
-
-} catch (Exception $e) {
-    $response['alerta'] = $e->getMessage();
-    http_response_code($e->getCode() ?: 500);
+} else {
+    $alerta = "";
+    if(strtolower($codigo) == strtolower($_valclasif[1]["codigo"])) {
+        $alerta = "<b>Error!</b> Ya existe una clasificación con el código: ".$codigo;
+    } else if(strtolower($descripcion) == strtolower($_valclasif[1]["descripcion"])) {
+        $alerta = "<b>Error!</b> Ya existe una clasificación con la descripción: ".$descripcion;
+    }
+    
+    $arr = array('codigo' => 0, 'alerta' => $alerta);
 }
 
-// 9. Enviar respuesta JSON
-echo json_encode($response, JSON_UNESCAPED_UNICODE);
-exit;
+echo json_encode($arr);
 ?>

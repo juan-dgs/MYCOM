@@ -316,7 +316,7 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
 
   function deleteUser(id){
     $.ajax({  
-    url: "ajax.php?mode=deleteUser",
+    url: "ajax.php?mode=deleteuser",
     type: "POST",
     data: {
       id:id
