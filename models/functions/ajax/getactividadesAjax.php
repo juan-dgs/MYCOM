@@ -33,7 +33,7 @@ $dt_acts=findtablaq("SELECT a.folio,a.c_tipo_act,t.descripcion as tipo_desc,
                                     LEFT JOIN users as ur on a.id_usuario_resp = ur.id
                                     LEFT JOIN users as uf on a.id_usuario_finaliza = uf.id
                                     LEFT JOIN act_c_estatus as s on a.c_estatus = s.codigo
-                                WHERE 1=1 $qValidaPermisos
+                                WHERE 1=1 $qValidaPermisos AND c_estatus = 'A'
                                 ORDER BY fh_captura desc;"
                         ,"folio");
 
@@ -70,57 +70,71 @@ if ($dt_acts!=false){
     }
 
       $htmlAdjuntos ='';
+
+      $htmlAdjuntos .= '<button title="Ver Adjuntos" class="btn btn-default btn-lg" type="button" onclick="verAdjuntos(\''.$dt_acts[$id]['folio'].'\');">'.($dt_acts[$id]['adjuntos']==''?"Subir Adjuntos":count(explode(',',$dt_acts[$id]['adjuntos']))." Adjuntos").'  <i class="fas fa-paperclip"></i></button>';
       if($dt_acts[$id]['adjuntos']!=''){
-        $htmlAdjuntos .= '<button title="Ver Adjuntos" class="btn btn-default btn-lg" type="button" onclick="verAdjuntos(\''.$dt_acts[$id]['folio'].'\');">'.count(explode(',',$dt_acts[$id]['adjuntos'])).'  <i class="fas fa-paperclip"></i></button>';
         //if(count(explode(',',$dt_acts[$id]['adjuntos']))<=3){   
             $contador = 0;
             foreach(explode(',' ,$dt_acts[$id]['adjuntos']) as $f) {
+              $ext = explode('.',$f)[1];
               $dir = 'views/images/attachments/'.substr($dt_acts[$id]['folio'],0,2).'/'.$dt_acts[$id]['folio'].'/'.$f;
+              $img = $dir;
+              $valPreview= true;
+            switch ($ext) {
+              case 'jpg':
+              case 'png':
+              case 'gif':
+                $img = $dir;
+                break;
 
-              switch(explode('.',$f)[1]){
-                case 'jpg':
-                case 'png':
-                case 'gif':
-                  $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="'.$dir.'" width="100px;">'; 
-                  break;
+              case 'doc':
+              case 'docx':
+                $img = "views/images/icons/doc.png";
+                break;
 
-                  case 'doc':
-                case 'docx':
-                  $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/doc.png" width="80px;">'; 
-                  break;
+              case 'xls':
+              case 'xlsx':
+                $img = "views/images/icons/xls.png";
+                $valPreview= false;
+                break;
 
-                case 'xls':
-                case 'xlsx':
-                  $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/xls.png" width="80px;">'; 
-                  break;
+              case 'pdf':
+                $img = "views/images/icons/pdf.png";
+                $valPreview= false;
+                break;
 
-                case 'pdf':
-                  $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/pdf.png" width="80px;">'; 
-                  break;
+              default:
+                $img = "views/images/icons/otro.png";
+                $valPreview= false;
+                break;
+            }
+              $htmlAdjuntos .= '<img '.(USER_TYPE=='SPUS'||$valPreview==true?'onclick="preview(\''.$dir.'\',\''.$ext.'\');" title="Visualizar Adjunto" ':' title="Adjunto no se puede visualizar por permisos." ').' class="img-adjunto" src="'.$img.'" width="80px;">'; 
 
-                 default:
-                    $htmlAdjuntos .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/otro.png" width="80px;">'; 
-                  break;
-              }
               $contador ++;
               if($contador>=5){
                 break;
               }
             }
-          //}
-          
+    
  
             
       }
 
     $HTML .= '<tr>
-                <td style="width: 200px;">'.
+                <td style="width: 200px;position:relative;">'.
                     $dt_acts[$id]['folio'].' <br>'.
-                    $dt_acts[$id]['tipo_desc'].' - '.  $dt_acts[$id]['clasificacion_desc'].' <br>'.
+                    $dt_acts[$id]['tipo_desc'].' - '.$dt_acts[$id]['clasificacion_desc'].' <br>'.
                     $dt_acts[$id]['prioridad_desc'].' <br>'.
                     '<b title="'.$dt_acts[$id]['razon'].'">'.$dt_acts[$id]['nombre_cliente'].'</b><br>'.
-                    $dt_acts[$id]['contacto'].' <br>
-                </td>               
+                    $dt_acts[$id]['contacto'].' <br>';
+
+                    if (USER_TYPE=='SPUS'&&$dt_acts[$id]['avance']<50){
+                      $HTML .='<button type="button" class="btn btn-default" style="position: absolute;bottom:5px;left: 5;" onclick="statusActividad(\''.$dt_acts[$id]['folio'].'\',\'X\',false)">
+                                  <i class="fas fa-trash-alt"></i>
+                              </button>';
+                    }
+
+    $HTML .= '</td>               
                 <td>'.                    
                     ($dt_acts[$id]['descripcion']!=''?'<b>Descripción: </b>'.$dt_acts[$id]['descripcion'].'<br>':'').
                     ($dt_acts[$id]['comentario']!=''?'<b>Comentarios: </b>'.$dt_acts[$id]['comentario'].'<br>':'').
@@ -148,6 +162,12 @@ if ($dt_acts!=false){
                       $HTML .='<button type="button" class="btn btn-default" style="position: absolute;right: 10px;top: 10px;" onclick="editActividad(\''.$dt_acts[$id]['folio'].'\')">
                               <i class="fas fa-pencil-alt"></i>
                           </button>';
+
+                      if($dt_acts[$id]['avance']==100){
+                        $HTML .='<button type="button" class="btn btn-success" style="position: absolute;right: 60px;top: 10px;" onclick="statusActividad(\''.$dt_acts[$id]['folio'].'\',\'F\',false)">
+                                    <i class="fas fa-pencil-alt"></i> Finalizar
+                                </button>';
+                      }     
                     }
                     
       $HTML .= '</div></td>    

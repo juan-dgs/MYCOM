@@ -37,25 +37,25 @@ if ($dt_item!=false){
                                     case 'jpg':
                                     case 'png':
                                     case 'gif':
-                                      $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="'.$dir.'" height="100px;">'; 
+                                      $HTML .= '<img onclick="preview(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="'.$dir.'" height="100px;">'; 
                                       break;
                     
                                       case 'doc':
                                     case 'docx':
-                                      $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/doc.png" width="80px;">'; 
+                                      $HTML .= '<img onclick="preview(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/doc.png" width="80px;">'; 
                                       break;
                     
                                     case 'xls':
                                     case 'xlsx':
-                                      $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/xls.png" width="80px;">'; 
+                                      $HTML .= '<img onclick="preview(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/xls.png" width="80px;">'; 
                                       break;
                     
                                     case 'pdf':
-                                      $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/pdf.png" width="80px;">'; 
+                                      $HTML .= '<img onclick="preview(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/pdf.png" width="80px;">'; 
                                       break;
                     
                                      default:
-                                        $HTML .= '<img onclick="verAdjuntos(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/otro.png" width="80px;">'; 
+                                        $HTML .= '<img onclick="preview(\''.$dir.'\',\''.explode('.',$f)[1].'\');" class="img-adjunto" src="views/images/icons/otro.png" width="80px;">'; 
                                       break;
                                   }   
 
