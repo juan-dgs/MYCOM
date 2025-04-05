@@ -1,7 +1,7 @@
 <?php
 /*NUCLEO DE LA APLICACION*/
   session_start();
-  date_default_timezone_set("America/Caracas");
+  date_default_timezone_set('America/Mexico_City'); // Cambia por tu zona
   setlocale(LC_TIME, 'es_VE.UTF-8','esp');
 
 
@@ -34,6 +34,7 @@
   require('models/functions/findtabla.php');
   require('models/functions/findtablaquery.php');
   require('models/functions/Encrypt.php');
+  require('models/functions/funcionesGeneral.php');
 
   $_MESES = array('','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre');
 

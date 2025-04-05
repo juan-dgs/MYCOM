@@ -65,8 +65,13 @@ if ($dt_item!=false){
                     }                   
         $HTML .= '</div>
                 </div>';
-
   }
+  $update = "UPDATE act_r_comentarios SET visto_por = CONCAT(visto_por,'*".USER_ID."*') WHERE folio_act='$folio' and visto_por not like '%".USER_ID."%';";
+  if($db->query($update)) {
+      $HTML.='<b title="Vistos actualizados" class="fas fa-check-double pull-right" style="    color: #007bff;"></b>';
+  } else {
+      $HTML.='<b title="Vistos no actualizados" class="<i class="fas fa-times pull-right" style="    color: #dc3545;"></i>"></b>';
+  }   
 }else {
   $HTML = '<div class="alert alert-warning" role="alert">
               NO HAY COMENTARIOS DE ESTE FOLIO.
