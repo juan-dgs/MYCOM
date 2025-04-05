@@ -66,7 +66,7 @@ try {
             <div class="form-group">
                 <label>Ícono:</label>
                 <div class="input-group">
-                    <input type="hidden" id="edit_icono" value="'.htmlspecialchars($data['icono'] ?? '').'">
+                    <input type="hidden" id="edit_icono" name="icono" value="'.htmlspecialchars($data['icono'] ?? '').'">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#iconModal">
                         <i class="fas fa-icons"></i> Seleccionar
                     </button>

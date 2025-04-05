@@ -41,6 +41,24 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     .btn-icon:hover {
         opacity: 0.8;
     }
+    .inactive-row, .inactive-row td {
+        background-color:rgb(124, 124, 124) !important;
+    }
+    .dropdown-menu {
+        min-width: 200px;
+        padding: 10px;
+    }
+    #contentPriorities {
+        position: relative;
+    }
+    .loading-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 1000;
+    }
 </style>
 
 <div class="row">
@@ -50,7 +68,12 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                 <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddPriority">
                     <i class="fas fa-plus"></i> Agregar Prioridad
                 </button>
-                <div id="contentPriorities" class="mt-3"></div>
+                <div id="contentPriorities" class="mt-3">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <p>Cargando prioridades...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -278,36 +301,35 @@ function loadIcons(searchTerm = '') {
 
 // Función para obtener las prioridades
 function getPriorities() {
+    var mostrarInactivos = $('#mostrarInactivos').is(':checked') ? '1' : '0';
     $.ajax({
         url: "ajax.php?mode=getpriorities",
         type: "POST",
-        data: {},
+        data: { inactivos: mostrarInactivos },
         beforeSend: function() {
-            $('#contentPriorities').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
+            $('#contentPriorities').html('<div class="loading-spinner"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Cargando prioridades...</p></div>');
         },
-        success: function(response) {
-            $('#contentPriorities').html(response);
-            initDataTable();
+        success: function(datos) {
+            $("#contentPriorities").html(datos);
+            
+            var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
+                var arrayExport = ['excel']; //'excel'
+                datatablebase("tablaUsuarios", false, 400, true, true, arrayOrder, arrayExport);
+                //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
+            
+            // Configurar el evento del checkbox después de cargar la tabla
+            $('#mostrarInactivos').off('change').on('change', function() {
+                const mostrar = $(this).is(":checked") ? "1" : "0";
+                getPriorities();
+            });
         },
         error: function(xhr, status, error) {
-            notify('Error al cargar prioridades: ' + error, 2000, "error");
+            $('#contentPriorities').html('<div class="alert alert-danger">Error al cargar las prioridades</div>');
+            console.error('Error al cargar prioridades:', error);
         }
     });
 }
 
-// Función para inicializar DataTables sin paginación
-function initDataTable() {
-    $('#tablaPrioridades').DataTable({
-        responsive: true,
-        language: {
-            url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-        },
-        dom: 'Bfrtip',
-        buttons: ['excel', 'print'],
-        paging: false,
-        info: false
-    });
-}
 
 // Función para agregar nueva prioridad
 function newPriority() {
@@ -372,13 +394,13 @@ function newPriority() {
     });
 }
 
-// Función para cargar datos para edición (corregida)
+// Función para cargar datos para edición
 function GetRegisterPriority(id) {
     $.ajax({
         url: "ajax.php?mode=getpriority",
         type: "POST",
         data: { id: id },
-        dataType: 'json', // Asegurar que esperamos JSON
+        dataType: 'json',
         beforeSend: function() {
             $('#editPriorityForm').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
         },
@@ -386,7 +408,7 @@ function GetRegisterPriority(id) {
             if (response && response.success && response.html) {
                 $('#editPriorityForm').html(response.html);
                 
-                // Actualizar el ícono seleccionado en el modal de edición
+                // Actualizar el ícono seleccionado
                 const icono = $('#edit_icono').val();
                 if(icono) {
                     $('#editIconPreview').html(`
@@ -395,10 +417,17 @@ function GetRegisterPriority(id) {
                     `).removeClass('text-muted');
                 }
                 
+                // Configurar el modal de íconos para edición
+                $('[data-target="#iconModal"]').off('click').on('click', function() {
+                    currentIconField = 'edit_icono';
+                    currentIconPreview = 'editIconPreview';
+                    selectedIcon = $('#edit_icono').val() || '';
+                    $('#iconModal').modal('show');
+                });
+                
                 $('#ModalEditPriority').modal('show');
             } else {
-                const errorMsg = response.error || "Error al cargar datos";
-                notify(errorMsg, 1500, "error");
+                notify(response.error || "Error al cargar datos", 1500, "error");
             }
         },
         error: function(xhr, status, error) {
@@ -407,94 +436,11 @@ function GetRegisterPriority(id) {
     });
 }
 
-// Función para guardar cambios (corregida)
-function savePriority() {
-    const formData = {
-        id: $('#edit_id').val(),
-        codigo: $('#edit_codigo').val().trim().toUpperCase(), // Añadido
-        descripcion: $('#edit_descripcion').val().trim(),
-        color_hex: $('#edit_color_hex').val(),
-        hr_min: $('#edit_hr_min').val(),
-        hr_max: $('#edit_hr_max').val(),
-        icono: $('#edit_icono').val()
-    };
-
-    // Validaciones mejoradas
-    if (!formData.descripcion) {
-        notify("La descripción es obligatoria", 1500, "error");
-        $('#edit_descripcion').focus();
-        return;
-    }
-    if (!formData.icono) {
-        notify("Por favor seleccione un ícono", 1500, "error");
-        return;
-    }
-    if (parseFloat(formData.hr_min) > parseFloat(formData.hr_max)) {
-        notify("Las horas mínimas no pueden ser mayores que las máximas", 1500, "error");
-        $('#edit_hr_min').focus();
-        return;
-    }
-
-    $.ajax({
-        url: "ajax.php?mode=savepriority",
-        type: "POST",
-        data: formData,
-        dataType: 'json', // Asegurar que esperamos JSON
-        beforeSend: function() {
-            $('button').prop('disabled', true);
-        },
-        success: function(response) {
-            try {
-                if(response && response.codigo == 1) {
-                    $('#ModalEditPriority').modal('hide');
-                    getPriorities();
-                    notify(response.alerta || "Cambios guardados correctamente", 1500, "success");
-                } else {
-                    notify(response.alerta || "Error al guardar los cambios", 1500, "error");
-                }
-            } catch (e) {
-                notify("Error al procesar la respuesta del servidor", 1500, "error");
-            }
-        },
-        error: function(xhr, status, error) {
-            notify("Error de conexión: " + error, 1500, "error");
-        },
-        complete: function() {
-            $('button').prop('disabled', false);
-        }
-    });
-}
-
-// Modificación en el modal de íconos para edición
-function initIconModal() {
-    $('#iconModal').on('show.bs.modal', function(e) {
-        const button = $(e.relatedTarget);
-        currentIconField = button.data('field') || 'icono'; // Default si no existe
-        currentIconPreview = button.data('preview') || 'selectedIconPreview'; // Default
-        
-        // Obtener el valor actual del campo correspondiente
-        selectedIcon = $('#' + currentIconField).val() || '';
-        loadIcons();
-        $('#iconSearch').val('').focus();
-    });
-
-    // Selección automática mejorada
-    $(document).on('click', '#iconModal .icon-item', function() {
-        selectedIcon = $(this).data('icon');
-        $('#' + currentIconField).val(selectedIcon);
-        updateIconPreview(currentIconPreview, selectedIcon);
-        $('#iconModal').modal('hide');
-    });
-
-    $('#iconSearch').on('input', function() {
-        loadIcons($(this).val());
-    });
-}
-
 // Función para guardar cambios
 function savePriority() {
     const formData = {
         id: $('#edit_id').val(),
+        codigo: $('#edit_codigo').val().trim().toUpperCase(),
         descripcion: $('#edit_descripcion').val().trim(),
         color_hex: $('#edit_color_hex').val(),
         hr_min: $('#edit_hr_min').val(),
@@ -522,25 +468,25 @@ function savePriority() {
         url: "ajax.php?mode=savepriority",
         type: "POST",
         data: formData,
+        dataType: 'json',
         beforeSend: function() {
             $('button').prop('disabled', true);
         },
         success: function(response) {
             try {
-                const result = JSON.parse(response);
-                if (result.codigo == 1) {
+                if(response && response.codigo == 1) {
                     $('#ModalEditPriority').modal('hide');
                     getPriorities();
-                    notify(result.alerta, 1500, "success");
+                    notify(response.alerta || "Cambios guardados correctamente", 1500, "success");
                 } else {
-                    notify(result.alerta || "Error al guardar", 1500, "error");
+                    notify(response.alerta || "Error al guardar los cambios", 1500, "error");
                 }
             } catch (e) {
-                notify("Error al procesar la respuesta", 1500, "error");
+                notify("Error al procesar la respuesta del servidor", 1500, "error");
             }
         },
         error: function(xhr, status, error) {
-            notify("Error al guardar: " + error, 1500, "error");
+            notify("Error de conexión: " + error, 1500, "error");
         },
         complete: function() {
             $('button').prop('disabled', false);
@@ -605,43 +551,7 @@ function cleanPriorityForm() {
     $('#color_hex').val('#FF0000');
 }
 
-// Función para mostrar notificaciones
-function notify(message, duration, type) {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: duration || 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    });
-    
-    Toast.fire({
-        icon: type || 'info',
-        title: message
-    });
-}
 
-// Función para mostrar confirmación
-function notifyConfirm(title, text, icon, confirmCallback) {
-    Swal.fire({
-        title: title,
-        html: text,
-        icon: icon || 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, continuar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            eval(confirmCallback);
-        }
-    });
-}
 </script>
 
 <?php include(HTML.'AdminPanel/masterPanel/foot.php'); ?>
