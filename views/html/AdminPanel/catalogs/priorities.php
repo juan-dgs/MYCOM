@@ -503,7 +503,7 @@ function confirmDeletePriority(id, codigo, descripcion) {
     
     notifyConfirm(
         "¿Está seguro de eliminar esta prioridad?",
-        `Se eliminará la prioridad: <strong>${descripcion}</strong>`,
+        `Se eliminará la prioridad:${descripcion}`,
         "warning",
         `deletePriority('${id}')`
     );
