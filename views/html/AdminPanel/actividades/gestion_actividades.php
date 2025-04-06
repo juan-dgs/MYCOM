@@ -781,6 +781,12 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
     border-radius: 10px;
     font-weight: bold;
     }
+
+    #contentInvolucrado{
+        min-height: 50px;
+    border-bottom: solid #00000012;
+    margin-bottom: 3px;
+    }
 </style>
 
 <?php if (USER_TYPE == 'SPUS') {    ?>
@@ -1685,33 +1691,13 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                 notify("Error! Estatus ["+ status +" no valido.]", 1500, "error", "top-end");
             }
         } else {
-            $.ajax({
-                url: "ajax.php?mode=editregister",
-                type: "POST",
-                data: {
-                    id: folio,
-                    tabla: 'actividades',
-                    nameKey: 'folio',
-                    columna: 'c_estatus',
-                    txt: status
-                },
-                error: function(request, status, error) {
-                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
-                },
-                beforeSend: function() {},
-                success: function(datos) {
-                    //console.log(datos);
-                    var respuesta = JSON.parse(datos);
-                    if (respuesta["codigo"] == "1") {
-                        getActividades();
-                        
-                        notify(respuesta["alerta"], 1500, "success", "top-end");
-                    } else {
-                        notify(respuesta["alerta"], 1500, "error", "top-end");
-                        console.log(respuesta["alerta"]);
-                    }
-                }
-            });
+            _FOLIO = '0';
+
+            editRegister(folio,'actividades','folio','c_estatus',status);
+            if(status=='F'){
+                editRegister(folio,'actividades','folio','fh_finaliza','now()');
+                editRegister(folio,'actividades','folio','id_usuario_finaliza','<?php echo USER_ID; ?>');
+            }
         }
     }
 
@@ -1733,6 +1719,36 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                 scrollTop: $row.offset().top - 100
             }, 300);
         }
+    }
+
+    function editRegister(id,tabla,nameKey,columna,txt){
+        $.ajax({
+                url: "ajax.php?mode=editregister",
+                type: "POST",
+                data: {
+                    id: id,
+                    tabla:tabla ,
+                    nameKey:nameKey ,
+                    columna:columna ,
+                    txt:txt
+                },
+                error: function(request, status, error) {
+                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+                },
+                beforeSend: function() {},
+                success: function(datos) {
+                    //console.log(datos);
+                    var respuesta = JSON.parse(datos);
+                    if (respuesta["codigo"] == "1") {
+                        getActividades();
+                        
+                        notify(respuesta["alerta"], 1500, "success", "top-end");
+                    } else {
+                        notify(respuesta["alerta"], 1500, "error", "top-end");
+                        console.log(respuesta["alerta"]);
+                    }
+                }
+            });
     }
 </script>
 

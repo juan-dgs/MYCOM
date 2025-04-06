@@ -7,7 +7,7 @@
   $columna  = $db->real_escape_string($_POST['columna']);
   $txt  = $db->real_escape_string($_POST['txt']);
 
-  $q = "UPDATE $tabla SET $columna = '$txt' WHERE $nameKey = '$id';";
+  $q = "UPDATE $tabla SET $columna = ".(strtolower($txt)=='now()'?$txt:"'".$txt."'")." WHERE $nameKey = '$id';";
 
   $db->query($q);
   $resultado = "";

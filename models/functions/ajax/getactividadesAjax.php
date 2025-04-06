@@ -146,12 +146,11 @@
         }
 
 
-        $HTML .= '<td style="width: 250px;position:relative;">' .
+        $HTML .= '<td style="width: 250px;position:relative;"><div id="contentInvolucrado">' .
           ($dt_acts[$id]['id_usuario_resp'] != '' ? '<div title="Usuario Responsable: ' . $dt_acts[$id]['ur_nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_acts[$id]['ur_foto'] != '' ? $dt_acts[$id]['ur_foto'] : 'userDefault.png') . ');  background-size:  cover; width:55px; height: 55px;  border: solid 2px #fff; "></div>' : '') .
           ($dt_acts[$id]['id_usuario_finaliza'] != '' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza'] ? '<div title="Usuario Finaliza: ' . $dt_acts[$id]['uf_nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_acts[$id]['uf_foto'] != '' ? $dt_acts[$id]['uf_foto'] : 'userDefault.png') . ');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>' : '') .
-          $involucrados .
-          ' <hr>  
-                  <div style="position:relative;">
+          $involucrados .'</div>'.
+          '<div style="position:relative;">
                     <div class="progress avance" style="position:relative;">
                       <b>' . $dt_acts[$id]['avance'] . '%</b>
                       <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="' . $dt_acts[$id]['avance'] . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $dt_acts[$id]['avance'] . '%"></div>
