@@ -1,5 +1,5 @@
 -host
-    -Luis definira si usa server o hosting
+    -Luis definira si usa server o hosting-OK
 
 
 -información de los catalogos
@@ -10,12 +10,16 @@
     -Clasificaciónes
 
 -Indicadores 
-    -Proyectos registrados vs cumplidos (x mes y x semana)
+    -Proyectos registrados vs cumplidos (xa año, x mes y x semana)
     -Cumplimiento por Usuario (x fecha plan, x calificacion y x cantidad de proyectos)
     -Estadisticas x tipo y x clasificacion
 
 -logotipos y colores
     -textos para sitio web?
+
+NOMBRE DEL SITIO
+
+
 
 
 
