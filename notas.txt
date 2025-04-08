@@ -16,3 +16,77 @@
 
 -logotipos y colores
     -textos para sitio web?
+
+
+
+Métricas Generales para Todas las Áreas
+    -Actividades por Estado
+        Pendientes
+        En progreso
+        Completadas
+        Atrasadas
+
+    -Tiempos de Ejecución
+        Tiempo promedio por tipo de actividad
+        Tiempo estimado vs. tiempo real
+        SLA cumplido (%)
+
+    -Distribución de Trabajo
+        Actividades asignadas por técnico
+        Carga de trabajo por equipo/persona
+
+Métricas Específicas por Área
+    -Redes
+        Incidentes reportados por tipo (caídas, lentitud, etc.)
+        Tiempo promedio de resolución de fallas
+        Tickets recurrentes por ubicación/dispositivo
+        Preventivos realizados vs. programados
+
+    -CCTV
+        Instalaciones completadas/mes
+        Mantenimientos preventivos realizados
+        Fallas recurrentes por modelo de cámara
+        Tiempo de respuesta a fallas
+
+    -Configuraciones
+        Dispositivos configurados por tipo (switch, router, firewall)
+        Configuraciones estándar vs. personalizadas
+        Errores en configuraciones (requieren rehacer)
+
+    -Consultoría
+        Proyectos de consultoría activos
+        Horas invertidas vs. horas cotizadas
+        Fases completadas por proyecto
+        Documentación entregada
+
+    -Levantamientos
+        Levantamientos realizados/semana
+        Tiempo promedio por levantamiento
+        Sitios pendientes por visitar
+        Informes generados
+
+    -Cotizaciones
+        Cotizaciones enviadas vs. aprobadas
+        Tiempo promedio de elaboración
+        Valor promedio de cotizaciones
+        Conversión (cotizaciones aprobadas/enviadas)
+
+Métricas de Productividad del Personal
+    -Eficiencia Individual
+        Tareas completadas vs. asignadas
+        Tiempo promedio de resolución
+        Calificación de clientes (si aplica)
+
+    Disponibilidad
+        Horas trabajadas vs. horas disponibles
+        Tiempo ocioso/no asignado
+
+    Habilidades
+        Certificaciones por técnico
+        Especializaciones por área
+
+    Visualizaciones Recomendadas
+        Gráfico de Gantt para ver progreso de proyectos
+        Mapa de calor para identificar áreas/tipos de servicio con más incidencias
+        Gráficos de barras comparativos por técnico/equipo
+        Tendencia temporal (cómo evolucionan las métricas)

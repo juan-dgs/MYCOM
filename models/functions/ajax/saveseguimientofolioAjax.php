@@ -19,7 +19,7 @@ if(empty($dt_valuavance)){
     }else{
         $insert ="INSERT INTO act_r_comentarios 
                     (folio_act, id_u_registra, fh_registra, comentario, avance, visto_por) VALUES 
-                    ('$folio', '".USER_ID."', now(), '$comentarios', '$avance', '".USER_ID."');";
+                    ('$folio', '".USER_ID."', now(), '$comentarios', '$avance', '*".USER_ID."*');";
 
         $insert.="UPDATE actividades SET avance = '$avance' WHERE folio = '$folio';";
 

@@ -50,7 +50,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
 <script src="views/components/fileinput/js/locales/es.js"></script>
 
 <style>
-    .box {
+   /* .box {
         position: relative;
         border-radius: 3px;
         background: #ffffff;
@@ -412,15 +412,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
         transform: translate(0, 0);
     }
 
-    .direct-chat-messages {
-        -webkit-transform: translate(0, 0);
-        -ms-transform: translate(0, 0);
-        -o-transform: translate(0, 0);
-        transform: translate(0, 0);
-        padding: 10px;
-        height: 400px;
-        overflow: auto;
-    }
+   
 
     .direct-chat-msg,
     .direct-chat-text {
@@ -648,6 +640,17 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
     .direct-chat-success .right>.direct-chat-text:after,
     .direct-chat-success .right>.direct-chat-text:before {
         border-left-color: #00a65a;
+    }*/
+
+
+    .direct-chat-messages {
+        -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+        padding: 10px;
+        height: 520px;
+        overflow: auto;
     }
 
     .pull-right {
@@ -737,6 +740,59 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
     #contentAdjuntos div.adjunto-item .btn:hover {
         opacity: 1;
         transition: all 0.3s ease;
+    }
+
+    button.btn-icon{
+        background: transparent;
+        border: none;
+    }
+
+    button.btn-icon:hover{
+        background: transparent;
+        border: none;
+    }
+
+    .highlight {
+        background-color: #c2ffd0 !important;
+    box-shadow: 0 0 0 2px #bbf0c7;
+    transition: all 0.3s ease;
+    outline: none;
+    }
+
+    .cargando-spiner{
+        width: 100%;
+        padding: 80px;
+        text-align: center;
+    }
+
+    .cargando-spiner i{
+        font-size: 110px;
+        color: #00000045;
+    }
+
+    .mark-number{
+        position: absolute;
+    right: -11px;
+    background: #fd7e14;
+    padding: 0px 15px;
+    color: #fff;
+    font-size: 20px;
+    top: -20px;
+    border-radius: 10px;
+    font-weight: bold;
+    }
+
+    #contentInvolucrado{
+        min-height: 50px;
+    border-bottom: solid #00000012;
+    margin-bottom: 3px;
+    }
+
+    .filtroOculto{
+        font-size: 1px;
+    position: absolute;
+    top: 0;
+    color: transparent;
     }
 </style>
 
@@ -990,6 +1046,10 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
 
 <script>
     var select2Act;
+    var _CARGANDO = '<div class="cargando-spiner">'+
+                        '<i class="fa fa-spinner fa-spin fa-3x"></i>'+
+                    '</div>';
+
     $(document).ready(function() {
         getActividades();
 
@@ -1074,6 +1134,8 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
 
 
     function getActividades() {
+       
+        
         $.ajax({
             url: "ajax.php?mode=getactividades",
             type: "POST",
@@ -1081,7 +1143,9 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
             error: function(request, status, error) {
                 notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
             },
-            beforeSend: function() {},
+            beforeSend: function() {
+                $('#contentActs').html(_CARGANDO);
+            },
             success: function(datos) {
                 $("#contentActs").html(datos);
 
@@ -1089,6 +1153,13 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                 var arrayExport = ['excel']; //'excel'
                 datatablebase("tablaActividades", false, 500, true, true, arrayOrder, arrayExport);
                 //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
+                console.log('foco:'+_FOLIO);
+                if(_FOLIO!='0'){
+                    setTimeout(function() {
+                                    var $rowToHighlight = $('#tr'+_FOLIO);
+                                    highlightTableRow($rowToHighlight, 'highlight', true);
+                                }, 500);
+                }
             }
         });
     }
@@ -1134,7 +1205,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
             beforeSend: function() {},
             success: function(datos) {
                 var respuesta = JSON.parse(datos);
-                console.log(respuesta);
+                //console.log(respuesta);
 
                 $("#c_tipo_actividad").val(respuesta[1]["c_tipo_act"]);
                 $('#c_tipo_actividad').prop('disabled', true);
@@ -1383,7 +1454,6 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
         $("#modalSeguimientoActiviades").modal("show");
 
         $("#titleSeguimiento").html("<i class='fas fa-sync-alt'></i> Seguimiento Folio " + folio);
-
         $.ajax({
             url: "ajax.php?mode=getseguimientofolio",
             type: "POST",
@@ -1393,7 +1463,9 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
             error: function(request, status, error) {
                 notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
             },
-            beforeSend: function() {},
+            beforeSend: function() {
+                $('#chatContent').html(_CARGANDO);
+            },
             success: function(datos) {
                 $("#chatContent").html(datos);
 
@@ -1410,6 +1482,8 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                     $('#txtAvance').val(parseInt($(this).html().replace("%", "")));
                     $('#txtAvance').attr("ultimo_avance", parseInt($(this).html().replace("%", "")));
                 });
+
+                $("#cm"+folio).remove();
 
                 setTimeout(function() {
                     scrollTo('chatContent');
@@ -1542,7 +1616,9 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
             error: function(request, status, error) {
                 notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
             },
-            beforeSend: function() {},
+            beforeSend: function() {
+                $('#contentAdjuntos').html(_CARGANDO);
+            },
             success: function(datos) {
                 $("#contentAdjuntos").html(datos);
             }
@@ -1599,6 +1675,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                     if (respuesta["codigo"] == "1") {
                         verAdjuntos(_FOLIO);
                         getActividades();
+                       
                         notify(respuesta["alerta"], 1500, "success", "top-end");
                     } else {
                         notify(respuesta["alerta"], 1500, "error", "top-end");
@@ -1621,25 +1698,57 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                 notify("Error! Estatus ["+ status +" no valido.]", 1500, "error", "top-end");
             }
         } else {
-            $.ajax({
+            _FOLIO = '0';
+
+            editRegister(folio,'actividades','folio','c_estatus',status);
+            if(status=='F'){
+                editRegister(folio,'actividades','folio','fh_finaliza','now()');
+                editRegister(folio,'actividades','folio','id_usuario_finaliza','<?php echo USER_ID; ?>');
+            }
+        }
+    }
+
+    function highlightTableRow($row, highlightClass , scrollToRow = true) {
+        // Restaurar estilo de la fila previamente resaltada
+        if ($(highlightClass).length>0) {
+            $(highlightClass).removeClass(highlightClass);
+        }
+        
+        // Resaltar nueva fila
+        $row.addClass(highlightClass)
+            .attr('tabindex', '-1')
+            .focus();
+        
+        
+        // Scroll opcional
+        if (scrollToRow) {
+            $('html, body').animate({
+                scrollTop: $row.offset().top - 100
+            }, 300);
+        }
+    }
+
+    function editRegister(id,tabla,nameKey,columna,txt){
+        $.ajax({
                 url: "ajax.php?mode=editregister",
                 type: "POST",
                 data: {
-                    id: folio,
-                    tabla: 'actividades',
-                    nameKey: 'folio',
-                    columna: 'c_estatus',
-                    txt: status
+                    id: id,
+                    tabla:tabla ,
+                    nameKey:nameKey ,
+                    columna:columna ,
+                    txt:txt
                 },
                 error: function(request, status, error) {
                     notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
                 },
                 beforeSend: function() {},
                 success: function(datos) {
-                    console.log(datos);
+                    //console.log(datos);
                     var respuesta = JSON.parse(datos);
                     if (respuesta["codigo"] == "1") {
                         getActividades();
+                        
                         notify(respuesta["alerta"], 1500, "success", "top-end");
                     } else {
                         notify(respuesta["alerta"], 1500, "error", "top-end");
@@ -1647,7 +1756,6 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                     }
                 }
             });
-        }
     }
 </script>
 
