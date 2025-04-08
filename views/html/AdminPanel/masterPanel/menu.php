@@ -113,7 +113,7 @@ $qMenu ='SELECT m.c_modulo,m.nivel1,m.nivel2,m.nivel3,m.tipo,m.titulo,m.vinculo,
         <img src="<?php echo USER_PHOTO; ?>" class="img-circle elevation-2" alt="">
       </div>
       <div class="info">
-        <a href="views\html\AdminPanel\Profile\my_profile.php" class="d-block"><?php echo USER_NAME; ?></a>
+        <a href="miperfil" class="d-block"><?php echo USER_NAME; ?></a>
         <b style="    color: #fff;    font-size: 11px;    float: right;    margin-top: -5px;"><?php echo USER_TYPE_DESC; ?></b>
       </div>
     </div>
