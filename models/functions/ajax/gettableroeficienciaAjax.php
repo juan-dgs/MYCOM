@@ -72,7 +72,7 @@ if ($dt_register != false) {
                                 $dt_register[$id]["nombre"] = ($dt_register[$id]["nombre"]==''?'Usuario no asignado':$dt_register[$id]["nombre"]);
 
                                 $HTML .='<tr>
-                                        <td>'.($dt_register[$id]['id'] != '' ? '<div title="Usuario Responsable: ' . $dt_register[$id]['nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_register[$id]['dir_foto'] != '' ? $dt_register[$id]['dir_foto'] : 'userDefault.png') . ');  background-size:  cover; width:55px; height: 55px;  border: solid 2px #fff; "></div>' : '').'</td>
+                                        <td>'.($dt_register[$id]['id'] != '' ? '<div title="Usuario Responsable: ' . $dt_register[$id]['nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_register[$id]['dir_foto'] != '' ? $dt_register[$id]['dir_foto'] : 'userDefault.png') . ');  background-size:  cover; width:30px; height: 30px;  border: solid 2px #fff; "></div>' : '').'</td>
                                         <td class="detalle text-left">'.$dt_register[$id]["nombre"].'</td>
                                         <td class="detalle text-right">'.round($dt_register[$id]["total_plan"],0).' hrs</td>
                                         <td class="detalle text-right">'.round($dt_register[$id]["total_real"],0).' hrs</td>
