@@ -62,29 +62,82 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
     .highcharts-description {
         margin: 0.3rem 10px;
     }
+
+
+    .card .resumen{
+        display: table-cell !important;
+    }
+
+    .card .detalle{
+        display: none !important;
+    }
+    
+    .card.maximized-card .resumen{
+        display: none !important;
+    }
+
+    .card.maximized-card .detalle{
+        display: table-cell !important;
+        
+    }
 </style>
 
-para numeros generales
+<!--
+******para numeros generales
 SELECT sum(IF(c_estatus='X',1,0))as cancelados, sum(IF(c_estatus='F',1,0))as finalizados, sum(IF(c_estatus='A',1,0))as pendientes, sum(IF(c_estatus='A' and avance > 5,1,0))as enproceso FROM `actividades` WHERE (fh_captura > '2025-04-01' OR c_estatus ='A' OR fh_finaliza > '2025-04-01');
 
-para horas plan
+******para horas plan
+
+SELECT u.id,concat(u.nombre,' ',u.apellido_p) as usuario,u.dir_foto,
+sum(horas_plan) as prom_plan,
+sum(horas_real) as prom_real,
+SUM(1) as tot_act,
+SUM(if(c_estatus='F',1,0)) as tot_fin,
+SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
+SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
+AVG(avance) as avance_prom
+from (
+
+    
 SELECT 
-a.fh_captura,a.f_plan_i,a.f_plan_f,p.hr_min,p.hr_max,a.fh_finaliza,
+   a.folio,a.id_usuario_resp,a.fh_captura,a.f_plan_i,a.f_plan_f,p.hr_min,p.hr_max,a.fh_finaliza,a.c_tipo_act,a.c_clasifica_act,a.c_prioridad,a.c_estatus,a.calificacion,a.avance,
+   
+ if(f_plan_f is null,
+    p.hr_max,
+ 	fn_horas_laborables_dinamico(
+        IFNULL(a.f_plan_i, a.fh_captura),
+        IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))
+    )) AS horas_plan,
+    
 
-if(f_plan_i is null,fh_captura,f_plan_i)as fi_plan,
-if(f_plan_f is null,DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR),f_plan_f) as ff_plan,
 
-TIMESTAMPDIFF(HOUR,if(f_plan_i is null,fh_captura,f_plan_i),if(f_plan_f is null,DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR),f_plan_f)) as hrs_plan,
+ fn_horas_laborables_dinamico(
+        IFNULL(a.f_plan_i, a.fh_captura),
+        IFNULL(a.fh_finaliza, now())
+    ) AS horas_real,
+    
+        ROUND(TIMESTAMPDIFF(SECOND, 
+          IFNULL(a.f_plan_i, a.fh_captura), 
+          IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))) / 3600.0, 2) AS horas_totales_plan,
+          
+    ROUND(TIMESTAMPDIFF(SECOND, 
+          IFNULL(a.f_plan_i, a.fh_captura), 
+          IFNULL(a.fh_finaliza, now())) / 3600.0, 2) AS horas_totales_real
 
-if(f_plan_i is null,fh_captura,f_plan_i)as fi_real,
-if(fh_finaliza is null,now(),fh_finaliza) as ff_real,
 
-TIMESTAMPDIFF(HOUR,if(f_plan_i is null,fh_captura,f_plan_i),if(fh_finaliza is null,now(),fh_finaliza)) as hrs_real, c_estatus
-
-FROM actividades as a LEFT JOIN 
+FROM actividades a LEFT JOIN 
 	act_c_prioridades as p on p.codigo = a.c_prioridad
+WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-04-01')
+    
+    ) as calculo 
+    LEFT JOIN users as u on calculo.id_usuario_resp =u.id 
+    
+    GROUP BY u.id 
+    ORDER BY tot_act DESC;
+-->
 
-WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-04-01');
+
+
 <div class="row">
     <div class="col-lg-3 col-6">
         <!-- small box -->
@@ -164,72 +217,7 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                     <!-- /.card-tools -->
                 </div>
                 <!-- /.card-header -->
-                <div class="card-bod p-0">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 45px">U</th>
-                                <th title="horas estimadas vs horas reales [SLAs]">Estimado vs Real</th>
-                                <th style="width: 45px">%SLA</th>
-                                <th>Avance</th>
-                                <th style="width: 40px">%</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div title="Juan David Garcia" class="circular img-circle elevation-2" style="background: url(views/images/profile/jd.jpg);  background-size:  cover; width:45px; height: 45px;  border: solid 2px #fff; "></div>
-                                </td>
-                                <td>50 hrs vs 55 hrs</td>
-                                <td><span class="badge bg-danger">55%</span></td>
-                                <td>
-                                    <div class="progress progress-xs">
-                                        <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-danger">55%</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div title="Juan David Garcia" class="circular img-circle elevation-2" style="background: url(views/images/profile/jd.jpg);  background-size:  cover; width:45px; height: 45px;  border: solid 2px #fff; "></div>
-                                </td>
-                                <td>50 hrs vs 55 hrs</td>
-                                <td><span class="badge bg-danger">55%</span></td>
-                                <td>
-                                    <div class="progress progress-xs">
-                                        <div class="progress-bar bg-warning" style="width: 70%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-warning">70%</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div title="Juan David Garcia" class="circular img-circle elevation-2" style="background: url(views/images/profile/jd.jpg);  background-size:  cover; width:45px; height: 45px;  border: solid 2px #fff; "></div>
-                                </td>
-                                <td>50 hrs vs 55 hrs</td>
-                                <td><span class="badge bg-danger">55%</span></td>
-                                <td>
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar bg-primary" style="width: 30%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-primary">30%</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div title="Juan David Garcia" class="circular img-circle elevation-2" style="background: url(views/images/profile/jd.jpg);  background-size:  cover; width:45px; height: 45px;  border: solid 2px #fff; "></div>
-                                </td>
-                                <td>50 hrs vs 55 hrs</td>
-                                <td><span class="badge bg-danger">55%</span></td>
-                                <td>
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar bg-success" style="width: 90%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-success">90%</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-bod p-0" id="contEficiencia"> 
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -307,6 +295,9 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
 
 <script>
     $(document).ready(function() {
+        getTablaEficiencia();
+
+
         Highcharts.chart('container-graph', {
             chart: {
                 zooming: {
@@ -460,7 +451,37 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         });
 
     });
+
+    var _CARGANDO = '<div class="cargando-spiner">'+
+                        '<i class="fa fa-spinner fa-spin fa-3x"></i>'+
+                    '</div>';
+
+
+
+    function getTablaEficiencia(){        
+        var modo  ='X';
+        var periodo ='X';
+        $.ajax({
+                url: "ajax.php?mode=gettableroeficiencia",
+                type: "POST",
+                data: {
+                    modo: modo,
+                    periodo: periodo
+                },
+                error: function(request, status, error) {
+                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+                },
+                beforeSend: function() {
+                    $('#contEficiencia').html(_CARGANDO);
+                },
+                success: function(datos) {
+                    $("#contEficiencia").html(datos);
+                }
+            });
+    }
 </script>
+
+
 
 
 <?php include(HTML . 'AdminPanel/masterPanel/foot.php'); ?>

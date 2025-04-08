@@ -1,5 +1,3 @@
-
-
     <?php
     $db = new Conexion();
 
@@ -9,8 +7,7 @@
     }
 
 
-    $dt_acts = findtablaq(
-      "SELECT a.folio,a.c_tipo_act,t.descripcion as tipo_desc,
+    $dt_acts = findtablaq("SELECT a.folio,a.c_tipo_act,t.descripcion as tipo_desc,
                                         a.c_clasifica_act,c.descripcion as clasificacion_desc , 
                                         a.c_prioridad,p.descripcion as prioridad_desc,p.color_hex,p.icono,
                                         a.id_cliente,cl.alias as nombre_cliente, cl.razon_social as razon,cl.contacto,
@@ -27,8 +24,22 @@
                                           WHERE ad.folio_act =a.folio) as adjuntos,
                                            (SELECT sum(1) as comenta 
                                           FROM act_r_comentarios as cm  
-                                          WHERE cm.folio_act =a.folio and visto_por NOT LIKE '%*".USER_ID."*%') as comentarios_sin_ver,
-                                          p.hr_min,p.hr_max
+                                          WHERE cm.folio_act =a.folio and visto_por NOT LIKE '%*" . USER_ID . "*%') as comentarios_sin_ver,
+                                          p.hr_min,p.hr_max,
+                                           
+                                          if(a.f_plan_f is null,
+                                                p.hr_max,
+                                                fn_horas_laborables_dinamico(
+                                                    IFNULL(a.f_plan_i, a.fh_captura),
+                                                    IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))
+                                                )) AS horas_plan,
+                                            
+                                                fn_horas_laborables_dinamico(
+                                                IFNULL(a.f_plan_i, a.fh_captura),
+                                                IFNULL(a.fh_finaliza, now())
+                                            ) AS horas_real, 
+                                             
+                                             IFNULL(a.fh_finaliza, now()) as fh_fin
                                 FROM actividades as a 
                                     LEFT JOIN act_c_tipos as t on a.c_tipo_act = t.codigo
                                     LEFT JOIN act_c_clasificacion as c on a.c_clasifica_act = c.codigo
@@ -39,9 +50,7 @@
                                     LEFT JOIN users as uf on a.id_usuario_finaliza = uf.id
                                     LEFT JOIN act_c_estatus as s on a.c_estatus = s.codigo
                                 WHERE 1=1 $qValidaPermisos AND c_estatus = 'A' 
-                                ORDER BY fh_captura desc;",
-      "folio"
-    );
+                                ORDER BY fh_captura desc;", "folio");
 
     $HTML = '';
     if ($dt_acts != false) {
@@ -57,7 +66,7 @@
 
       foreach ($dt_acts as $id => $array) {
 
-        $HTML .= '<tr id="tr'.$id.'">
+        $HTML .= '<tr id="tr' . $id . '">
                 <td style="width: 200px;position:relative;">' .
           $dt_acts[$id]['folio'] . ' <br>' .
           $dt_acts[$id]['tipo_desc'] . ' - ' . $dt_acts[$id]['clasificacion_desc'] . ' <br>' .
@@ -141,15 +150,18 @@
           $htmlAdjuntos .
           '</td>';
         $involucrados = '';
+        $involucrados_nombres ='';
         foreach (explode(',', $dt_acts[$id]['involucrados']) as $i) {
           $involucrados .= ($i != '' ? '<div title="Usuario Involucrado: ' . explode('|', $i)[1] . '" class="circular" style="background: url(views/images/profile/' . (explode('|', $i)[2] != '' ? explode('|', $i)[2] : 'userDefault.png') . ');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>' : '');
+          $involucrados_nombres .=($i != '' ?' '.explode('|', $i)[1]:'');
         }
 
 
         $HTML .= '<td style="width: 250px;position:relative;"><div id="contentInvolucrado">' .
+             '<span class="filtroOculto">'.$dt_acts[$id]['ur_nombre'].' '.$dt_acts[$id]['uf_nombre'].$involucrados_nombres.'</span>'. 
           ($dt_acts[$id]['id_usuario_resp'] != '' ? '<div title="Usuario Responsable: ' . $dt_acts[$id]['ur_nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_acts[$id]['ur_foto'] != '' ? $dt_acts[$id]['ur_foto'] : 'userDefault.png') . ');  background-size:  cover; width:55px; height: 55px;  border: solid 2px #fff; "></div>' : '') .
           ($dt_acts[$id]['id_usuario_finaliza'] != '' && $dt_acts[$id]['id_usuario_resp'] != $dt_acts[$id]['id_usuario_finaliza'] ? '<div title="Usuario Finaliza: ' . $dt_acts[$id]['uf_nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_acts[$id]['uf_foto'] != '' ? $dt_acts[$id]['uf_foto'] : 'userDefault.png') . ');  background-size:  cover; width:40px; height: 40px;  border: solid 2px #fff; "></div>' : '') .
-          $involucrados .'</div>'.
+          $involucrados . '</div>' .
           '<div style="position:relative;">
                     <div class="progress avance" style="position:relative;">
                       <b>' . $dt_acts[$id]['avance'] . '%</b>
@@ -157,32 +169,34 @@
                       <button type="button" class="btn btn-default" style="    position: absolute;right: 0;"  onclick="openComentarios(\'' . $dt_acts[$id]['folio'] . '\',\'' . $dt_acts[$id]['id_usuario_resp'] . '\')">
                           <i class="fas fa-sync-alt"></i>
                       </button>                        
-                    </div>'.  
-                    ($dt_acts[$id]['comentarios_sin_ver']>0?'<div class="mark-number" id="cm'.$id.'">'.$dt_acts[$id]['comentarios_sin_ver'].'</div>':'')                   
-                  .'</div>
+                    </div>' .
+          ($dt_acts[$id]['comentarios_sin_ver'] > 0 ? '<div class="mark-number" id="cm' . $id . '">' . $dt_acts[$id]['comentarios_sin_ver'] . '</div>' : '')
+          . '</div>
                   <div id="rangoFechas" style="    width: 100%;    text-align: center;">';
 
-        $fecha_actual = new DateTime();    
-
-        $tiempoTranscurrido = calcularDiferenciaFechas($dt_acts[$id]['fh_captura'], $fecha_actual->format('Y-m-d H:i:s'));
-
-        if($tiempoTranscurrido['horas']<$dt_acts[$id]['hr_min'] && $tiempoTranscurrido['horas']>$dt_acts[$id]['hr_max']){
+        //$fecha_actual = new DateTime();    
+        //$tiempoTranscurrido = calcularDiferenciaFechas($dt_acts[$id]['fh_captura'], $fecha_actual->format('Y-m-d H:i:s'));
+        /*if($tiempoTranscurrido['horas']<$dt_acts[$id]['hr_min'] && $tiempoTranscurrido['horas']>$dt_acts[$id]['hr_max']){
               $HTML .='<div class="alert alert-warning" role="alert" title="SLA ['.$dt_acts[$id]['hr_min'].'-'.$dt_acts[$id]['hr_max'].'] hrs '.$dt_acts[$id]["prioridad_desc"].'-> Horas Transcurridas '.$tiempoTranscurrido['horas'].'">
                         <i class="fas fa-exclamation-triangle"></i> Actividad en Rango de SLA 
                       </div>';
-        }
-        
-        if($tiempoTranscurrido['horas']>$dt_acts[$id]['hr_max']){
-              $HTML .='<div class="alert alert-danger" role="alert" title="SLA ['.$dt_acts[$id]['hr_min'].'-'.$dt_acts[$id]['hr_max'].'] hrs '.$dt_acts[$id]["prioridad_desc"].'-> Horas Transcurridas '.$tiempoTranscurrido['horas'].'">
+        }*/
+
+        if ($dt_acts[$id]['horas_real'] > $dt_acts[$id]['horas_plan']) {
+          $HTML .= '<div class="alert alert-danger" role="alert" title="SLA [' . $dt_acts[$id]['hr_min'] . '-' . $dt_acts[$id]['hr_max'] . '] hrs ' . $dt_acts[$id]["prioridad_desc"] . '-> Horas Transcurridas ' . $dt_acts[$id]['horas_real'] . ' hrs">
                           <i class="<i class="fas fa-bomb" ></i> Actividad Exedida de SLA 
                         </div>';
+        } elseif ($dt_acts[$id]['horas_real'] < $dt_acts[$id]['hr_min'] && $dt_acts[$id]['horas_real'] > $dt_acts[$id]['hr_max']) {
+          $HTML .= '<div class="alert alert-warning" role="alert" title="SLA [' . $dt_acts[$id]['hr_min'] . '-' . $dt_acts[$id]['hr_max'] . '] hrs ' . $dt_acts[$id]["prioridad_desc"] . '-> Horas Transcurridas ' . $dt_acts[$id]['horas_real'] . ' hrs">
+                          <i class="fas fa-exclamation-triangle"></i> Actividad en Rango de SLA 
+                      </div>';
         }
 
-     
-     
-        $HTML .= '<b title="Tiempo transcurrido desde '.$dt_acts[$id]['fh_captura'].' - '.$fecha_actual->format('Y-m-d H:i:s').' ">'.
-                   $tiempoTranscurrido['texo']. 
-                   '</b><br>';
+
+
+        $HTML .= '<b title="Tiempo transcurrido desde ' . $dt_acts[$id]['fh_captura'] . ' - ' . $dt_acts[$id]['fh_fin'] . ' ">' .
+                          round($dt_acts[$id]['horas_real'],0) . ' horas habiles
+                   </b><br>';
 
         $HTML .= ($dt_acts[$id]['f_plan_i'] != '' ? '<b>Plan Inicio:</b>' . $dt_acts[$id]['f_plan_i'] . ' ' : '') .
           ($dt_acts[$id]['f_plan_f'] != '' ? '<b>Plan Fin:</b>' . $dt_acts[$id]['f_plan_f'] . '' : '');

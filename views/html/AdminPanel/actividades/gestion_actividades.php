@@ -787,6 +787,13 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
     border-bottom: solid #00000012;
     margin-bottom: 3px;
     }
+
+    .filtroOculto{
+        font-size: 1px;
+    position: absolute;
+    top: 0;
+    color: transparent;
+    }
 </style>
 
 <?php if (USER_TYPE == 'SPUS') {    ?>
