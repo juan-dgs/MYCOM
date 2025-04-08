@@ -196,6 +196,5 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         </div>
     </div>
 </body>
-</html>
 
 <?php include(HTML.'AdminPanel/masterPanel/foot.php'); ?>
