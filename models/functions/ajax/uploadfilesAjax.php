@@ -18,7 +18,7 @@ switch ($modo) {
     ];
         echo json_encode($response);
         return;
-    break;
+    
 }
 
 $uploadDir = $dir;
@@ -84,7 +84,7 @@ if (!empty($_FILES['archivos'])) {
             ];
                 echo json_encode($response);
                 return;
-            break;
+            
         }
 
         $destination = $uploadDir . $newFileName;
@@ -110,7 +110,7 @@ if (!empty($_FILES['archivos'])) {
                 ];
                     echo json_encode($response);
                     return;
-                break;
+                
             }
 
             if($q!=''){

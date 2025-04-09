@@ -31,5 +31,20 @@ function calcularDiferenciaFechas($fechaInicio, $fechaFin) {
         ];
     }
 
+    function borrarArchivoSeguro($ruta) {
+        if (!file_exists($ruta)) {
+            return false;
+        }
+        
+        if (is_dir($ruta)) {
+           // error_log("Intento de borrar directorio como archivo: $ruta");
+            return false;
+        }
+        
+        return unlink($ruta);
+    }
+    
+
+
 
 ?>

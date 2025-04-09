@@ -207,6 +207,31 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
     </div>
 </div>
 
+<div id="ModalEditPhoto" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Editar Foto de Perfil</h4>
+            </div>
+            <div class="modal-body">
+                <form id="formEditPhoto" enctype="multipart/form-data">
+                    <input type="hidden" id="userIdPhoto" name="id">
+                    <div class="form-group text-center">
+                        <img id="previewPhoto" src="" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:15px;">
+                        <input type="file" class="form-control" id="fotoUsuario" name="foto" accept="image/*">
+                        <p class="help-block">Formatos permitidos: JPG, PNG, GIF (Máx. 2MB)</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="savePhoto()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
   $(document).ready(function(){
         getUsers();
@@ -489,6 +514,56 @@ if(clave != $("#claveChange2").val()){
             }); 
           }
   }
+
+  // Función para abrir el modal de edición de foto
+function editPhoto(id, currentPhoto) {
+    $("#userIdPhoto").val(id);
+    var fotoUrl = currentPhoto ? 'views/images/profile/'+currentPhoto : 'views/images/profile/userDefault.png';
+    $("#previewPhoto").attr('src', fotoUrl);
+    $("#ModalEditPhoto").modal("show");
+}
+
+// Función para previsualizar la imagen seleccionada
+$("#fotoUsuario").change(function() {
+    if (this.files && this.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#previewPhoto').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+// Función para guardar la foto
+function savePhoto() {
+    var formData = new FormData($("#formEditPhoto")[0]);
+    
+    if(!$("#fotoUsuario").val()) {
+        notify("Debes seleccionar una imagen", 1500, "error", "top-end");
+        return;
+    }
+    
+    $.ajax({
+        url: "ajax.php?mode=updateuserphoto",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        error: function(request, status, error) {
+            notify('Error al actualizar foto: ' + error, 1500, "error", "top-end");
+        },
+        success: function(datos) {
+            var respuesta = JSON.parse(datos);
+            if(respuesta.codigo == 1) {
+                notify(respuesta.alerta, 1500, "success", "top-end");
+                $("#ModalEditPhoto").modal("hide");
+                getUsers(); // Recargar la tabla para mostrar la nueva foto
+            } else {
+                notify(respuesta.alerta, 1500, "error", "top-end");
+            }
+        }
+    });
+}
 
 </script>
 <?php include(HTML.'AdminPanel/masterPanel/foot.php'); ?>

@@ -25,112 +25,37 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 <!-- Modal Agregar Cliente -->
 <div id="ModalAddClient" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Cliente</h4>
-            </div>
-            <div class="modal-body" id="clientForm">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="rfc">RFC:</label>
-                            <input type="text" class="form-control" id="rfc" placeholder="Ingrese RFC (Opcional)" maxlength="13">
-                        </div>
-                        <div class="form-group">
-                            <label for="alias">Alias: <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required" id="alias" placeholder="Ingrese alias comercial" maxlength="50" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="razon_social">Razón Social: <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required" id="razon_social" placeholder="Ingrese razón social" maxlength="100" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="domicilio">Domicilio:</label>
-                            <input type="text" class="form-control" id="domicilio" placeholder="Ingrese domicilio fiscal (Opcional)" maxlength="200">
-                        </div>
-                        <div class="form-group">
-                            <label for="contacto">Contacto:</label>
-                            <input type="text" class="form-control" id="contacto" placeholder="Persona de contacto (Opcional)" maxlength="50">
-                        </div>
-                        <div class="form-group">
-                            <label for="correo">Correo:</label>
-                            <input type="text" class="form-control" id="correo" placeholder="Ingrese correo electrónico (Opcional)" maxlength="50">
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono">Teléfono:</label>
-                            <input type="text" class="form-control" id="telefono" placeholder="Ingrese teléfono (Opcional)" maxlength="15">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="text-muted"><small>Los campos marcados con <span class="text-danger">*</span> son obligatorios</small></p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="newClient()">Guardar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
+        <!-- Contenido del modal existente... -->
     </div>
 </div>
 
 <!-- Modal Editar Cliente -->
 <div id="ModalEditClient" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
+        <!-- Contenido del modal existente... -->
+    </div>
+</div>
+
+<!-- Modal para editar foto de cliente -->
+<div id="ModalEditClientPhoto" class="modal fade" role="dialog">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Cliente: <span id="editClientSel"></span></h4>
+                <h4 class="modal-title">Editar Foto de Cliente</h4>
             </div>
-            <div class="modal-body" id="clientFormEdit">
-                <input type="hidden" id="idEdit">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="rfcEdit">RFC:</label>
-                            <input type="text" class="form-control" id="rfcEdit" placeholder="Ingrese RFC (Opcional)" maxlength="13">
-                        </div>
-                        <div class="form-group">
-                            <label for="aliasEdit">Alias: <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required" id="aliasEdit" placeholder="Ingrese alias comercial" maxlength="50" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="razon_socialEdit">Razón Social: <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required" id="razon_socialEdit" placeholder="Ingrese razón social" maxlength="100" required>
-                        </div>
+            <div class="modal-body">
+                <form id="formEditClientPhoto" enctype="multipart/form-data">
+                    <input type="hidden" id="clientIdPhoto" name="id">
+                    <div class="form-group text-center">
+                        <img id="previewClientPhoto" src="" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:15px;">
+                        <input type="file" class="form-control" id="fotoCliente" name="foto" accept="image/*">
+                        <p class="help-block">Formatos permitidos: JPG, PNG, GIF (Máx. 2MB)</p>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="domicilioEdit">Domicilio:</label>
-                            <input type="text" class="form-control" id="domicilioEdit" placeholder="Ingrese domicilio fiscal (Opcional)" maxlength="200">
-                        </div>
-                        <div class="form-group">
-                            <label for="contactoEdit">Contacto:</label>
-                            <input type="text" class="form-control" id="contactoEdit" placeholder="Persona de contacto (Opcional)" maxlength="50">
-                        </div>
-                        <div class="form-group">
-                            <label for="correoEdit">Correo:</label>
-                            <input type="text" class="form-control" id="correoEdit" placeholder="Ingrese correo electrónico (Opcional)" maxlength="50">
-                        </div>
-                        <div class="form-group">
-                            <label for="telefonoEdit">Teléfono:</label>
-                            <input type="text" class="form-control" id="telefonoEdit" placeholder="Ingrese teléfono (Opcional)" maxlength="15">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="text-muted"><small>Los campos marcados con <span class="text-danger">*</span> son obligatorios</small></p>
-                    </div>
-                </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="saveClient()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="saveClientPhoto()">Guardar</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -138,6 +63,87 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 </div>
 
 <script>
+$(document).ready(function(){
+    getClients();
+    
+    // Previsualización de foto
+    $("#fotoCliente").change(function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#previewClientPhoto').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+});
+
+function getClients() {
+    $.ajax({
+        url: "ajax.php?mode=getclients",
+        type: "POST",
+        data: {},
+        error: function(request, status, error) {
+            notify('Error al cargar clientes: ' + error, 1500, "error", "top-end");
+        },
+        success: function(datos) {
+            $("#contentClients").html(datos);
+            
+            var arrayOrder = [[3, 'asc']]; // Ordenar por Razón Social por defecto
+            var arrayExport = ['excel'];
+            datatablebase("tablaClientes", false, 400, true, true, arrayOrder, arrayExport);
+        }
+    });
+}
+
+// Función para abrir el modal de edición de foto de cliente
+function editClientPhoto(id, currentPhoto) {
+    $("#clientIdPhoto").val(id);
+    var fotoUrl = currentPhoto ? 'views/images/clients/'+currentPhoto : 'views/images/clients/clientDefault.png';
+    $("#previewClientPhoto").attr('src', fotoUrl);
+    $("#ModalEditClientPhoto").modal("show");
+}
+
+// Función para guardar la foto del cliente
+function saveClientPhoto() {
+    var formData = new FormData($("#formEditClientPhoto")[0]);
+    
+    if(!$("#fotoCliente").val()) {
+        notify("Debes seleccionar una imagen", 1500, "error", "top-end");
+        return;
+    }
+    
+    var btn = $("#ModalEditClientPhoto").find(".btn-success");
+    btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
+    
+    $.ajax({
+        url: "ajax.php?mode=updateclientphoto",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        error: function(request, status, error) {
+            notify('Error al actualizar foto: ' + error, 1500, "error", "top-end");
+            btn.prop('disabled', false).html('Guardar');
+        },
+        success: function(datos) {
+            try {
+                var respuesta = JSON.parse(datos);
+                if(respuesta.codigo == 1) {
+                    notify(respuesta.alerta, 1500, "success", "top-end");
+                    $("#ModalEditClientPhoto").modal("hide");
+                    getClients(); // Recargar la tabla para mostrar la nueva foto
+                } else {
+                    notify(respuesta.alerta, 1500, "error", "top-end");
+                }
+            } catch(e) {
+                notify("Error al procesar respuesta del servidor", 1500, "error", "top-end");
+            }
+            btn.prop('disabled', false).html('Guardar');
+        }
+    });
+}
+
 $(document).ready(function(){
     getClients();
 });
@@ -376,6 +382,56 @@ function saveClient() {
 function validateEmail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
+}
+
+// Función para abrir el modal de edición de foto de cliente
+function editClientPhoto(id, currentPhoto) {
+    $("#clientIdPhoto").val(id);
+    var fotoUrl = currentPhoto ? 'views/images/clients/'+currentPhoto : 'views/images/clients/clientDefault.png';
+    $("#previewClientPhoto").attr('src', fotoUrl);
+    $("#ModalEditClientPhoto").modal("show");
+}
+
+// Función para previsualizar la imagen seleccionada
+$("#fotoCliente").change(function() {
+    if (this.files && this.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#previewClientPhoto').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+// Función para guardar la foto del cliente
+function saveClientPhoto() {
+    var formData = new FormData($("#formEditClientPhoto")[0]);
+    
+    if(!$("#fotoCliente").val()) {
+        notify("Debes seleccionar una imagen", 1500, "error", "top-end");
+        return;
+    }
+    
+    $.ajax({
+        url: "ajax.php?mode=updateclientphoto",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        error: function(request, status, error) {
+            notify('Error al actualizar foto: ' + error, 1500, "error", "top-end");
+        },
+        success: function(datos) {
+            var respuesta = JSON.parse(datos);
+            if(respuesta.codigo == 1) {
+                notify(respuesta.alerta, 1500, "success", "top-end");
+                $("#ModalEditClientPhoto").modal("hide");
+                getClients(); // Recargar la tabla para mostrar la nueva foto
+            } else {
+                notify(respuesta.alerta, 1500, "error", "top-end");
+            }
+        }
+    });
 }
 </script>
 

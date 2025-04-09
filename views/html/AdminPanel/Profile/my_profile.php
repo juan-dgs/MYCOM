@@ -279,7 +279,7 @@ function renderProfile(userData) {
     const email = userData.correo || 'No especificado';
     const userType = userData.c_tipo_usuario || 'No especificado';
     const joinDate = formatDate(userData.f_registro);
-    const profilePhoto = userData.dir_foto ? `${userData.dir_foto}` : `views/images/profile/`;
+    const profilePhoto = 'views/images/profile/'+ (userData.dir_foto !=""? `${userData.dir_foto}` : `userDefault.png`);
 
     const profileHTML = `
         <div class="profile-card">
@@ -351,29 +351,6 @@ function showError(message) {
         </div>
     `);
 }
-
-/* Función para editar perfil
-function editProfile() {
-    const userId = "<?php echo $user_id; ?>";
-    const userName = $("#profile-content .profile-name").text().trim();
-    if (typeof GetUser === 'function') {
-        GetUser(userId, userName);
-    } else {
-        showError("La función de edición no está disponible");
-    }
-}
-
-// Función para cambiar contraseña
-function changePassword() {
-    const userId = "<?php echo $user_id; ?>";
-    const userName = $("#profile-content .profile-name").text().trim();
-    if (typeof ChangePass === 'function') {
-        ChangePass(userId, userName);
-    } else {
-        showError("La función de cambio de contraseña no está disponible");
-    }
-}
-*/
 
 // Función para escapar HTML
 function escapeHtml(unsafe) {
