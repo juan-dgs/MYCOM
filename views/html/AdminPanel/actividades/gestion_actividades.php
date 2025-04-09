@@ -50,7 +50,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
 <script src="views/components/fileinput/js/locales/es.js"></script>
 
 <style>
-   /* .box {
+    /* .box {
         position: relative;
         border-radius: 3px;
         background: #ffffff;
@@ -742,58 +742,60 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
         transition: all 0.3s ease;
     }
 
-    button.btn-icon{
+    button.btn-icon {
         background: transparent;
         border: none;
     }
 
-    button.btn-icon:hover{
+    button.btn-icon:hover {
         background: transparent;
         border: none;
     }
 
     .highlight {
         background-color: #c2ffd0 !important;
-    box-shadow: 0 0 0 2px #bbf0c7;
-    transition: all 0.3s ease;
-    outline: none;
+        box-shadow: 0 0 0 2px #bbf0c7;
+        transition: all 0.3s ease;
+        outline: none;
     }
 
-    .cargando-spiner{
+    .cargando-spiner {
         width: 100%;
         padding: 80px;
         text-align: center;
     }
 
-    .cargando-spiner i{
+    .cargando-spiner i {
         font-size: 110px;
         color: #00000045;
     }
 
-    .mark-number{
+    .mark-number {
         position: absolute;
-    right: -11px;
-    background: #fd7e14;
-    padding: 0px 15px;
-    color: #fff;
-    font-size: 20px;
-    top: -20px;
-    border-radius: 10px;
-    font-weight: bold;
+        right: -11px;
+        background: #fd7e14;
+        padding: 0px 15px;
+        color: #fff;
+        font-size: 20px;
+        top: -20px;
+        border-radius: 10px;
+        font-weight: bold;
     }
 
-    #contentInvolucrado{
+    #contentInvolucrado {
         min-height: 50px;
-    border-bottom: solid #00000012;
-    margin-bottom: 3px;
+        border-bottom: solid #00000012;
+        margin-bottom: 3px;
     }
 
-    .filtroOculto{
+    .filtroOculto {
         font-size: 1px;
-    position: absolute;
-    top: 0;
-    color: transparent;
+        position: absolute;
+        top: 0;
+        color: transparent;
     }
+
+    
 </style>
 
 <?php if (USER_TYPE == 'SPUS') {    ?>
@@ -843,7 +845,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                             <select class="form-control select2ModalActividades" id="c_prioridad" required>
                                 <option value="">Seleciona Prioridad</option>
                                 <?php foreach ($dt_prio as $codigo => $array) {
-                                    echo "<option value='" . $dt_prio[$codigo]["codigo"] . "' title='SLA max " . $dt_prio[$codigo]["hr_max"] . " hrs - min " . $dt_prio[$codigo]["hr_min"] . " hrs'>" . $dt_prio[$codigo]["descripcion"] . "</option>";
+                                    echo "<option value='" . $dt_prio[$codigo]["codigo"] . "' min='" . $dt_prio[$codigo]['hr_max'] . "' max='" . $dt_prio[$codigo]['hr_min'] . "' title='SLA max " . $dt_prio[$codigo]["hr_max"] . " hrs - min " . $dt_prio[$codigo]["hr_min"] . " hrs'>" . $dt_prio[$codigo]["descripcion"] . "</option>";
                                 } ?>
                             </select>
                         </div>
@@ -918,12 +920,12 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                         <div id="rangoCont" class="collapse">
                             <div class="form-group">
                                 <label for="f_plan_i">Fecha Inicio:</label>
-                                <input type="date" id="f_plan_i" class="form-control">
+                                <input type="date" id="f_plan_i" min="<?php echo  date('Y-m-d'); ?>" class="form-control">
                             </div>
 
                             <div class="form-group">
                                 <label for="f_plan_f">Fecha Fin:</label>
-                                <input type="date" id="f_plan_f" class="form-control">
+                                <input type="date" id="f_plan_f" min="<?php echo  date('Y-m-d'); ?>" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -1046,9 +1048,9 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
 
 <script>
     var select2Act;
-    var _CARGANDO = '<div class="cargando-spiner">'+
-                        '<i class="fa fa-spinner fa-spin fa-3x"></i>'+
-                    '</div>';
+    var _CARGANDO = '<div class="cargando-spiner">' +
+        '<i class="fa fa-spinner fa-spin fa-3x"></i>' +
+        '</div>';
 
     $(document).ready(function() {
         getActividades();
@@ -1068,11 +1070,17 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
             height: 100
         });
 
-        setTimeout(function() {
-            defineFnCUR();
-        }, 500);
+        
+
+        $("#f_plan_i").change(function(){
+            $("#f_plan_f").attr('min',$("#f_plan_i").val());
+        });
 
     });
+
+    setTimeout(function() {
+            defineFnCUR();
+        }, 500);
 
     function collapse(id) {
 
@@ -1089,6 +1097,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
         });
 
     }
+
 
     function defineFnCUR() {
         $(".select2ModalActividades").change(function() {
@@ -1107,8 +1116,6 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                         $('#c_usuarios_ivolucrados').select2().val($(this).val()).trigger("change");
 
                         $("#c_usuarios_ivolucrados").val($("#c_usuarios_ivolucrados").val());
-
-
                     }
 
                 }
@@ -1116,6 +1123,11 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
 
             } else if ($(this).attr("id") == 'c_usuarios_ivolucrados') {
                 fotosInvolucrados($(this).val());
+            } else if ($(this).attr("id") == 'c_prioridad') {
+                if($("#c_prioridad").val()=='P'){
+                    $('#rangoCont').collapse("show");
+                    $("#f_plan_i").val(formatDate());
+                }    
             }
         });
     }
@@ -1134,8 +1146,8 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
 
 
     function getActividades() {
-       
-        
+
+
         $.ajax({
             url: "ajax.php?mode=getactividades",
             type: "POST",
@@ -1153,12 +1165,11 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                 var arrayExport = ['excel']; //'excel'
                 datatablebase("tablaActividades", false, 500, true, true, arrayOrder, arrayExport);
                 //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
-                console.log('foco:'+_FOLIO);
-                if(_FOLIO!='0'){
+                if (_FOLIO != '0') {
                     setTimeout(function() {
-                                    var $rowToHighlight = $('#tr'+_FOLIO);
-                                    highlightTableRow($rowToHighlight, 'highlight', true);
-                                }, 500);
+                        var $rowToHighlight = $('#tr' + _FOLIO);
+                        highlightTableRow($rowToHighlight, 'highlight', true);
+                    }, 500);
                 }
             }
         });
@@ -1483,7 +1494,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                     $('#txtAvance').attr("ultimo_avance", parseInt($(this).html().replace("%", "")));
                 });
 
-                $("#cm"+folio).remove();
+                $("#cm" + folio).remove();
 
                 setTimeout(function() {
                     scrollTo('chatContent');
@@ -1675,7 +1686,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                     if (respuesta["codigo"] == "1") {
                         verAdjuntos(_FOLIO);
                         getActividades();
-                       
+
                         notify(respuesta["alerta"], 1500, "success", "top-end");
                     } else {
                         notify(respuesta["alerta"], 1500, "error", "top-end");
@@ -1691,35 +1702,35 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
     function statusActividad(folio, status, valida) {
         if (!valida) {
             if (status == 'F') {
-                notifyConfirm("Confirmas que quieres finalizar el folio "+folio+"?", "", "success", "statusActividad('" + folio + "','" + status + "',true);");
+                notifyConfirm("Confirmas que quieres finalizar el folio " + folio + "?", "", "success", "statusActividad('" + folio + "','" + status + "',true);");
             } else if (status = 'X') {
-                notifyConfirm("Confirmas que quieres cancelar el folio "+folio+"?", "", "error", "statusActividad('" + folio + "','" + status + "',true);");
+                notifyConfirm("Confirmas que quieres cancelar el folio " + folio + "?", "", "error", "statusActividad('" + folio + "','" + status + "',true);");
             } else {
-                notify("Error! Estatus ["+ status +" no valido.]", 1500, "error", "top-end");
+                notify("Error! Estatus [" + status + " no valido.]", 1500, "error", "top-end");
             }
         } else {
             _FOLIO = '0';
 
-            editRegister(folio,'actividades','folio','c_estatus',status);
-            if(status=='F'){
-                editRegister(folio,'actividades','folio','fh_finaliza','now()');
-                editRegister(folio,'actividades','folio','id_usuario_finaliza','<?php echo USER_ID; ?>');
+            editRegister(folio, 'actividades', 'folio', 'c_estatus', status);
+            if (status == 'F') {
+                editRegister(folio, 'actividades', 'folio', 'fh_finaliza', 'now()');
+                editRegister(folio, 'actividades', 'folio', 'id_usuario_finaliza', '<?php echo USER_ID; ?>');
             }
         }
     }
 
-    function highlightTableRow($row, highlightClass , scrollToRow = true) {
+    function highlightTableRow($row, highlightClass, scrollToRow = true) {
         // Restaurar estilo de la fila previamente resaltada
-        if ($(highlightClass).length>0) {
+        if ($(highlightClass).length > 0) {
             $(highlightClass).removeClass(highlightClass);
         }
-        
+
         // Resaltar nueva fila
         $row.addClass(highlightClass)
             .attr('tabindex', '-1')
             .focus();
-        
-        
+
+
         // Scroll opcional
         if (scrollToRow) {
             $('html, body').animate({
@@ -1728,34 +1739,34 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
         }
     }
 
-    function editRegister(id,tabla,nameKey,columna,txt){
+    function editRegister(id, tabla, nameKey, columna, txt) {
         $.ajax({
-                url: "ajax.php?mode=editregister",
-                type: "POST",
-                data: {
-                    id: id,
-                    tabla:tabla ,
-                    nameKey:nameKey ,
-                    columna:columna ,
-                    txt:txt
-                },
-                error: function(request, status, error) {
-                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
-                },
-                beforeSend: function() {},
-                success: function(datos) {
-                    //console.log(datos);
-                    var respuesta = JSON.parse(datos);
-                    if (respuesta["codigo"] == "1") {
-                        getActividades();
-                        
-                        notify(respuesta["alerta"], 1500, "success", "top-end");
-                    } else {
-                        notify(respuesta["alerta"], 1500, "error", "top-end");
-                        console.log(respuesta["alerta"]);
-                    }
+            url: "ajax.php?mode=editregister",
+            type: "POST",
+            data: {
+                id: id,
+                tabla: tabla,
+                nameKey: nameKey,
+                columna: columna,
+                txt: txt
+            },
+            error: function(request, status, error) {
+                notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+            },
+            beforeSend: function() {},
+            success: function(datos) {
+                //console.log(datos);
+                var respuesta = JSON.parse(datos);
+                if (respuesta["codigo"] == "1") {
+                    getActividades();
+
+                    notify(respuesta["alerta"], 1500, "success", "top-end");
+                } else {
+                    notify(respuesta["alerta"], 1500, "error", "top-end");
+                    console.log(respuesta["alerta"]);
                 }
-            });
+            }
+        });
     }
 </script>
 
