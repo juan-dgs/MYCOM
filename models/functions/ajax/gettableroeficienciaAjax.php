@@ -1,9 +1,70 @@
 <?php
+
+$q_usu = "";
+if (USER_TYPE!='SPUS'){
+    $q_usu = " AND a.id_usuario_resp = '".USER_ID."' ";
+}
+
+
 $modo = $db->real_escape_string($_POST['modo']);
+if($modo==''){
+    $modo = 'USUA';
+}
+
 $periodo = $db->real_escape_string($_POST['periodo']);
 
 
-$dt_register = findtablaq("SELECT u.id,concat(u.nombre,' ',u.apellido_p,' ',u.apellido_m) as nombre,u.dir_foto,
+
+
+$Q_BASE ="SELECT 
+            a.folio,a.id_usuario_resp,a.fh_captura,a.f_plan_i,a.f_plan_f,p.hr_min,p.hr_max,a.fh_finaliza,a.c_tipo_act,a.c_clasifica_act,a.c_prioridad,a.c_estatus,a.calificacion,a.avance,a.id_cliente,
+              if(f_plan_f is null,
+                p.hr_max,
+                fn_horas_laborables_dinamico(
+                    IFNULL(a.f_plan_i, a.fh_captura),
+                    IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))
+                )) AS horas_plan,
+                
+            fn_horas_laborables_dinamico(
+                    IFNULL(a.f_plan_i, a.fh_captura),
+                    IFNULL(a.fh_finaliza, now())
+                ) AS horas_real,
+                
+                    ROUND(TIMESTAMPDIFF(SECOND, 
+                    IFNULL(a.f_plan_i, a.fh_captura), 
+                    IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))) / 3600.0, 2) AS horas_totales_plan,
+                    
+                ROUND(TIMESTAMPDIFF(SECOND, 
+                    IFNULL(a.f_plan_i, a.fh_captura), 
+                    IFNULL(a.fh_finaliza, now())) / 3600.0, 2) AS horas_totales_real
+
+
+            FROM actividades a LEFT JOIN 
+                act_c_prioridades as p on p.codigo = a.c_prioridad
+            WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-04-01') AND a.c_estatus !='X' $q_usu";
+
+
+$q_tablero = "";
+
+switch ($modo) {
+    case 'USUA':
+        $q_tablero = "SELECT  u.id,concat(u.nombre,' ',u.apellido_p,' ',u.apellido_m) as nombre,u.dir_foto,
+                                sum(horas_plan) as total_plan,
+                                sum(horas_real) as total_real,
+                                SUM(1) as total_act,
+                                SUM(if(c_estatus='F',1,0)) as tot_fin,
+                                SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
+                                SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
+                                AVG(avance) as avance_prom
+                                from (
+                                 $Q_BASE
+                                    ) as calculo 
+                                    LEFT JOIN users as u on calculo.id_usuario_resp =u.id 
+                                    GROUP BY u.id 
+                                    ORDER BY avance_prom DESC;";
+        break;
+    case 'TIPO':
+        $q_tablero = "SELECT c_tipo_act as id,t.descripcion as nombre,
                                         sum(horas_plan) as total_plan,
                                         sum(horas_real) as total_real,
                                         SUM(1) as total_act,
@@ -12,49 +73,86 @@ $dt_register = findtablaq("SELECT u.id,concat(u.nombre,' ',u.apellido_p,' ',u.ap
                                         SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
                                         AVG(avance) as avance_prom
                                         from (
-                                        SELECT 
-                                        a.folio,a.id_usuario_resp,a.fh_captura,a.f_plan_i,a.f_plan_f,p.hr_min,p.hr_max,a.fh_finaliza,a.c_tipo_act,a.c_clasifica_act,a.c_prioridad,a.c_estatus,a.calificacion,a.avance,
-                                        
-                                        if(f_plan_f is null,
-                                            p.hr_max,
-                                            fn_horas_laborables_dinamico(
-                                                IFNULL(a.f_plan_i, a.fh_captura),
-                                                IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))
-                                            )) AS horas_plan,
-                                            
-                                        fn_horas_laborables_dinamico(
-                                                IFNULL(a.f_plan_i, a.fh_captura),
-                                                IFNULL(a.fh_finaliza, now())
-                                            ) AS horas_real,
-                                            
-                                                ROUND(TIMESTAMPDIFF(SECOND, 
-                                                IFNULL(a.f_plan_i, a.fh_captura), 
-                                                IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))) / 3600.0, 2) AS horas_totales_plan,
-                                                
-                                            ROUND(TIMESTAMPDIFF(SECOND, 
-                                                IFNULL(a.f_plan_i, a.fh_captura), 
-                                                IFNULL(a.fh_finaliza, now())) / 3600.0, 2) AS horas_totales_real
-
-
-                                        FROM actividades a LEFT JOIN 
-                                            act_c_prioridades as p on p.codigo = a.c_prioridad
-                                        WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-04-01')
-                                            
+                                        $Q_BASE
                                             ) as calculo 
-                                            LEFT JOIN users as u on calculo.id_usuario_resp =u.id 
-                                            
-                                            GROUP BY u.id 
-                                            ORDER BY avance_prom DESC;", "id");
+                                            LEFT JOIN act_c_tipos as t on calculo.c_tipo_act = t.codigo
+                                            GROUP BY c_tipo_act
+                                            ORDER BY avance_prom DESC;";
 
 
+        break;
+    case 'CLAS':
+         $q_tablero = "SELECT c_clasifica_act as id,c.descripcion as nombre, 
+                                sum(horas_plan) as total_plan,
+                                sum(horas_real) as total_real,
+                                SUM(1) as total_act,
+                                SUM(if(c_estatus='F',1,0)) as tot_fin,
+                                SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
+                                SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
+                                AVG(avance) as avance_prom
+                                from (
+                                 $Q_BASE
+                                    ) as calculo 
+                                    LEFT JOIN act_c_clasificacion as c on calculo.c_clasifica_act = c.codigo
+                                    GROUP BY c_clasifica_act
+                                    ORDER BY avance_prom DESC;";
+        break;
+    case 'PRIO':
+        $q_tablero = "SELECT   c_prioridad as id,p.descripcion as nombre, 
+        sum(horas_plan) as total_plan,
+        sum(horas_real) as total_real,
+        SUM(1) as total_act,
+        SUM(if(c_estatus='F',1,0)) as tot_fin,
+        SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
+        SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
+        AVG(avance) as avance_prom
+        from (
+         $Q_BASE
+            ) as calculo 
+            LEFT JOIN act_c_prioridades as p on calculo.c_prioridad = p.codigo
+            GROUP BY c_prioridad 
+            ORDER BY avance_prom DESC;";
+        break;
+    case 'CLIE':
+        $q_tablero = "SELECT c.alias as id,c.razon_social as nombre,
+        sum(horas_plan) as total_plan,
+        sum(horas_real) as total_real,
+        SUM(1) as total_act,
+        SUM(if(c_estatus='F',1,0)) as tot_fin,
+        SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
+        SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
+        AVG(avance) as avance_prom
+        from (
+         $Q_BASE
+            ) as calculo 
+            LEFT JOIN act_c_clientes as c on calculo.id_cliente = c.id
+            GROUP BY id_cliente
+            ORDER BY avance_prom DESC;";
+        break;
+    default:
+        $modo="USUA";
+}
+$HTML='';
+//$HTML =str_replace("<", "°", $q_tablero);
 
+
+$dt_register = findtablaq($q_tablero, "id");
+
+
+$HTML .='<div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" id="btnClasUSUA" class="btn '.($modo=='USUA'?'btn-primary':'btn-default').' clasUSUA" onclick="getTablaEficiencia(\'USUA\');">Usuario</button>
+            <button type="button" id="btnClasTIPO" class="btn '.($modo=='TIPO'?'btn-primary':'btn-default').' clasTIPO" onclick="getTablaEficiencia(\'TIPO\');">Tipo Actividad</button>
+            <button type="button" id="btnClasCLAS" class="btn '.($modo=='CLAS'?'btn-primary':'btn-default').' clasCLAS" onclick="getTablaEficiencia(\'CLAS\');">Clasificación</button>
+            <button type="button" id="btnClasPRIO" class="btn '.($modo=='PRIO'?'btn-primary':'btn-default').' clasPRIO" onclick="getTablaEficiencia(\'PRIO\');">Prioridad</button>
+            <button type="button" id="btnClasCLIE" class="btn '.($modo=='CLIE'?'btn-primary':'btn-default').' clasCLIE" onclick="getTablaEficiencia(\'CLIE\');">Clientes</button>
+        </div>';
 
 if ($dt_register != false) {
-    $HTML ='<table class="table table-striped">
+    $HTML .='<table class="table table-striped">
                         <thead>
                             <tr>
-                                <th style="width: 45px">U</th>     
-                                <th class="detalle text-center">Nombre</th>                           
+                                <th style="width: 45px">ID</th>
+                                <th class="detalle text-center">Descripción</th>                           
                                 <th class="detalle text-center">Total hrs<br>Estimado</th>
                                 <th class="detalle text-center">Total hrs<br>Real</th>
                                 <th class="detalle text-center">Total<br>Actividades</th>
@@ -72,7 +170,7 @@ if ($dt_register != false) {
                                 $dt_register[$id]["nombre"] = ($dt_register[$id]["nombre"]==''?'Usuario no asignado':$dt_register[$id]["nombre"]);
 
                                 $HTML .='<tr>
-                                        <td>'.($dt_register[$id]['id'] != '' ? '<div title="Usuario Responsable: ' . $dt_register[$id]['nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_register[$id]['dir_foto'] != '' ? $dt_register[$id]['dir_foto'] : 'userDefault.png') . ');  background-size:  cover; width:30px; height: 30px;  border: solid 2px #fff; "></div>' : '').'</td>
+                                        <td>'.($modo=='USUA'?($dt_register[$id]['id'] != '' ? '<div title="Usuario Responsable: ' . $dt_register[$id]['nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_register[$id]['dir_foto'] != '' ? $dt_register[$id]['dir_foto'] : 'userDefault.png') . ');  background-size:  cover; width:30px; height: 30px;  border: solid 2px #fff; "></div>':''):$id).'</td>
                                         <td class="detalle text-left">'.$dt_register[$id]["nombre"].'</td>
                                         <td class="detalle text-right">'.round($dt_register[$id]["total_plan"],0).' hrs</td>
                                         <td class="detalle text-right">'.round($dt_register[$id]["total_real"],0).' hrs</td>
@@ -86,14 +184,16 @@ if ($dt_register != false) {
                                         <td><span class="badge bg-danger">'.round($dt_register[$id]["avance_prom"],2).'%</span></td>
                                     </tr>';
                         }
+                       
 
                            $HTML .='</tbody>
                     </table>';
 
-echo $HTML;
 } else {
    
 
-    echo 'ERROR: NO HAY RESULTADOS..';
+    $HTML .= 'ERROR: NO HAY RESULTADOS..';
 }
+echo $HTML;
+
 ?>

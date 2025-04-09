@@ -182,21 +182,38 @@
                       </div>';
         }*/
 
+        $por = 0; 
+        
+        if (isset($dt_acts[$id]['horas_plan']) && 
+            is_numeric($dt_acts[$id]['horas_plan']) && 
+            $dt_acts[$id]['horas_plan'] != 0) {
+            
+            $horas_plan = $dt_acts[$id]['horas_plan'];
+            $horas_real = $dt_acts[$id]['horas_real'] ?? 0; 
+            
+            $por = ($horas_plan - $horas_real) / $horas_plan*100;
+            
+            $por = round($por, 2);          
+        }
+        
         if ($dt_acts[$id]['horas_real'] > $dt_acts[$id]['horas_plan']) {
-          $HTML .= '<div class="alert alert-danger" role="alert" title="SLA [' . $dt_acts[$id]['hr_min'] . '-' . $dt_acts[$id]['hr_max'] . '] hrs ' . $dt_acts[$id]["prioridad_desc"] . '-> Horas Transcurridas ' . $dt_acts[$id]['horas_real'] . ' hrs">
-                          <i class="<i class="fas fa-bomb" ></i> Actividad Exedida de SLA 
+          $HTML .= '<div class="alert alert-danger" role="alert" title="' . $dt_acts[$id]["prioridad_desc"] . '-> Horas Transcurridas ' . $dt_acts[$id]['horas_real'] . ' hrs">
+                          <i class="fas fa-bomb" ></i> Atraso de '.(($dt_acts[$id]['horas_plan']-$dt_acts[$id]['horas_real'])*-1).' hrs
                         </div>';
-        } elseif ($dt_acts[$id]['horas_real'] < $dt_acts[$id]['hr_min'] && $dt_acts[$id]['horas_real'] > $dt_acts[$id]['hr_max']) {
-          $HTML .= '<div class="alert alert-warning" role="alert" title="SLA [' . $dt_acts[$id]['hr_min'] . '-' . $dt_acts[$id]['hr_max'] . '] hrs ' . $dt_acts[$id]["prioridad_desc"] . '-> Horas Transcurridas ' . $dt_acts[$id]['horas_real'] . ' hrs">
-                          <i class="fas fa-exclamation-triangle"></i> Actividad en Rango de SLA 
+        } elseif ($por < 10) {
+          $HTML .= '<div class="alert alert-warning" role="alert" title=" ' . $dt_acts[$id]["prioridad_desc"] . '-> Horas Transcurridas ' . $dt_acts[$id]['horas_real'] . ' hrs">
+                          <i class="fas fa-exclamation-triangle"></i> Proximo a Exceder Tiempo
                       </div>';
         }
 
 
-
-        $HTML .= '<b title="Tiempo transcurrido desde ' . $dt_acts[$id]['fh_captura'] . ' - ' . $dt_acts[$id]['fh_fin'] . ' ">' .
-                          round($dt_acts[$id]['horas_real'],0) . ' horas habiles
-                   </b><br>';
+        if ($dt_acts[$id]['f_plan_f'] == ''){
+          $HTML .= '<b title="Tiempo transcurrido desde ' . $dt_acts[$id]['fh_captura'] . ' - ' . $dt_acts[$id]['fh_fin'] . ' ">' .
+                          ' ['.$por.'%]<br><b title="Horas Transcurridas">'.round($dt_acts[$id]['horas_real'],0) . '</b> de <b title="Horas Plan">'.round($dt_acts[$id]['horas_plan'],0).' Horas</b> 
+                    </b><br>';
+        }       else{
+          $HTML .='<br><b>['.$por.'%]</b><br>';
+        }
 
         $HTML .= ($dt_acts[$id]['f_plan_i'] != '' ? '<b>Plan Inicio:</b>' . $dt_acts[$id]['f_plan_i'] . ' ' : '') .
           ($dt_acts[$id]['f_plan_f'] != '' ? '<b>Plan Fin:</b>' . $dt_acts[$id]['f_plan_f'] . '' : '');

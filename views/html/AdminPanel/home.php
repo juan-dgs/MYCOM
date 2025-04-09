@@ -80,6 +80,13 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
         display: table-cell !important;
         
     }
+
+    .card:not(.maximized-card) #contEficiencia{
+        height: 500px;
+        overflow: auto;
+    }
+   
+
 </style>
 
 <!--
@@ -204,7 +211,6 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
 <div class="row">
     <div class="col-lg-4 col-6">
 
-        <?php if (USER_TYPE == 'SPUS') { ?>
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Resumen Cumplimiento</h3>
@@ -221,51 +227,7 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                 </div>
                 <!-- /.card-body -->
             </div>
-        <?php } else { ?>
-
-            <div class="card card-widget widget-user">
-                <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header bg-info">
-                    <h3 class="widget-user-username">Alexander Pierce</h3>
-                    <h5 class="widget-user-desc">Founder & CEO</h5>
-                </div>
-                <div class="widget-user-image">
-                    <div title="Juan David Garcia" class="circular img-circle elevation-2" style="background: url(views/images/profile/jd.jpg);  background-size:  cover; width:100px; height: 100px;  border: solid 2px #fff; "></div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-sm-4 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header">3,200</h5>
-                                <span class="description-text">SALES</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header">13,000</h5>
-                                <span class="description-text">FOLLOWERS</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4">
-                            <div class="description-block">
-                                <h5 class="description-header">35</h5>
-                                <span class="description-text">PRODUCTS</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-            </div>
-            <!-- /.widget-user -->
-
-
-        <?php } ?>
+        
 
     </div>
     <div class="col-lg-8 col-6">
@@ -295,8 +257,8 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
 
 <script>
     $(document).ready(function() {
-        getTablaEficiencia();
-
+        getTablaEficiencia('');
+        getContadores();
 
         Highcharts.chart('container-graph', {
             chart: {
@@ -458,9 +420,9 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
 
 
 
-    function getTablaEficiencia(){        
-        var modo  ='X';
-        var periodo ='X';
+    function getTablaEficiencia(modo){        
+        var periodo  ='';
+
         $.ajax({
                 url: "ajax.php?mode=gettableroeficiencia",
                 type: "POST",
@@ -476,6 +438,30 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                 },
                 success: function(datos) {
                     $("#contEficiencia").html(datos);
+                }
+            });
+    }
+
+
+    function getContadores(){  
+        var periodo  ='';
+      
+        $.ajax({
+                url: "ajax.php?mode=getcontadores",
+                type: "POST",
+                data: {
+                    periodo: periodo
+                },
+                error: function(request, status, error) {
+                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+                },
+                beforeSend: function() {
+                    //$('#contEficiencia').html(_CARGANDO);
+                },
+                success: function(datos) {
+                   var result = JSON.parse(datos);
+                   console.log(result);
+
                 }
             });
     }
