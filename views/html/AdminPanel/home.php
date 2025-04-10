@@ -256,8 +256,29 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
 </div>
 
 <script>
+const obtenerFeriados = async (año = 2023) => {
+  try {
+    const response = await fetch(`https://calendarific.com/api/v2/holidays??api_key=gjXsdYfiyt76HJ9AdkDmOScW6hnij4D7&country=MX&year=${año}`);
+    const data = await response.json();
+    
+    // Procesar los datos
+    const feriados = data.response.holidays.map(feriado => ({
+      nombre: feriado.name,
+      fecha: feriado.date.iso,
+      tipo: feriado.type.join(', ')
+    }));
+    
+    console.log(feriados);
+    return feriados;
+    
+  } catch (error) {
+    console.error('Error al obtener feriados:', error);
+  }
+};
+
     $(document).ready(function() {
-        getTablaEficiencia('');
+        obtenerFeriados(2025);
+
         getContadores();
 
         Highcharts.chart('container-graph', {
@@ -465,6 +486,8 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                 }
             });
     }
+
+
 </script>
 
 
