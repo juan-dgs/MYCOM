@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="views/css/template.css">
 
 
+
   <!-- jQuery -->
   <script src="<?php echo ADMINLTE; ?>plugins/jquery/jquery.min.js"></script>
   <!-- jQuery UI 1.11.4 -->
