@@ -5,6 +5,9 @@ include(HTML . 'AdminPanel/masterPanel/menu.php');
 include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
+<script src="views/js/repository.js"></script>
+
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/series-label.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -64,29 +67,27 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
     }
 
 
-    .card .resumen{
+    .card .resumen {
         display: table-cell !important;
     }
 
-    .card .detalle{
-        display: none !important;
-    }
-    
-    .card.maximized-card .resumen{
+    .card .detalle {
         display: none !important;
     }
 
-    .card.maximized-card .detalle{
+    .card.maximized-card .resumen {
+        display: none !important;
+    }
+
+    .card.maximized-card .detalle {
         display: table-cell !important;
-        
+
     }
 
-    .card:not(.maximized-card) #contEficiencia{
+    .card:not(.maximized-card) #contEficiencia {
         height: 500px;
         overflow: auto;
     }
-   
-
 </style>
 
 <!--
@@ -150,29 +151,13 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>150</h3>
-
-                <p>Pendientes</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-tasks"></i>
-            </div>
-            <a href="#" class="small-box-footer">Más<i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>53</h3>
-
-                <p>En progreso</p>
+                <h3 id='countPendientes'>150</h3>
+                <p>En Progreso</p>
             </div>
             <div class="icon">
                 <i class="fas fa-spinner fa-spin"></i>
             </div>
-            <a href="#" class="small-box-footer">Más <i class="fas fa-arrow-circle-right"></i></a>
+            <a class="small-box-footer" id="detPendientes"></a>
         </div>
     </div>
     <!-- ./col -->
@@ -180,14 +165,14 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>44</h3>
+                <h3 id='countFinalizadas'>53</h3>
 
                 <p>Completadas</p>
             </div>
             <div class="icon">
                 <i class="fas fa-thumbs-up"></i>
             </div>
-            <a href="#" class="small-box-footer">Más <i class="fas fa-arrow-circle-right"></i></a>
+            <a class="small-box-footer" id="detFinalizadas"></a>
         </div>
     </div>
     <!-- ./col -->
@@ -195,14 +180,29 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
+                <h3 id="countAtrasadas">44</h3>
 
                 <p>Atrasadas</p>
             </div>
             <div class="icon">
                 <i class="fas fa-thumbs-down"></i>
             </div>
-            <a href="#" class="small-box-footer">Más <i class="fas fa-arrow-circle-right"></i></a>
+            <a class="small-box-footer" id="detAtrasadas"></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3 id="coutCumplimiento">65%</h3>
+
+                <p>Cumplimiento SLA</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-thumbs-up"></i>
+            </div>
+            <a class="small-box-footer" id="detCumplimiento"></a>
         </div>
     </div>
     <!-- ./col -->
@@ -211,23 +211,23 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
 <div class="row">
     <div class="col-lg-4 col-6">
 
-            <div class="card card-outline card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Resumen Cumplimiento</h3>
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Resumen Cumplimiento</h3>
 
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                            <i class="fas fa-expand"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
                 </div>
-                <!-- /.card-header -->
-                <div class="card-bod p-0" id="contEficiencia"> 
-                </div>
-                <!-- /.card-body -->
+                <!-- /.card-tools -->
             </div>
-        
+            <!-- /.card-header -->
+            <div class="card-bod p-0" id="contEficiencia">
+            </div>
+            <!-- /.card-body -->
+        </div>
+
 
     </div>
     <div class="col-lg-8 col-6">
@@ -256,29 +256,8 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
 </div>
 
 <script>
-const obtenerFeriados = async (año = 2023) => {
-  try {
-    const response = await fetch(`https://calendarific.com/api/v2/holidays??api_key=gjXsdYfiyt76HJ9AdkDmOScW6hnij4D7&country=MX&year=${año}`);
-    const data = await response.json();
-    
-    // Procesar los datos
-    const feriados = data.response.holidays.map(feriado => ({
-      nombre: feriado.name,
-      fecha: feriado.date.iso,
-      tipo: feriado.type.join(', ')
-    }));
-    
-    console.log(feriados);
-    return feriados;
-    
-  } catch (error) {
-    console.error('Error al obtener feriados:', error);
-  }
-};
-
     $(document).ready(function() {
-        obtenerFeriados(2025);
-
+        getTablaEficiencia('USUA');
         getContadores();
 
         Highcharts.chart('container-graph', {
@@ -435,59 +414,362 @@ const obtenerFeriados = async (año = 2023) => {
 
     });
 
-    var _CARGANDO = '<div class="cargando-spiner">'+
-                        '<i class="fa fa-spinner fa-spin fa-3x"></i>'+
-                    '</div>';
+    var _CARGANDO = '<div class="cargando-spiner">' +
+        '<i class="fa fa-spinner fa-spin fa-3x"></i>' +
+        '</div>';
 
 
 
-    function getTablaEficiencia(modo){        
-        var periodo  ='';
+    function getTablaEficiencia(modo) {
+        var periodo = '';
 
         $.ajax({
-                url: "ajax.php?mode=gettableroeficiencia",
-                type: "POST",
-                data: {
-                    modo: modo,
-                    periodo: periodo
-                },
-                error: function(request, status, error) {
-                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
-                },
-                beforeSend: function() {
-                    $('#contEficiencia').html(_CARGANDO);
-                },
-                success: function(datos) {
-                    $("#contEficiencia").html(datos);
+            url: "ajax.php?mode=gettableroeficiencia",
+            type: "POST",
+            data: {
+                modo: modo,
+                periodo: periodo
+            },
+            error: function(request, status, error) {
+                notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+            },
+            beforeSend: function() {
+                $('#contEficiencia').html(_CARGANDO);
+
+                setTimeout(function() {
+                    $(".progress-bar").each(function() {
+                        //animarProgressBar($(this), parseFloat($(this).attr("avance")));
+                        animarProgressBarDegradado($(this), parseFloat($(this).attr("avance")), {
+                                duracion: 1500,
+                                colores: [
+                                    { porcentaje: 0, color: '#ff0000' },   // Rojo
+                                    { porcentaje: 30, color: '#ff8000' },  // Naranja
+                                    { porcentaje: 70, color: '#ffff00' },  // Amarillo
+                                    { porcentaje: 100, color: '#28a745' }  // Verde
+                                ],
+                                onComplete: function() {
+                                    console.log('Animación completada');
+                                }
+                            });
+                    });
+
+                    $(".badge-por").each(function() {
+                        animarBadgeDegradado($(this), $(this).attr("por"), {
+                            colorInicio: '#ff0000',
+                            colorMedio: '#ff8000',  // Naranja
+                            colorFin: '#28a745',
+                            duracion: 1500
+                        });
+                    });
+
+
+
+                }, 500);
+
+
+            },
+            success: function(datos) {
+                $("#contEficiencia").html(datos);
+            }
+        });
+    }
+
+    function animarBadgeDegradado($element, porcentajeFinal, opciones = {}) {
+    const config = {
+        duracion: 2000,
+        colorInicio: '#ff0000',  // Rojo
+        colorMedio: '#ffff00',   // Amarillo
+        colorFin: '#00ff00',     // Verde
+        onComplete: null,
+        ...opciones
+    };
+
+    let start = null;
+    const badgeOriginal = $element.text();
+    
+    function animar(timestamp) {
+        if (!start) start = timestamp;
+        const progreso = Math.min((timestamp - start) / config.duracion, 1);
+        const porcentaje = Math.round(progreso * porcentajeFinal);
+        
+        // Actualizar texto
+        $element.text(`${porcentaje}%`);
+        
+        // Calcular color intermedio
+        let color;
+        if (porcentaje < 50) {
+            const factor = porcentaje / 50;
+            color = interpolateColor(config.colorInicio, config.colorMedio, factor);
+        } else {
+            const factor = (porcentaje - 50) / 50;
+            color = interpolateColor(config.colorMedio, config.colorFin, factor);
+        }
+        
+        // Aplicar color
+        $element.css('background-color', color);
+        
+        // Continuar o finalizar
+        if (progreso < 1) {
+            requestAnimationFrame(animar);
+        } else if (typeof config.onComplete === 'function') {
+            config.onComplete();
+        }
+    }
+    
+    // Función para interpolar colores HEX
+    function interpolateColor(color1, color2, factor) {
+        const r1 = parseInt(color1.substring(1, 3), 16);
+        const g1 = parseInt(color1.substring(3, 5), 16);
+        const b1 = parseInt(color1.substring(5, 7), 16);
+        
+        const r2 = parseInt(color2.substring(1, 3), 16);
+        const g2 = parseInt(color2.substring(3, 5), 16);
+        const b2 = parseInt(color2.substring(5, 7), 16);
+        
+        const r = Math.round(r1 + (r2 - r1) * factor);
+        const g = Math.round(g1 + (g2 - g1) * factor);
+        const b = Math.round(b1 + (b2 - b1) * factor);
+        
+        return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+    }
+    
+    // Iniciar animación
+    requestAnimationFrame(animar);
+}
+
+    function animarProgressBarDegradado($element, objetivo, config = {}) {
+        const defaults = {
+            duracion: 2000,
+            colores: [{
+                    porcentaje: 0,
+                    color: '#ff0000'
+                }, // Rojo
+                {
+                    porcentaje: 50,
+                    color: '#ffff00'
+                }, // Amarillo
+                {
+                    porcentaje: 100,
+                    color: '#00ff00'
+                } // Verde
+            ],
+            onComplete: null
+        };
+
+        config = $.extend({}, defaults, config);
+
+        let start = null;
+        const $bar = $element;
+        $bar.css('width', '0%');
+
+        function mezclarColores(color1, color2, factor) {
+            const result = color1.slice();
+            for (let i = 0; i < 3; i++) {
+                result[i] = Math.round(result[i] + factor * (color2[i] - result[i]));
+            }
+            return result;
+        }
+
+        function hexARgb(hex) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return [r, g, b];
+        }
+
+        function animar(timestamp) {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / config.duracion, 1);
+            const porcentaje = progress * objetivo;
+
+            $bar.css('width', porcentaje + '%');
+
+            // Calcular color basado en el porcentaje
+            for (let i = 1; i < config.colores.length; i++) {
+                if (porcentaje <= config.colores[i].porcentaje) {
+                    const color1 = hexARgb(config.colores[i - 1].color);
+                    const color2 = hexARgb(config.colores[i].color);
+                    const factor = (porcentaje - config.colores[i - 1].porcentaje) /
+                        (config.colores[i].porcentaje - config.colores[i - 1].porcentaje);
+
+                    const color = mezclarColores(color1, color2, factor);
+                    $bar.css('background-color', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+                    break;
                 }
-            });
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(animar);
+            } else if (typeof config.onComplete === 'function') {
+                config.onComplete();
+            }
+        }
+
+        requestAnimationFrame(animar);
     }
 
 
-    function getContadores(){  
-        var periodo  ='';
-      
-        $.ajax({
-                url: "ajax.php?mode=getcontadores",
-                type: "POST",
-                data: {
-                    periodo: periodo
-                },
-                error: function(request, status, error) {
-                    notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
-                },
-                beforeSend: function() {
-                    //$('#contEficiencia').html(_CARGANDO);
-                },
-                success: function(datos) {
-                   var result = JSON.parse(datos);
-                   console.log(result);
+    function getContadores() {
+        var periodo = '';
 
-                }
-            });
+        $.ajax({
+            url: "ajax.php?mode=getcontadores",
+            type: "POST",
+            data: {
+                periodo: periodo
+            },
+            error: function(request, status, error) {
+                notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+            },
+            beforeSend: function() {
+
+            },
+            success: function(datos) {
+                var result = JSON.parse(datos);
+                //console.log(result);
+
+
+                $('#countPendientes').contadorAnimado({
+                    target: parseInt(result[1]["pendientes"]),
+                    duration: 1000,
+                    decimals: 0,
+                    prefix: '',
+                    suffix: '',
+                    onComplete: function() {}
+                });
+
+                $("#detPendientes").contadorAnimado({
+                    target: parseInt(parseInt(result[1]["pendientes"]) / parseInt(result[1]["tot_act"]) * 100),
+                    duration: 1500,
+                    decimals: 0,
+                    prefix: '',
+                    suffix: '% ',
+                    onComplete: function() {
+                        $('#detPendientes').append(" <b title='" + result[1]["tot_act"] + "'>del Total</b>")
+                    }
+                });
+
+                $('#countAtrasadas').contadorAnimado({
+                    target: parseInt(result[1]["atrasadas"]),
+                    duration: 1000,
+                    decimals: 0,
+                    prefix: '',
+                    suffix: '',
+                    onComplete: function() {}
+                });
+
+                $('#detAtrasadas').contadorAnimado({
+                    target: parseInt(parseInt(result[1]["atrasadas"]) / parseInt(result[1]["pendientes"]) * 100),
+                    duration: 1500,
+                    decimals: 0,
+                    prefix: '',
+                    suffix: '% ',
+                    onComplete: function() {
+                        $('#detAtrasadas').append(" <b title='" + result[1]["pendientes"] + "'>del las Pendientes</b>")
+                    }
+                });
+
+                $('#countFinalizadas').contadorAnimado({
+                    target: parseInt(result[1]["finalizadas"]),
+                    duration: 1000,
+                    decimals: 0,
+                    prefix: '',
+                    suffix: '',
+                    onComplete: function() {}
+                });
+
+                $('#detFinalizadas').contadorAnimado({
+                    target: parseInt(result[1]["avance_prom"]),
+                    duration: 1500,
+                    decimals: 0,
+                    prefix: '',
+                    suffix: '% ',
+                    onComplete: function() {
+                        $('#detFinalizadas').append(" Avance Promedio")
+                    }
+                });
+
+
+                $('#coutCumplimiento').contadorAnimado({
+                    target: parseInt((parseInt(result[1]["cumplimiento_SLA"]) / parseInt(result[1]["tot_act"])) * 100),
+                    duration: 1000,
+                    decimals: 0,
+                    prefix: '',
+                    suffix: '% ',
+                    onComplete: function() {}
+                });
+
+                $('#detCumplimiento').contadorAnimado({
+                    target: parseInt(parseInt(result[1]["cumplimiento_SLA"])),
+                    duration: 1500,
+                    decimals: 0,
+                    prefix: '',
+                    suffix: '',
+                    onComplete: function() {
+                        $("#detCumplimiento").append(' SLA Cumplidos de un total de ' + result[1]["tot_act"]);
+                    }
+                });
+
+
+            }
+        });
     }
 
 
+    /**
+     * Contador animado que inicia desde 0 hasta el valor objetivo con formato
+     * @param {Object} options - Opciones de configuración
+     */
+    $.fn.contadorAnimado = function(options) {
+        const settings = $.extend({
+            target: 100, // Valor final del contador
+            duration: 2000, // Duración en milisegundos
+            decimals: 0, // Decimales a mostrar
+            prefix: '', // Prefijo (ej: '$')
+            suffix: '', // Sufijo (ej: '%')
+            separadorMiles: true, // Mostrar separadores de miles
+            easing: 'swing', // Tipo de easing
+            onComplete: null // Callback al finalizar
+        }, options);
+
+        return this.each(function() {
+            const $this = $(this);
+            $this.text('0'); // Inicializar en 0
+
+            const start = 0; // Siempre comenzará desde 0
+            const range = settings.target - start;
+            const stepTime = Math.abs(Math.floor(settings.duration / range));
+
+            let current = start;
+            const timer = setInterval(() => {
+                current += range > 0 ? 1 : -1;
+
+                // Formatear el número con separadores de miles y decimales
+                let displayValue;
+                if (settings.decimals > 0) {
+                    displayValue = current.toFixed(settings.decimals);
+                    if (settings.separadorMiles) {
+                        const parts = displayValue.split('.');
+                        parts[0] = parseInt(parts[0]).toLocaleString();
+                        displayValue = parts.join('.');
+                    }
+                } else {
+                    displayValue = settings.separadorMiles ?
+                        Math.floor(current).toLocaleString() :
+                        Math.floor(current).toString();
+                }
+
+                $this.text(settings.prefix + displayValue + settings.suffix);
+
+                if (current === settings.target) {
+                    clearInterval(timer);
+                    if (typeof settings.onComplete === 'function') {
+                        settings.onComplete.call(this);
+                    }
+                }
+            }, stepTime);
+        });
+    };
 </script>
 
 

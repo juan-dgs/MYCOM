@@ -20,12 +20,12 @@ $Q_BASE ="SELECT
             a.folio,a.id_usuario_resp,a.fh_captura,a.f_plan_i,a.f_plan_f,p.hr_min,p.hr_max,a.fh_finaliza,a.c_tipo_act,a.c_clasifica_act,a.c_prioridad,a.c_estatus,a.calificacion,a.avance,a.id_cliente,
               if(f_plan_f is null,
                 p.hr_max,
-                fn_horas_laborables_dinamico(
+                fn_calcular_horas_laborables(
                     IFNULL(a.f_plan_i, a.fh_captura),
                     IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))
                 )) AS horas_plan,
                 
-            fn_horas_laborables_dinamico(
+            fn_calcular_horas_laborables(
                     IFNULL(a.f_plan_i, a.fh_captura),
                     IFNULL(a.fh_finaliza, now())
                 ) AS horas_real,
@@ -147,7 +147,7 @@ $HTML .='<div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" id="btnClasCLIE" class="btn '.($modo=='CLIE'?'btn-primary':'btn-default').' clasCLIE" onclick="getTablaEficiencia(\'CLIE\');">Clientes</button>
         </div>';
 
-if ($dt_register != false) {
+if (!empty($dt_register)) {
     $HTML .='<table class="table table-striped">
                         <thead>
                             <tr>
@@ -169,6 +169,9 @@ if ($dt_register != false) {
                         foreach ($dt_register as $id => $array) {
                                 $dt_register[$id]["nombre"] = ($dt_register[$id]["nombre"]==''?'Usuario no asignado':$dt_register[$id]["nombre"]);
 
+                                $porSLA =(($dt_register[$id]["total_act"] != 0)? round($dt_register[$id]["tot_cumple_sla"] / $dt_register[$id]["total_act"]*100, 2):"0");
+
+                                
                                 $HTML .='<tr>
                                         <td>'.($modo=='USUA'?($dt_register[$id]['id'] != '' ? '<div title="Usuario Responsable: ' . $dt_register[$id]['nombre'] . '" class="circular" style="background: url(views/images/profile/' . ($dt_register[$id]['dir_foto'] != '' ? $dt_register[$id]['dir_foto'] : 'userDefault.png') . ');  background-size:  cover; width:30px; height: 30px;  border: solid 2px #fff; "></div>':''):$id).'</td>
                                         <td class="detalle text-left">'.$dt_register[$id]["nombre"].'</td>
@@ -179,13 +182,13 @@ if ($dt_register != false) {
                                         <td class="detalle text-right">'.round($dt_register[$id]["tot_cumple_sla"],0).'</td>
                                         <td class="detalle text-right">'.round($dt_register[$id]["tot_atrasos"],0).'</td>
                                         <td class="resumen text-right" title="Suma de horas laborables Plan vs Suma de horas laborales real">'.round($dt_register[$id]["total_plan"],0).' hrs vs '.round($dt_register[$id]["total_real"],0).' hrs</td>
-                                        <td><span class="badge bg-danger">'.(($dt_register[$id]["total_act"] != 0)? round($dt_register[$id]["tot_cumple_sla"] / $dt_register[$id]["total_act"]*100, 2):"0") .' %</span></td>
-                                        <td><div class="progress progress-xs"><div class="progress-bar progress-bar-danger" style="width:'.round($dt_register[$id]["avance_prom"],2).'%"></div></div></td>
-                                        <td><span class="badge bg-danger">'.round($dt_register[$id]["avance_prom"],2).'%</span></td>
+                                        <td><span class="badge badge-por" por="'.$porSLA.'">'.$porSLA.' %</span></td>
+                                        <td><div class="progress progress-xs"><div class="progress-bar  progress-bar-striped active" avance="'.round($dt_register[$id]["avance_prom"],2).'" ></div></div></td>
+                                        <td><span class="badge badge-por" por="'.round($dt_register[$id]["avance_prom"],2).'">'.round($dt_register[$id]["avance_prom"],2).'%</span></td>
                                     </tr>';
                         }
                        
-
+//style="width:'.round($dt_register[$id]["avance_prom"],2).'%"
                            $HTML .='</tbody>
                     </table>';
 

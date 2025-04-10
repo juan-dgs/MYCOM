@@ -29,12 +29,12 @@
                                            
                                           if(a.f_plan_f is null,
                                                 p.hr_max,
-                                                fn_horas_laborables_dinamico(
+                                                fn_calcular_horas_laborables(
                                                     IFNULL(a.f_plan_i, a.fh_captura),
                                                     IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))
                                                 )) AS horas_plan,
                                             
-                                                fn_horas_laborables_dinamico(
+                                                fn_calcular_horas_laborables(
                                                 IFNULL(a.f_plan_i, a.fh_captura),
                                                 IFNULL(a.fh_finaliza, now())
                                             ) AS horas_real, 
@@ -53,7 +53,7 @@
                                 ORDER BY fh_captura desc;", "folio");
 
     $HTML = '';
-    if ($dt_acts != false) {
+    if (!empty($dt_acts)) {
       $HTML .= '<table id="tablaActividades" class="display tab-hv dataTable table table-striped nowrap row-border hover order-column table-hover" style="width: 100%;">
             <thead>
                 <tr>

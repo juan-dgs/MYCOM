@@ -794,8 +794,6 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
         top: 0;
         color: transparent;
     }
-
-    
 </style>
 
 <?php if (USER_TYPE == 'SPUS') {    ?>
@@ -820,9 +818,13 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                             <label for="c_tipo_actividad">Tipo de Actividad:</label>
                             <select class="form-control select2ModalActividades" id="c_tipo_actividad" required>
                                 <option value="">Seleciona Tipo de Actividad</option>
-                                <?php foreach ($dt_tipo as $codigo => $array) {
-                                    echo "<option value='" . $dt_tipo[$codigo]["codigo"] . "'>" . $dt_tipo[$codigo]["descripcion"] . "</option>";
-                                } ?>
+                                <?php
+                                if (!empty($dt_tipo)) {
+                                    foreach ($dt_tipo as $codigo => $array) {
+                                        echo "<option value='" . $dt_tipo[$codigo]["codigo"] . "'>" . $dt_tipo[$codigo]["descripcion"] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -832,9 +834,13 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                             <label for="c_clasifica_act">Clasificación:</label>
                             <select class="form-control select2ModalActividades" id="c_clasifica_act" required>
                                 <option value="">Seleciona Clasificación</option>
-                                <?php foreach ($dt_clasifica as $codigo => $array) {
-                                    echo "<option value='" . $dt_clasifica[$codigo]["codigo"] . "'>" . $dt_clasifica[$codigo]["descripcion"] . "</option>";
-                                } ?>
+                                <?php
+                                if (!empty($dt_clasifica)) {
+                                    foreach ($dt_clasifica as $codigo => $array) {
+                                        echo "<option value='" . $dt_clasifica[$codigo]["codigo"] . "'>" . $dt_clasifica[$codigo]["descripcion"] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -844,9 +850,13 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                             <label for="c_prioridad">Prioridad:</label>
                             <select class="form-control select2ModalActividades" id="c_prioridad" required>
                                 <option value="">Seleciona Prioridad</option>
-                                <?php foreach ($dt_prio as $codigo => $array) {
-                                    echo "<option value='" . $dt_prio[$codigo]["codigo"] . "' min='" . $dt_prio[$codigo]['hr_max'] . "' max='" . $dt_prio[$codigo]['hr_min'] . "' title='SLA max " . $dt_prio[$codigo]["hr_max"] . " hrs - min " . $dt_prio[$codigo]["hr_min"] . " hrs'>" . $dt_prio[$codigo]["descripcion"] . "</option>";
-                                } ?>
+                                <?php
+                                if (!empty($dt_prio)) {
+                                    foreach ($dt_prio as $codigo => $array) {
+                                        echo "<option value='" . $dt_prio[$codigo]["codigo"] . "' min='" . $dt_prio[$codigo]['hr_max'] . "' max='" . $dt_prio[$codigo]['hr_min'] . "' title='SLA max " . $dt_prio[$codigo]["hr_max"] . " hrs - min " . $dt_prio[$codigo]["hr_min"] . " hrs'>" . $dt_prio[$codigo]["descripcion"] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -856,9 +866,13 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                             <label for="c_cliente">Cliente:</label>
                             <select class="form-control select2ModalActividades" id="c_cliente" required>
                                 <option value="">Seleciona Cliente Responsable</option>
-                                <?php foreach ($dt_cliente as $codigo => $array) {
-                                    echo "<option value='" . $dt_cliente[$codigo]["id"] . "'>" . $dt_cliente[$codigo]["nombre"] . "</option>";
-                                } ?>
+                                <?php
+                                if (!empty($dt_cliente)) {
+                                    foreach ($dt_cliente as $codigo => $array) {
+                                        echo "<option value='" . $dt_cliente[$codigo]["id"] . "'>" . $dt_cliente[$codigo]["nombre"] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -869,9 +883,14 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                             <label for="c_usuario_responsable">Usuario Responsable:</label>
                             <select class="form-control select2ModalActividades" id="c_usuario_responsable">
                                 <option value="">Seleciona Usuarios Responsable</option>
-                                <?php foreach ($dt_usuarios as $codigo => $array) {
-                                    echo "<option value='" . $dt_usuarios[$codigo]["id"] . "' foto='" . ($dt_usuarios[$codigo]["foto"] != '' ? $dt_usuarios[$codigo]["foto"] : 'userDefault.png') . "' usuario='" . $dt_usuarios[$codigo]["usuario"] . "' tipo='" . $dt_usuarios[$codigo]["tipo"] . "' title='" . $dt_usuarios[$codigo]["usuario"] . " " . $dt_usuarios[$codigo]["tipo"] . "'>" . $dt_usuarios[$codigo]["nombre"] . "</option>";
-                                } ?>
+                                <?php
+                                if (!empty($dt_usuarios)) {
+                                    foreach ($dt_usuarios as $codigo => $array) {
+                                        echo "<option value='" . $dt_usuarios[$codigo]["id"] . "' foto='" . ($dt_usuarios[$codigo]["foto"] != '' ? $dt_usuarios[$codigo]["foto"] : 'userDefault.png') . "' usuario='" . $dt_usuarios[$codigo]["usuario"] . "' tipo='" . $dt_usuarios[$codigo]["tipo"] . "' title='" . $dt_usuarios[$codigo]["usuario"] . " " . $dt_usuarios[$codigo]["tipo"] . "'>" . $dt_usuarios[$codigo]["nombre"] . "</option>";
+                                    }
+                                }
+
+                                ?>
                             </select>
                             <div id="c_usuario_responsable_foto" class="circular novisible" style="background-image: url(views/images/profile/userDefault.png);background-size:  cover; width: 60px;height: 60px;border: solid 2px #fff;position: absolute;top: 0;right: 16px; "></div>
                         </div>
@@ -881,9 +900,13 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                         <div class="form-group">
                             <label for="c_usuarios_ivolucrados">Usuarios Involucrados:</label>
                             <select class="form-control select2ModalActividades" id="c_usuarios_ivolucrados" name="ivolucrados[]" multiple="multiple">>
-                                <?php foreach ($dt_usuarios as $codigo => $array) {
-                                    echo "<option value='" . $dt_usuarios[$codigo]["id"] . "' foto='" . ($dt_usuarios[$codigo]["foto"] != '' ? $dt_usuarios[$codigo]["foto"] : 'userDefault.png') . "' usuario='" . $dt_usuarios[$codigo]["usuario"] . "' tipo='" . $dt_usuarios[$codigo]["tipo"] . "' title='" . $dt_usuarios[$codigo]["usuario"] . " " . $dt_usuarios[$codigo]["tipo"] . "'>" . $dt_usuarios[$codigo]["nombre"] . "</option>";
-                                } ?>
+                                <?php
+                                if (!empty($dt_usuarios)) {
+                                    foreach ($dt_usuarios as $codigo => $array) {
+                                        echo "<option value='" . $dt_usuarios[$codigo]["id"] . "' foto='" . ($dt_usuarios[$codigo]["foto"] != '' ? $dt_usuarios[$codigo]["foto"] : 'userDefault.png') . "' usuario='" . $dt_usuarios[$codigo]["usuario"] . "' tipo='" . $dt_usuarios[$codigo]["tipo"] . "' title='" . $dt_usuarios[$codigo]["usuario"] . " " . $dt_usuarios[$codigo]["tipo"] . "'>" . $dt_usuarios[$codigo]["nombre"] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <div id="c_usuario_involucrados_fotos"></div>
 
@@ -1070,17 +1093,17 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
             height: 100
         });
 
-        
 
-        $("#f_plan_i").change(function(){
-            $("#f_plan_f").attr('min',$("#f_plan_i").val());
+
+        $("#f_plan_i").change(function() {
+            $("#f_plan_f").attr('min', $("#f_plan_i").val());
         });
 
     });
 
     setTimeout(function() {
-            defineFnCUR();
-        }, 500);
+        defineFnCUR();
+    }, 500);
 
     function collapse(id) {
 
@@ -1124,10 +1147,10 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
             } else if ($(this).attr("id") == 'c_usuarios_ivolucrados') {
                 fotosInvolucrados($(this).val());
             } else if ($(this).attr("id") == 'c_prioridad') {
-                if($("#c_prioridad").val()=='P'){
+                if ($("#c_prioridad").val() == 'P') {
                     $('#rangoCont').collapse("show");
                     $("#f_plan_i").val(formatDate());
-                }    
+                }
             }
         });
     }

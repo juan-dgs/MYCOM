@@ -179,3 +179,26 @@ function sumarDias(fecha, dias) {
 
   return `${year}-${month}-${day}`;
 }
+
+function formatearNumero(valor, decimales = 2, separadorMiles = true) {
+  // Convertir a número y validar
+  const numero = Number(valor);
+  
+  // Manejar casos especiales
+  if (isNaN(numero)) return 'NaN';
+  if (!isFinite(numero)) return numero > 0 ? '∞' : '-∞';
+  
+  // Redondear con precisión (manejo correcto de negativos)
+  const factor = Math.pow(10, decimales);
+  const redondeado = Math.round((Math.abs(numero) * factor)) / factor * Math.sign(numero);
+  
+  // Opciones de formato
+  const opciones = {
+      minimumFractionDigits: decimales,
+      maximumFractionDigits: decimales,
+      useGrouping: separadorMiles
+  }
+  
+  return redondeado.toLocaleString(undefined, opciones);
+
+}

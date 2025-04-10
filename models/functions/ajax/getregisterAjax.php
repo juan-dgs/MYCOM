@@ -1,4 +1,5 @@
 <?php
+
 $tabla = $db->real_escape_string($_POST['tabla']);
 $campoId =$db->real_escape_string($_POST['campoId']);
 $datoId = $db->real_escape_string($_POST['datoId']);
@@ -16,4 +17,4 @@ if ($dt_register!=false){
                           WHERE $campoId= '$datoId' LIMIT 1;");
   echo json_encode($arr);
 }
- ?>
+ 

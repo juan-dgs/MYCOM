@@ -9,12 +9,12 @@ $Q_BASE ="SELECT
             a.folio,a.id_usuario_resp,a.fh_captura,a.f_plan_i,a.f_plan_f,p.hr_min,p.hr_max,a.fh_finaliza,a.c_tipo_act,a.c_clasifica_act,a.c_prioridad,a.c_estatus,a.calificacion,a.avance,a.id_cliente,
               if(f_plan_f is null,
                 p.hr_max,
-                fn_horas_laborables_dinamico(
+                fn_calcular_horas_laborables(
                     IFNULL(a.f_plan_i, a.fh_captura),
                     IFNULL(a.f_plan_f, DATE_ADD(fh_captura, INTERVAL p.hr_max HOUR))
                 )) AS horas_plan,
                 
-            fn_horas_laborables_dinamico(
+            fn_calcular_horas_laborables(
                     IFNULL(a.f_plan_i, a.fh_captura),
                     IFNULL(a.fh_finaliza, now())
                 ) AS horas_real,
@@ -35,11 +35,11 @@ $Q_BASE ="SELECT
                         sum(horas_plan) as prom_plan,
                         sum(horas_real) as prom_real,
                         SUM(1) as tot_act,
-                        SUM(if(c_estatus='A',1,0)) as pendientes,
                         AVG(avance) as avance_prom,
+                        SUM(if(c_estatus='A',1,0)) as pendientes,
                         SUM(if(c_estatus='F',1,0)) as finalizadas,
                         SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as cumplimiento_SLA,
-                        SUM(if(horas_plan<horas_real,1,0)) as atrasadas
+                        SUM(if(horas_plan<horas_real and c_estatus='A',1,0)) as atrasadas
                     FROM (".$Q_BASE.') as calculo 
                     ORDER BY tot_act DESC;';
 
