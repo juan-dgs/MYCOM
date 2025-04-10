@@ -62,7 +62,8 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                 <h4 class="modal-title">Editar Día Feriado</h4>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="fecha_original">
+                <input type="hidden" id="idEdit">
+                <input type="hidden" id="fecha_original"> 
                 
                 <div class="form-group">
                     <label for="fechaEdit">Fecha:</label>
@@ -81,7 +82,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="saveHoliday()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="updateHoliday()">Guardar</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -123,7 +124,6 @@ function newHoliday() {
             if (respuesta["codigo"] == "1") {
                 $("#ModalAddHoliday").modal("hide");
                 cleanFormHoliday();
-                $("#contentHolidays");
                 getHolidays();
                 notify(respuesta["alerta"], 1500, "success", "top-end");
             } else {
@@ -155,56 +155,75 @@ function getRegisterHoliday(fecha) {
     $.ajax({
         url: "ajax.php?mode=getregister",
         type: "POST",
-        data: { fecha: fecha },
+        data: { 
+            tabla: "core_feriados", 
+            campoId: "fecha",
+            datoId: fecha
+        },
         success: function(datos) {
-            var respuesta = JSON.parse(datos);
-            $("#ModalEditHoliday").modal("show");
-            $("#fecha_original").val(respuesta.fecha);
-            $("#fechaEdit").val(respuesta.fecha);
-            $("#nombreEdit").val(respuesta.nombre);
-            $("#es_recurrenteEdit").prop("checked", respuesta.es_recurrente == 1);
+            try {
+                var respuesta = JSON.parse(datos);
+                console.log("Datos recibidos para edición:", respuesta); // Debug
+                
+                $("#ModalEditHoliday").modal("show");
+                $("#idEdit").val(respuesta.id);
+                $("#fecha_original").val(respuesta.fecha); // Asegurar esto
+                $("#fechaEdit").val(respuesta.fecha);
+                $("#nombreEdit").val(respuesta.nombre);
+                $("#es_recurrenteEdit").prop("checked", respuesta.es_recurrente == 1);
+            } catch (e) {
+                console.error("Error al parsear respuesta:", e, datos);
+                notify("Error al cargar datos para edición", 2000, "error", "top-end");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en getRegisterHoliday:", status, error);
         }
     });
 }
 
-function saveHoliday() {
+function updateHoliday() {
+    var id = $("#idEdit").val();
     var fecha_original = $("#fecha_original").val();
     var fecha = $("#fechaEdit").val();
     var nombre = $("#nombreEdit").val();
     var es_recurrente = $("#es_recurrenteEdit").is(":checked") ? 1 : 0;
 
-    if(fecha == ""){
-        $("#fechaEdit").focus();
-        notify("El campo fecha es obligatorio", 1500, "error", "top-end");
-        return;
-    }
-    
-    if(nombre == ""){
-        $("#nombreEdit").focus();
-        notify("El campo nombre es obligatorio", 1500, "error", "top-end");
+    // Validaciones básicas
+    if (!fecha || !nombre) {
+        notify("Todos los campos son requeridos", 1500, "error", "top-end");
         return;
     }
 
     $.ajax({
         url: "ajax.php?mode=saveholiday",
         type: "POST",
+        dataType: "json", // Esperamos JSON
         data: {
+            id: id,
             fecha_original: fecha_original,
             fecha: fecha,
             nombre: nombre,
             es_recurrente: es_recurrente
         },
-        success: function(datos) {
-            var respuesta = JSON.parse(datos);
-            if (respuesta["codigo"] == "1") {
-                $("#ModalEditHoliday").modal("hide");
-                $("#contentHolidays");
-                getHolidays();
-                cleanFormHoliday();
-                notify(respuesta["alerta"], 1500, "success", "top-end");
+        success: function(response) {
+            // Verificar si la respuesta es un objeto válido
+            if (typeof response === 'object' && response !== null) {
+                if (response.success) {
+                    notify(response.message, 1500, "success", "top-end");
+                    $("#ModalEditHoliday").modal("hide");
+                    getHolidays();
+                } else {
+                    notify(response.message, 2000, "error", "top-end");
+                }
             } else {
-                notify(respuesta["alerta"], 1500, "error", "top-end");
+                console.error("Respuesta inválida:", response);
+                notify("Error al procesar la respuesta", 2000, "error", "top-end");
             }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en la petición:", status, error);
+            notify("Error al conectar con el servidor", 2000, "error", "top-end");
         }
     });
 }
@@ -227,7 +246,6 @@ function deleteHoliday(fecha) {
             var respuesta = JSON.parse(datos);
             if (respuesta["codigo"] == "1") {
                 notify(respuesta["alerta"], 1500, "success", "top-end");
-                $("#contentHolidays");
                 getHolidays();
                 cleanFormHoliday();
             } else {
@@ -246,6 +264,7 @@ function cleanFormHoliday() {
     $("#nombreEdit").val("");
     $("#es_recurrenteEdit").prop("checked", false);
     $("#fecha_original").val("");
+    $("#idEdit").val("");
 }
 </script>
 

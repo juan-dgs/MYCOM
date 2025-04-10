@@ -5,11 +5,15 @@ $arr = array('codigo' => '', 'alerta' => '');
 $fecha = $db->real_escape_string($_POST['fecha']);
 
 // Verificar si existe el feriado
-$dt_valholiday = findtablaq("SELECT 1 as id, fecha FROM core_feriados WHERE fecha = '$fecha' AND activo = 1 LIMIT 1;", "id");
+$sql_check = "SELECT id FROM core_feriados WHERE fecha = '$fecha' AND activo = 1 LIMIT 1";
+$result_check = $db->query($sql_check);
 
-if($dt_valholiday != false) {
-    // Proceder directamente con la desactivación
-    $q = "UPDATE core_feriados SET activo = 0 WHERE fecha = '$fecha'";
+if($result_check && $result_check->num_rows > 0) {
+    $row = $result_check->fetch_assoc();
+    $id = $row['id'];
+    
+    // Proceder con la desactivación usando el ID
+    $q = "UPDATE core_feriados SET activo = 0 WHERE id = '$id'";
     
     if($db->query($q)) {
         $arr = array(
@@ -17,19 +21,12 @@ if($dt_valholiday != false) {
             'alerta' => 'Día feriado eliminado correctamente.'
         );
     } else {
-        try {
-            throw new Exception("MySQL error $db->error <br> Query:<br> $q", $db->errno);
-        } catch(Exception $e) {
-            $resultado = "Error no. ".$e->getCode()." - ".$e->getMessage()."<br>";
-            $resultado .= nl2br($e->getTraceAsString());
-            $arr = array(
-                'codigo' => 0, 
-                'alerta' => '<b>Error!</b> '.$resultado
-            );
-        }
+        $arr = array(
+            'codigo' => 0, 
+            'alerta' => '<b>Error!</b> No se pudo eliminar el día feriado: '.$db->error
+        );
     }
 } else {
-    // El feriado no existe o ya está desactivado
     $arr = array(
         'codigo' => 0, 
         'alerta' => '<b>Error!</b> El día feriado que desea eliminar no existe o ya fue eliminado.'

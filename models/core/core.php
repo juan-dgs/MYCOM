@@ -37,6 +37,7 @@
   require('models/functions/funcionesGeneral.php');
 
   $_MESES = array('','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre');
+  $_DIASSEM = ['','Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
   if(isset($_SESSION['user_id'])){
       $_usuario=findtablaq("SELECT u.id,u.nombre,u.apellido_p,u.dir_foto,u.c_tipo_usuario,ut.descripcion as DTIPOU,YEAR(u.f_registro) AS yreg
