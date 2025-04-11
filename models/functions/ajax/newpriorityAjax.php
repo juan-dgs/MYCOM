@@ -17,7 +17,7 @@ if(empty($icono)) {
     exit;
 }
 
-$valPriority = findtablaq("SELECT 1 as id FROM act_c_prioridades WHERE codigo='$codigo' OR descripcion='$descripcion' LIMIT 1", "id");
+$valPriority = findtablaq("SELECT 1 as id,codigo,descripcion FROM act_c_prioridades WHERE codigo='$codigo' OR descripcion='$descripcion' LIMIT 1;", "id");
 
 if(empty($valPriority)) {
     $q = "INSERT INTO act_c_prioridades (codigo, descripcion, color_hex, hr_min, hr_max, icono, activo, fh_registro) 
@@ -30,12 +30,15 @@ if(empty($valPriority)) {
     }
 } else {
     $alerta = '';
-    if(findtablaq("SELECT 1 FROM act_c_prioridades WHERE codigo='$codigo' LIMIT 1", "id")) {
-        $alerta .= 'Ya existe una prioridad con este código. ';
+    if(is_array($valPriority)){
+        if($valPriority[1]['codigo'] == $codigo) {
+            $alerta .= 'Ya existe una prioridad con este código. ';
+        }
+        if($valPriority[1]['descripcion'] == $descripcion) {    
+            $alerta .= 'Ya existe una prioridad con esta descripción.';
+        }
     }
-    if(findtablaq("SELECT 1 FROM act_c_prioridades WHERE descripcion='$descripcion' LIMIT 1", "id")) {
-        $alerta .= 'Ya existe una prioridad con esta descripción.';
-    }
+   
     $arr = array('codigo' => 0, 'alerta' => $alerta);
 }
 

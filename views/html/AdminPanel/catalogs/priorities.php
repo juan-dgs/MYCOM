@@ -188,10 +188,10 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
 </div>
 
 <!-- Modal de Selección de Íconos -->
-<div class="modal fade" id="iconModal" tabindex="-1" role="dialog" aria-labelledby="iconModalLabel">
+<div class="modal fade" id="iconModal" tabindex="-1" role="dialog" aria-labelledby="iconModalLabel" aria-hidden="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header ">
+            <div class="modal-header">
                 <h4 class="modal-title" id="iconModalLabel"><i class="fas fa-icons"></i> Seleccionar Ícono</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -199,7 +199,7 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="iconSearch" placeholder="Buscar ícono...">
+                    <input type="text" class="form-control" id="iconSearch" placeholder="Buscar ícono..." autocomplete="off">
                 </div>
                 <div class="row icon-container" id="iconContainer"></div>
             </div>
@@ -294,30 +294,39 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
     });
 
     // Función para inicializar el modal de íconos
-    function initIconModal() {
-        // Al abrir el modal
-        $('#iconModal').on('show.bs.modal', function(e) {
-            const button = $(e.relatedTarget);
-            currentIconField = button.data('field');
-            currentIconPreview = button.data('preview');
-            selectedIcon = $('#' + currentIconField).val() || '';
-            loadIcons();
-            $('#iconSearch').val('').focus();
-        });
+function initIconModal() {
+    // Al abrir el modal
+    $('#iconModal').on('show.bs.modal', function(e) {
+        const button = $(e.relatedTarget);
+        currentIconField = button.data('field');
+        currentIconPreview = button.data('preview');
+        selectedIcon = $('#' + currentIconField).val() || '';
+        loadIcons();
 
-        // Selección automática al hacer click
-        $('#iconModal').on('click', '.icon-item', function() {
-            selectedIcon = $(this).data('icon');
-            $('#' + currentIconField).val(selectedIcon);
-            updateIconPreview(currentIconPreview, selectedIcon);
-            $('#iconModal').modal('hide');
-        });
+        $('#iconSearch').val('').focus();
+        
+        // Remover aria-hidden cuando el modal está visible
+       // $(this).removeAttr('aria-hidden');
+    });
 
-        // Buscar íconos
-        $('#iconSearch').on('input', function() {
-            loadIcons($(this).val());
-        });
-    }
+    // Restaurar cuando se cierra el modal
+    /*$('#iconModal').on('hidden.bs.modal', function() {
+        $(this).attr('aria-hidden', 'true');
+    });*/
+
+    // Selección automática al hacer click
+    $('#iconModal').on('click', '.icon-item', function() {
+        selectedIcon = $(this).data('icon');
+        $('#' + currentIconField).val(selectedIcon);
+        updateIconPreview(currentIconPreview, selectedIcon);
+        $('#iconModal').modal('hide');
+    });
+
+    // Buscar íconos
+    $('#iconSearch').on('input', function() {
+        loadIcons($(this).val());
+    });
+}
 
     // Función para actualizar la vista previa del ícono
     function updateIconPreview(previewId, iconClass) {
@@ -434,6 +443,7 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
             success: function(response) {
                 try {
                     const result = JSON.parse(response);
+
                     if (result.codigo == 1) {
                         $('#ModalAddPriority').modal('hide');
                         cleanPriorityForm();
@@ -455,107 +465,113 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
         });
     }
 
-    // Función para cargar datos para edición
     function GetRegisterPriority(id) {
-        $.ajax({
-            url: "ajax.php?mode=getpriority",
-            type: "POST",
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            beforeSend: function() {
-                $('#editPriorityForm').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
-            },
-            success: function(response) {
-                if (response && response.success && response.html) {
-                    $('#editPriorityForm').html(response.html);
+    $.ajax({
+        url: "ajax.php?mode=getpriority",
+        type: "POST",
+        data: { id: id },
+        dataType: 'json',
+        beforeSend: function() {
+            $('#editPriorityForm').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
+        },
+        success: function(response) {
+            if (response && response.success && response.html) {
+                $('#editPriorityForm').html(response.html);
+                $('#ModalEditPriority').modal('show');//.removeAttr('aria-hidden');
+                
+                // Configurar el evento cuando se cierre el modal
+                /*$('#ModalEditPriority').on('hidden.bs.modal', function() {
+                    $(this).attr('aria-hidden', 'true');
+                });*/
 
-                    // Actualizar el ícono seleccionado
-                    const icono = $('#edit_icono').val();
-                    if (icono) {
-                        $('#editIconPreview').html(`
-                        <i class="${icono}"></i>
-                        <div class="small">${icono.replace('fas fa-', '')}</div>
-                    `).removeClass('text-muted');
-                    }
-
-                    // Configurar el modal de íconos para edición
-                    $('[data-target="#iconModal"]').off('click').on('click', function() {
-                        currentIconField = 'edit_icono';
-                        currentIconPreview = 'editIconPreview';
-                        selectedIcon = $('#edit_icono').val() || '';
-                        $('#iconModal').modal('show');
-                    });
-
-                    $('#ModalEditPriority').modal('show');
-                } else {
-                    notify(response.error || "Error al cargar datos", 1500, "error");
-                }
-            },
-            error: function(xhr, status, error) {
-                notify("Error al cargar datos: " + error, 1500, "error");
+                // Configurar el modal de íconos para edición
+                /*$('[data-target="#iconModal"]').off('click').on('click', function() {
+                    currentIconField = 'edit_icono';
+                    currentIconPreview = 'editIconPreview';
+                    selectedIcon = $('#edit_icono').val() || '';
+                    $('#iconModal').modal('show');
+                });*/
+            } else {
+                notify(response.error || "Error al cargar datos", 1500, "error");
             }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            notify("Error al cargar datos: " + error, 1500, "error");
+        }
+    });
+}
 
     // Función para guardar cambios
-    function savePriority() {
-        const formData = {
-            id: $('#edit_id').val(),
-            codigo: $('#edit_codigo').val().trim().toUpperCase(),
-            descripcion: $('#edit_descripcion').val().trim(),
-            color_hex: $('#edit_color_hex').val(),
-            hr_min: $('#edit_hr_min').val(),
-            hr_max: $('#edit_hr_max').val(),
-            icono: $('#edit_icono').val()
-        };
+function savePriority() {
+    // Asegurarnos de que los elementos existen antes de acceder a ellos
+    const edit_id = document.getElementById('edit_id');
+    const edit_descripcion = document.getElementById('edit_descripcion');
+    const edit_color_hex = document.getElementById('edit_color_hex');
+    const edit_hr_min = document.getElementById('edit_hr_min');
+    const edit_hr_max = document.getElementById('edit_hr_max');
+    const edit_icono = document.getElementById('edit_icono');
 
-        // Validaciones
-        if (!formData.descripcion) {
-            notify("La descripción es obligatoria", 1500, "error");
-            $('#edit_descripcion').focus();
-            return;
-        }
-        if (!formData.icono) {
-            notify("Por favor seleccione un ícono", 1500, "error");
-            return;
-        }
-        if (parseFloat(formData.hr_min) > parseFloat(formData.hr_max)) {
-            notify("Las horas mínimas no pueden ser mayores que las máximas", 1500, "error");
-            $('#edit_hr_min').focus();
-            return;
-        }
-
-        $.ajax({
-            url: "ajax.php?mode=savepriority",
-            type: "POST",
-            data: formData,
-            dataType: 'json',
-            beforeSend: function() {
-                $('button').prop('disabled', true);
-            },
-            success: function(response) {
-                try {
-                    if (response && response.codigo == 1) {
-                        $('#ModalEditPriority').modal('hide');
-                        getPriorities();
-                        notify(response.alerta || "Cambios guardados correctamente", 1500, "success");
-                    } else {
-                        notify(response.alerta || "Error al guardar los cambios", 1500, "error");
-                    }
-                } catch (e) {
-                    notify("Error al procesar la respuesta del servidor", 1500, "error");
-                }
-            },
-            error: function(xhr, status, error) {
-                notify("Error de conexión: " + error, 1500, "error");
-            },
-            complete: function() {
-                $('button').prop('disabled', false);
-            }
-        });
+    // Validar que los elementos existen
+    if (!edit_id || !edit_descripcion || !edit_color_hex || !edit_hr_min || !edit_hr_max || !edit_icono) {
+        notify("Error: No se pudo acceder a los campos del formulario", 1500, "error");
+        return;
     }
+
+    const formData = {
+        id: edit_id.value,
+        codigo: document.getElementById('edit_codigo')?.value?.trim()?.toUpperCase() || '',
+        descripcion: edit_descripcion.value.trim(),
+        color_hex: edit_color_hex.value,
+        hr_min: edit_hr_min.value,
+        hr_max: edit_hr_max.value,
+        icono: edit_icono.value
+    };
+
+    // Validaciones
+    if (!formData.descripcion) {
+        notify("La descripción es obligatoria", 1500, "error");
+        edit_descripcion.focus();
+        return;
+    }
+    if (!formData.icono) {
+        notify("Por favor seleccione un ícono", 1500, "error");
+        return;
+    }
+    if (parseFloat(formData.hr_min) > parseFloat(formData.hr_max)) {
+        notify("Las horas mínimas no pueden ser mayores que las máximas", 1500, "error");
+        edit_hr_min.focus();
+        return;
+    }
+
+    $.ajax({
+        url: "ajax.php?mode=savepriority",
+        type: "POST",
+        data: formData,
+        dataType: 'json',
+        beforeSend: function() {
+            $('button').prop('disabled', true);
+        },
+        success: function(response) {
+            try {
+                if (response && response.codigo == 1) {
+                    $('#ModalEditPriority').modal('hide');
+                    getPriorities();
+                    notify(response.alerta || "Cambios guardados correctamente", 1500, "success");
+                } else {
+                    notify(response.alerta || "Error al guardar los cambios", 1500, "error");
+                }
+            } catch (e) {
+                notify("Error al procesar la respuesta del servidor", 1500, "error");
+            }
+        },
+        error: function(xhr, status, error) {
+            notify("Error de conexión: " + error, 1500, "error");
+        },
+        complete: function() {
+            $('button').prop('disabled', false);
+        }
+    });
+}
 
     // Función para confirmar eliminación
     function confirmDeletePriority(id, codigo, descripcion) {

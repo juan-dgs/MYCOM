@@ -25,7 +25,34 @@ try {
         throw new Exception("Faltan campos requeridos");
     }
 
-    // Query CORREGIDO (sin fecha de actualización y con comas correctas)
+    // Primero verificar si hay cambios
+    $current_data = $db->query("SELECT descripcion, color_hex, hr_min, hr_max, icono 
+                              FROM act_c_prioridades 
+                              WHERE id = '$id'");
+    if($current_data->num_rows === 0) {
+        throw new Exception("La prioridad no existe");
+    }
+    
+    $row = $current_data->fetch_assoc();
+    $has_changes = false;
+    
+    if($row['descripcion'] != $descripcion || 
+       $row['color_hex'] != $color_hex || 
+       $row['hr_min'] != $hr_min || 
+       $row['hr_max'] != $hr_max || 
+       $row['icono'] != $icono) {
+        $has_changes = true;
+    }
+    
+    if(!$has_changes) {
+        echo json_encode([
+            'codigo' => 1,
+            'alerta' => 'No se detectaron cambios para guardar'
+        ]);
+        exit;
+    }
+
+    // Query de actualización
     $q = "UPDATE act_c_prioridades SET 
             descripcion = '$descripcion',
             color_hex = '$color_hex',
@@ -51,3 +78,4 @@ try {
     ]);
     exit;
 }
+?>
