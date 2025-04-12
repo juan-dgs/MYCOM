@@ -7,11 +7,11 @@ function findtablaq($q, $id) {
   if ($db->rows($sql) > 0) {
       while ($data = $db->recorrer($sql)) {
           // Eliminar índices numéricos y conservar solo los asociativos
-          $datos_filtrados = array_filter($data, function($key) {
+          /*$datos_filtrados = array_filter($data, function($key) {
               return !is_numeric($key); // Conserva solo claves no numéricas
-          }, ARRAY_FILTER_USE_KEY);
+          }, ARRAY_FILTER_USE_KEY);*/
           
-          $datos[$data[$id]] = $datos_filtrados;
+          $datos[$data[$id]] = $data;
       }
   }else{
     $datos=false;

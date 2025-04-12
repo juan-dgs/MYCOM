@@ -14,6 +14,20 @@ if($modo==''){
 $periodo = $db->real_escape_string($_POST['periodo']);
 
 
+try {
+    $fecha_inicio = '2025-04-01';
+    $resultados = $db->callProcedure('sp_preparar_base_actividades', [$fecha_inicio]);
+    
+    // Ahora puedes trabajar con la tabla temporal
+    $consulta = $db->query("SELECT * FROM temp_base_actividades");
+    
+    if ($consulta) {       
+    }else{
+        echo "Error: Procedimiento Almacenado.";
+        return 0;
+    }
+
+
 
 
 $Q_BASE ="SELECT 
@@ -43,6 +57,8 @@ $Q_BASE ="SELECT
                 act_c_prioridades as p on p.codigo = a.c_prioridad
             WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-04-01') AND a.c_estatus !='X' $q_usu";
 
+$Q_BASE =  " temp_base_actividades ";
+
 
 $q_tablero = "";
 
@@ -56,9 +72,7 @@ switch ($modo) {
                                 SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
                                 SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
                                 AVG(avance) as avance_prom
-                                from (
-                                 $Q_BASE
-                                    ) as calculo 
+                                from $Q_BASE as calculo 
                                     LEFT JOIN users as u on calculo.id_usuario_resp =u.id 
                                     GROUP BY u.id 
                                     ORDER BY avance_prom DESC;";
@@ -72,9 +86,7 @@ switch ($modo) {
                                         SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
                                         SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
                                         AVG(avance) as avance_prom
-                                        from (
-                                        $Q_BASE
-                                            ) as calculo 
+                                        from $Q_BASE as calculo 
                                             LEFT JOIN act_c_tipos as t on calculo.c_tipo_act = t.codigo
                                             GROUP BY c_tipo_act
                                             ORDER BY avance_prom DESC;";
@@ -90,9 +102,7 @@ switch ($modo) {
                                 SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
                                 SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
                                 AVG(avance) as avance_prom
-                                from (
-                                 $Q_BASE
-                                    ) as calculo 
+                           from $Q_BASE as calculo 
                                     LEFT JOIN act_c_clasificacion as c on calculo.c_clasifica_act = c.codigo
                                     GROUP BY c_clasifica_act
                                     ORDER BY avance_prom DESC;";
@@ -106,9 +116,7 @@ switch ($modo) {
         SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
         SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
         AVG(avance) as avance_prom
-        from (
-         $Q_BASE
-            ) as calculo 
+        from $Q_BASE as calculo 
             LEFT JOIN act_c_prioridades as p on calculo.c_prioridad = p.codigo
             GROUP BY c_prioridad 
             ORDER BY avance_prom DESC;";
@@ -122,9 +130,7 @@ switch ($modo) {
         SUM(if(c_estatus='F' and horas_plan>=horas_real,1,0)) as tot_cumple_sla,
         SUM(if(horas_plan<horas_real,1,0)) as tot_atrasos,
         AVG(avance) as avance_prom
-        from (
-         $Q_BASE
-            ) as calculo 
+    from $Q_BASE as calculo 
             LEFT JOIN act_c_clientes as c on calculo.id_cliente = c.id
             GROUP BY id_cliente
             ORDER BY avance_prom DESC;";
@@ -132,11 +138,29 @@ switch ($modo) {
     default:
         $modo="USUA";
 }
+
 $HTML='';
 //$HTML =str_replace("<", "°", $q_tablero);
 
-
-$dt_register = findtablaq($q_tablero, "id");
+$id = "id";
+$sql = $db->query($q_tablero);
+if ($db->rows($sql) > 0) {
+    while ($data = $db->recorrer($sql)) {
+        // Eliminar índices numéricos y conservar solo los asociativos
+        $datos_filtrados = array_filter($data, function($key) {
+            return !is_numeric($key); // Conserva solo claves no numéricas
+        }, ARRAY_FILTER_USE_KEY);
+        
+        $dt_register[$data[$id]] = $datos_filtrados;
+    }
+}else{
+  $dt_register=false;
+}
+    
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+    return 0;
+}
 
 
 $HTML .='<div class="btn-group" role="group" aria-label="Basic example">
@@ -191,6 +215,7 @@ if (!empty($dt_register)) {
 //style="width:'.round($dt_register[$id]["avance_prom"],2).'%"
                            $HTML .='</tbody>
                     </table>';
+                    $db->liberar($consulta);
 
 } else {
    
