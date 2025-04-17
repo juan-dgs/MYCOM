@@ -261,201 +261,34 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         getTablaEficiencia('USUA');
         getContadores();
         getGraficas();
+        setTimeout(function() {
+            $(".highcharts-credits").remove();
+        }, 2000);
     });
 
     var _CARGANDO = '<div class="cargando-spiner">' +
         '<i class="fa fa-spinner fa-spin fa-3x"></i>' +
         '</div>';
 
-function graphPie(datos){
-    const colors = Highcharts.getOptions().colors,
-            categories = [
-                'Chrome',
-                'Safari',
-                'Edge',
-                'Firefox',
-                'Other'
-            ],
-            data = [{
-                    y: 61.04,
-                    color: colors[2],
-                    drilldown: {
-                        name: 'Chrome',
-                        categories: [
-                            'Chrome v97.0',
-                            'Chrome v96.0',
-                            'Chrome v95.0',
-                            'Chrome v94.0',
-                            'Chrome v93.0',
-                            'Chrome v92.0',
-                            'Chrome v91.0',
-                            'Chrome v90.0',
-                            'Chrome v89.0',
-                            'Chrome v88.0',
-                            'Chrome v87.0',
-                            'Chrome v86.0',
-                            'Chrome v85.0',
-                            'Chrome v84.0',
-                            'Chrome v83.0',
-                            'Chrome v81.0',
-                            'Chrome v89.0',
-                            'Chrome v79.0',
-                            'Chrome v78.0',
-                            'Chrome v76.0',
-                            'Chrome v75.0',
-                            'Chrome v72.0',
-                            'Chrome v70.0',
-                            'Chrome v69.0',
-                            'Chrome v56.0',
-                            'Chrome v49.0'
-                        ],
-                        data: [
-                            36.89,
-                            18.16,
-                            0.54,
-                            0.7,
-                            0.8,
-                            0.41,
-                            0.31,
-                            0.13,
-                            0.14,
-                            0.1,
-                            0.35,
-                            0.17,
-                            0.18,
-                            0.17,
-                            0.21,
-                            0.1,
-                            0.16,
-                            0.43,
-                            0.11,
-                            0.16,
-                            0.15,
-                            0.14,
-                            0.11,
-                            0.13,
-                            0.12
-                        ]
-                    }
-                },
-                {
-                    y: 9.47,
-                    color: colors[3],
-                    drilldown: {
-                        name: 'Safari',
-                        categories: [
-                            'Safari v15.3',
-                            'Safari v15.2',
-                            'Safari v15.1',
-                            'Safari v15.0',
-                            'Safari v14.1',
-                            'Safari v14.0',
-                            'Safari v13.1',
-                            'Safari v13.0',
-                            'Safari v12.1'
-                        ],
-                        data: [
-                            0.1,
-                            2.01,
-                            2.29,
-                            0.49,
-                            2.48,
-                            0.64,
-                            1.17,
-                            0.13,
-                            0.16
-                        ]
-                    }
-                },
-                {
-                    y: 9.32,
-                    color: colors[5],
-                    drilldown: {
-                        name: 'Edge',
-                        categories: [
-                            'Edge v97',
-                            'Edge v96',
-                            'Edge v95'
-                        ],
-                        data: [
-                            6.62,
-                            2.55,
-                            0.15
-                        ]
-                    }
-                },
-                {
-                    y: 8.15,
-                    color: colors[1],
-                    drilldown: {
-                        name: 'Firefox',
-                        categories: [
-                            'Firefox v96.0',
-                            'Firefox v95.0',
-                            'Firefox v94.0',
-                            'Firefox v91.0',
-                            'Firefox v78.0',
-                            'Firefox v52.0'
-                        ],
-                        data: [
-                            4.17,
-                            3.33,
-                            0.11,
-                            0.23,
-                            0.16,
-                            0.15
-                        ]
-                    }
-                },
-                {
-                    y: 11.02,
-                    color: colors[6],
-                    drilldown: {
-                        name: 'Other',
-                        categories: [
-                            'Other'
-                        ],
-                        data: [
-                            11.02
-                        ]
-                    }
-                }
-            ],
-            browserData = [],
-            versionsData = [],
-            dataLen = data.length;
+    function graphPie(datos) {
+        const coloresPorTipo = datos.tipos_act_colors;
 
-        let i,
-            j,
-            drillDataLen,
-            brightness;
+        // Mapear los datos de tipos_act para asignar colores
+        const tiposActConColores = datos.tipos_act.map(tipo => ({
+            ...tipo,
+            color: coloresPorTipo[tipo.name] || '#000000' // Asignar color o fallback
+        }));
 
+        // Mapear los datos de clasifica_act para asignar colores según el tipo de actividad
+        const clasificaActConColores = datos.clasifica_act.map(clas => {
+            // Determinar el tipo de actividad al que pertenece (ej. "Levantamientos CCTV" -> "Levantamientos")
+            const tipoActividad = Object.keys(coloresPorTipo).find(tipo => clas.name.includes(tipo)) || 'Levantamientos';
+            return {
+                ...clas,
+                color: coloresPorTipo[tipoActividad] || '#000000' // Asignar color o fallback
+            };
+        });
 
-        // Build the data arrays
-        for (i = 0; i < dataLen; i += 1) {
-
-            // add browser data
-            browserData.push({
-                name: categories[i],
-                y: data[i].y,
-                color: data[i].color
-            });
-
-            // add version data
-            drillDataLen = data[i].drilldown.data.length;
-            for (j = 0; j < drillDataLen; j += 1) {
-                const name = data[i].drilldown.categories[j];
-                brightness = 0.2 - (j / drillDataLen) / 5;
-                versionsData.push({
-                    name,
-                    y: data[i].drilldown.data[j],
-                    color: Highcharts.color(data[i].color).brighten(brightness).get(),
-                    custom: {
-                        version: name.split(' ')[1] || name.split(' ')[0]
-                    }
-                });
-            }
-        }
 
         // Create the chart
         Highcharts.chart('contenedor-pie', {
@@ -463,10 +296,13 @@ function graphPie(datos){
                 type: 'pie'
             },
             title: {
-                text: 'Browser market share, January, 2022'
+                text: 'Participación por Categoria de Actividades'
             },
             subtitle: {
-                text: 'Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+                text: ''
+            },
+            legend: {
+                enabled: false // Desactiva la leyenda
             },
             plotOptions: {
                 pie: {
@@ -475,24 +311,25 @@ function graphPie(datos){
                 }
             },
             tooltip: {
-                valueSuffix: '%'
+                valueSuffix: 'acts'
             },
             series: [{
-                name: 'Browsers',
-                data: browserData,
-                size: '45%',
+                name: 'Tipo Actividad',
+                data: tiposActConColores, //browserData
+                size: '65%',
                 dataLabels: {
                     color: '#ffffff',
                     distance: '-50%'
                 }
             }, {
-                name: 'Versions',
-                data: versionsData,
+                name: 'Categorias',
+                data: clasificaActConColores, //versionsData
                 size: '80%',
-                innerSize: '60%',
+                innerSize: '80%',
+                opacity: 0.8,
                 dataLabels: {
                     format: '<b>{point.name}:</b> <span style="opacity: 0.5">' +
-                        '{y}%</span>',
+                        '{y}</span>',
                     filter: {
                         property: 'y',
                         operator: '>',
@@ -502,7 +339,7 @@ function graphPie(datos){
                         fontWeight: 'normal'
                     }
                 },
-                id: 'versions'
+                id: 'actividades'
             }],
             responsive: {
                 rules: [{
@@ -511,12 +348,12 @@ function graphPie(datos){
                     },
                     chartOptions: {
                         series: [{}, {
-                            id: 'versions',
+                            id: 'actividades',
                             dataLabels: {
                                 distance: 10,
                                 format: '{point.custom.version}',
                                 filter: {
-                                    property: 'percentage',
+                                    property: 'pz',
                                     operator: '>',
                                     value: 2
                                 }
@@ -527,156 +364,14 @@ function graphPie(datos){
             }
         });
 
-        function crearGrafico(data) {
-        // Preparar series para el drilldown
-        const drilldownSeries = data.data.map(item => {
-            return {
-                name: item.drilldown.name,
-                id: item.drilldown.name,
-                data: item.drilldown.categories.map((category, index) => [
-                    category, 
-                    item.drilldown.data[index]
-                ])
-            };
-        });
-
-        // Crear el gráfico
-        Highcharts.chart('container', {
-            chart: {
-                type: 'pie'
-            },
-            title: {
-                text: 'Distribución de Actividades',
-                align: 'center'
-            },
-            subtitle: {
-                text: 'Haz clic en los segmentos para ver detalles',
-                align: 'center'
-            },
-            accessibility: {
-                announceNewData: {
-                    enabled: true
-                },
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            plotOptions: {
-                pie: {
-                    innerSize: '50%', // Hace que sea un donut chart
-                    depth: 45,
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: 'white',
-                            textOutline: '1px contrast'
-                        }
-                    },
-                    showInLegend: true
-                }
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}">●</span> <b>{point.name}</b>: {point.y}%<br/>'
-            },
-            series: [{
-                name: 'Actividades',
-                colorByPoint: true,
-                data: data.data.map(item => ({
-                    name: item.drilldown.name,
-                    y: item.y,
-                    color: item.color,
-                    drilldown: item.drilldown.name
-                }))
-            }],
-            drilldown: {
-                activeDataLabelStyle: {
-                    color: '#000000',
-                    textOutline: 'none'
-                },
-                series: drilldownSeries
-            },
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        plotOptions: {
-                            pie: {
-                                innerSize: '30%'
-                            }
-                        }
-                    }
-                }]
-            }
-        });
     }
 
-}
-
-    function getGraficas(id,modo,periodo) {
-
-        $.ajax({
-            url: "ajax.php?mode=getdatagraficas",
-            type: "POST",
-            data: {
-                modo: modo,
-                id:id,
-                periodo: periodo
-            },
-            error: function(request, status, error) {
-                notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
-            },
-            beforeSend: function() {
-                $('#contenedor-pie').html(_CARGANDO);            
-                $('#contenedor-barra').html(_CARGANDO);            
-            },
-            success: function(datos) {
-               console.log(datos);
-               graphPie(datos);
-            }
-        });
-
-        
-
-
-        Highcharts.chart('contenedor-barras', {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Corn vs wheat estimated production for 2023'
-            },
-            subtitle: {
-                text: ''
-            },
-            xAxis: {
-                categories: ['USA', 'China', 'Brazil', 'EU', 'Argentina', 'India'],
-                crosshair: true,
-                accessibility: {
-                    description: 'Countries'
-                }
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: '1000 metric tons (MT)'
-                }
-            },
-            tooltip: {
-                valueSuffix: ' (1000 MT)'
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [{
+    function graphBar(datos){
+        console.log(datos);
+        var meses = datos.meses;
+        var series = datos.series;
+       /* meses=['ene','feb','mar']
+        series=[{
                     name: 'Corn',
                     data: [387749, 280000, 129000, 64300, 54000, 34300]
                 },
@@ -684,9 +379,72 @@ function graphPie(datos){
                     name: 'Wheat',
                     data: [45321, 140000, 10000, 140500, 19500, 113500]
                 }
-            ]
-        });
+            ];
+            console.log(meses);
+            console.log(series);*/
 
+
+        Highcharts.chart('contenedor-barras', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Registro de Actividades Anual'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: meses,
+                crosshair: true,
+                accessibility: {
+                    description: 'Meses'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Actividades '
+                }
+            },
+            tooltip: {
+                valueSuffix: ' acts'
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: series
+        });
+    }
+
+    function getGraficas(id, modo, periodo) {
+
+        $.ajax({
+            url: "ajax.php?mode=getdatagraficas",
+            type: "POST",
+            data: {
+                modo: modo,
+                id: id,
+                periodo: periodo
+            },
+            error: function(request, status, error) {
+                notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+            },
+            beforeSend: function() {
+                $('#contenedor-pie').html(_CARGANDO);
+                $('#contenedor-barra').html(_CARGANDO);
+            },
+            success: function(datos) {
+                //console.log(datos);
+                var result = JSON.parse(datos);
+                //console.log(result);
+                graphPie(result.pie);
+                graphBar(result.bar);
+            }
+        });
 
     }
 
@@ -730,7 +488,6 @@ function graphPie(datos){
                                 } // Verde
                             ],
                             onComplete: function() {
-                                console.log('Animación completada');
                             }
                         });
                     });

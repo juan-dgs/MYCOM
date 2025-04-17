@@ -30,7 +30,7 @@ try {
 
 
 
-$Q_BASE ="SELECT 
+/*$Q_BASE ="SELECT 
             a.folio,a.id_usuario_resp,a.fh_captura,a.f_plan_i,a.f_plan_f,p.hr_min,p.hr_max,a.fh_finaliza,a.c_tipo_act,a.c_clasifica_act,a.c_prioridad,a.c_estatus,a.calificacion,a.avance,a.id_cliente,
               if(f_plan_f is null,
                 p.hr_max,
@@ -55,7 +55,7 @@ $Q_BASE ="SELECT
 
             FROM actividades a LEFT JOIN 
                 act_c_prioridades as p on p.codigo = a.c_prioridad
-            WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-04-01') AND a.c_estatus !='X' $q_usu";
+            WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-04-01') AND a.c_estatus !='X' $q_usu";*/
 
 $Q_BASE =  " temp_base_actividades ";
 
@@ -147,11 +147,11 @@ $sql = $db->query($q_tablero);
 if ($db->rows($sql) > 0) {
     while ($data = $db->recorrer($sql)) {
         // Eliminar índices numéricos y conservar solo los asociativos
-        $datos_filtrados = array_filter($data, function($key) {
+        /*$datos_filtrados = array_filter($data, function($key) {
             return !is_numeric($key); // Conserva solo claves no numéricas
-        }, ARRAY_FILTER_USE_KEY);
+        }, ARRAY_FILTER_USE_KEY);*/
         
-        $dt_register[$data[$id]] = $datos_filtrados;
+        $dt_register[$data[$id]] = $data;
     }
 }else{
   $dt_register=false;
