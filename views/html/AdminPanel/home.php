@@ -408,8 +408,8 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                 }
             },
             tooltip: {
-                valueSuffix: ' acts'
-            },
+                shared: true, // Agrupa los valores de todas las series para la misma categoría
+                pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>'            },
             plotOptions: {
                 column: {
                     pointPadding: 0.2,
