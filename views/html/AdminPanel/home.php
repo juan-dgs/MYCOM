@@ -243,12 +243,13 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                 <!-- /.card-tools -->
             </div>
             <!-- /.card-header -->
-            <div class="card-body p-0">
-                <figure class="highcharts-figure">
-                    <div id="container-graph"></div>
-                    <p class="highcharts-description">
-                    </p>
-                </figure>
+            <div class="card-body p-0 row">
+                <div class='col-xs-12 col-sm-8'>
+                    <div id="contenedor-barras"></div>
+                </div>
+                <div class='col-xs-12 col-sm-4'>
+                    <div id="contenedor-pie"></div>
+                </div>
             </div>
             <!-- /.card-body -->
         </div>
@@ -259,165 +260,435 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
     $(document).ready(function() {
         getTablaEficiencia('USUA');
         getContadores();
-
-        Highcharts.chart('container-graph', {
-            chart: {
-                zooming: {
-                    type: 'xy'
-                }
-            },
-            title: {
-                text: 'Average Monthly Weather Data for Tokyo'
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com'
-            },
-            xAxis: [{
-                categories: [
-                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-                ],
-                crosshair: true
-            }],
-            yAxis: [{ // Primary yAxis
-                labels: {
-                    format: '{value}°C',
-                    style: {
-                        color: Highcharts.getOptions().colors[2]
-                    }
-                },
-                title: {
-                    text: 'Temperature',
-                    style: {
-                        color: Highcharts.getOptions().colors[2]
-                    }
-                },
-                opposite: true
-
-            }, { // Secondary yAxis
-                gridLineWidth: 0,
-                title: {
-                    text: 'Rainfall',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-                labels: {
-                    format: '{value} mm',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                }
-
-            }, { // Tertiary yAxis
-                gridLineWidth: 0,
-                title: {
-                    text: 'Sea-Level Pressure',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-                labels: {
-                    format: '{value} mb',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-                opposite: true
-            }],
-            tooltip: {
-                shared: true
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'left',
-                x: 80,
-                verticalAlign: 'top',
-                y: 55,
-                floating: true,
-                backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || // theme
-                    'rgba(255,255,255,0.25)'
-            },
-            series: [{
-                name: 'Rainfall',
-                type: 'column',
-                yAxis: 1,
-                data: [
-                    49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1,
-                    95.6, 54.4
-                ],
-                tooltip: {
-                    valueSuffix: ' mm'
-                }
-
-            }, {
-                name: 'Sea-Level Pressure',
-                type: 'spline',
-                yAxis: 2,
-                data: [
-                    1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2, 1013.1,
-                    1016.9, 1018.2, 1016.7
-                ],
-                marker: {
-                    enabled: false
-                },
-                dashStyle: 'shortdot',
-                tooltip: {
-                    valueSuffix: ' mb'
-                }
-
-            }, {
-                name: 'Temperature',
-                type: 'spline',
-                data: [
-                    7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6
-                ],
-                tooltip: {
-                    valueSuffix: ' °C'
-                }
-            }],
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            floating: false,
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom',
-                            x: 0,
-                            y: 0
-                        },
-                        yAxis: [{
-                            labels: {
-                                align: 'right',
-                                x: 0,
-                                y: -6
-                            },
-                            showLastLabel: false
-                        }, {
-                            labels: {
-                                align: 'left',
-                                x: 0,
-                                y: -6
-                            },
-                            showLastLabel: false
-                        }, {
-                            visible: false
-                        }]
-                    }
-                }]
-            }
-        });
-
+        getGraficas();
     });
 
     var _CARGANDO = '<div class="cargando-spiner">' +
         '<i class="fa fa-spinner fa-spin fa-3x"></i>' +
         '</div>';
 
+function graphPie(datos){
+    const colors = Highcharts.getOptions().colors,
+            categories = [
+                'Chrome',
+                'Safari',
+                'Edge',
+                'Firefox',
+                'Other'
+            ],
+            data = [{
+                    y: 61.04,
+                    color: colors[2],
+                    drilldown: {
+                        name: 'Chrome',
+                        categories: [
+                            'Chrome v97.0',
+                            'Chrome v96.0',
+                            'Chrome v95.0',
+                            'Chrome v94.0',
+                            'Chrome v93.0',
+                            'Chrome v92.0',
+                            'Chrome v91.0',
+                            'Chrome v90.0',
+                            'Chrome v89.0',
+                            'Chrome v88.0',
+                            'Chrome v87.0',
+                            'Chrome v86.0',
+                            'Chrome v85.0',
+                            'Chrome v84.0',
+                            'Chrome v83.0',
+                            'Chrome v81.0',
+                            'Chrome v89.0',
+                            'Chrome v79.0',
+                            'Chrome v78.0',
+                            'Chrome v76.0',
+                            'Chrome v75.0',
+                            'Chrome v72.0',
+                            'Chrome v70.0',
+                            'Chrome v69.0',
+                            'Chrome v56.0',
+                            'Chrome v49.0'
+                        ],
+                        data: [
+                            36.89,
+                            18.16,
+                            0.54,
+                            0.7,
+                            0.8,
+                            0.41,
+                            0.31,
+                            0.13,
+                            0.14,
+                            0.1,
+                            0.35,
+                            0.17,
+                            0.18,
+                            0.17,
+                            0.21,
+                            0.1,
+                            0.16,
+                            0.43,
+                            0.11,
+                            0.16,
+                            0.15,
+                            0.14,
+                            0.11,
+                            0.13,
+                            0.12
+                        ]
+                    }
+                },
+                {
+                    y: 9.47,
+                    color: colors[3],
+                    drilldown: {
+                        name: 'Safari',
+                        categories: [
+                            'Safari v15.3',
+                            'Safari v15.2',
+                            'Safari v15.1',
+                            'Safari v15.0',
+                            'Safari v14.1',
+                            'Safari v14.0',
+                            'Safari v13.1',
+                            'Safari v13.0',
+                            'Safari v12.1'
+                        ],
+                        data: [
+                            0.1,
+                            2.01,
+                            2.29,
+                            0.49,
+                            2.48,
+                            0.64,
+                            1.17,
+                            0.13,
+                            0.16
+                        ]
+                    }
+                },
+                {
+                    y: 9.32,
+                    color: colors[5],
+                    drilldown: {
+                        name: 'Edge',
+                        categories: [
+                            'Edge v97',
+                            'Edge v96',
+                            'Edge v95'
+                        ],
+                        data: [
+                            6.62,
+                            2.55,
+                            0.15
+                        ]
+                    }
+                },
+                {
+                    y: 8.15,
+                    color: colors[1],
+                    drilldown: {
+                        name: 'Firefox',
+                        categories: [
+                            'Firefox v96.0',
+                            'Firefox v95.0',
+                            'Firefox v94.0',
+                            'Firefox v91.0',
+                            'Firefox v78.0',
+                            'Firefox v52.0'
+                        ],
+                        data: [
+                            4.17,
+                            3.33,
+                            0.11,
+                            0.23,
+                            0.16,
+                            0.15
+                        ]
+                    }
+                },
+                {
+                    y: 11.02,
+                    color: colors[6],
+                    drilldown: {
+                        name: 'Other',
+                        categories: [
+                            'Other'
+                        ],
+                        data: [
+                            11.02
+                        ]
+                    }
+                }
+            ],
+            browserData = [],
+            versionsData = [],
+            dataLen = data.length;
+
+        let i,
+            j,
+            drillDataLen,
+            brightness;
+
+
+        // Build the data arrays
+        for (i = 0; i < dataLen; i += 1) {
+
+            // add browser data
+            browserData.push({
+                name: categories[i],
+                y: data[i].y,
+                color: data[i].color
+            });
+
+            // add version data
+            drillDataLen = data[i].drilldown.data.length;
+            for (j = 0; j < drillDataLen; j += 1) {
+                const name = data[i].drilldown.categories[j];
+                brightness = 0.2 - (j / drillDataLen) / 5;
+                versionsData.push({
+                    name,
+                    y: data[i].drilldown.data[j],
+                    color: Highcharts.color(data[i].color).brighten(brightness).get(),
+                    custom: {
+                        version: name.split(' ')[1] || name.split(' ')[0]
+                    }
+                });
+            }
+        }
+
+        // Create the chart
+        Highcharts.chart('contenedor-pie', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Browser market share, January, 2022'
+            },
+            subtitle: {
+                text: 'Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+            },
+            plotOptions: {
+                pie: {
+                    shadow: false,
+                    center: ['50%', '50%']
+                }
+            },
+            tooltip: {
+                valueSuffix: '%'
+            },
+            series: [{
+                name: 'Browsers',
+                data: browserData,
+                size: '45%',
+                dataLabels: {
+                    color: '#ffffff',
+                    distance: '-50%'
+                }
+            }, {
+                name: 'Versions',
+                data: versionsData,
+                size: '80%',
+                innerSize: '60%',
+                dataLabels: {
+                    format: '<b>{point.name}:</b> <span style="opacity: 0.5">' +
+                        '{y}%</span>',
+                    filter: {
+                        property: 'y',
+                        operator: '>',
+                        value: 1
+                    },
+                    style: {
+                        fontWeight: 'normal'
+                    }
+                },
+                id: 'versions'
+            }],
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 400
+                    },
+                    chartOptions: {
+                        series: [{}, {
+                            id: 'versions',
+                            dataLabels: {
+                                distance: 10,
+                                format: '{point.custom.version}',
+                                filter: {
+                                    property: 'percentage',
+                                    operator: '>',
+                                    value: 2
+                                }
+                            }
+                        }]
+                    }
+                }]
+            }
+        });
+
+        function crearGrafico(data) {
+        // Preparar series para el drilldown
+        const drilldownSeries = data.data.map(item => {
+            return {
+                name: item.drilldown.name,
+                id: item.drilldown.name,
+                data: item.drilldown.categories.map((category, index) => [
+                    category, 
+                    item.drilldown.data[index]
+                ])
+            };
+        });
+
+        // Crear el gráfico
+        Highcharts.chart('container', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Distribución de Actividades',
+                align: 'center'
+            },
+            subtitle: {
+                text: 'Haz clic en los segmentos para ver detalles',
+                align: 'center'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                },
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: '50%', // Hace que sea un donut chart
+                    depth: 45,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: 'white',
+                            textOutline: '1px contrast'
+                        }
+                    },
+                    showInLegend: true
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">●</span> <b>{point.name}</b>: {point.y}%<br/>'
+            },
+            series: [{
+                name: 'Actividades',
+                colorByPoint: true,
+                data: data.data.map(item => ({
+                    name: item.drilldown.name,
+                    y: item.y,
+                    color: item.color,
+                    drilldown: item.drilldown.name
+                }))
+            }],
+            drilldown: {
+                activeDataLabelStyle: {
+                    color: '#000000',
+                    textOutline: 'none'
+                },
+                series: drilldownSeries
+            },
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        plotOptions: {
+                            pie: {
+                                innerSize: '30%'
+                            }
+                        }
+                    }
+                }]
+            }
+        });
+    }
+
+}
+
+    function getGraficas(id,modo,periodo) {
+
+        $.ajax({
+            url: "ajax.php?mode=getdatagraficas",
+            type: "POST",
+            data: {
+                modo: modo,
+                id:id,
+                periodo: periodo
+            },
+            error: function(request, status, error) {
+                notify('Error inesperado, consulte a soporte.' + request + status + error, 1500, "error", "top-end");
+            },
+            beforeSend: function() {
+                $('#contenedor-pie').html(_CARGANDO);            
+                $('#contenedor-barra').html(_CARGANDO);            
+            },
+            success: function(datos) {
+               console.log(datos);
+               graphPie(datos);
+            }
+        });
+
+        
+
+
+        Highcharts.chart('contenedor-barras', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Corn vs wheat estimated production for 2023'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: ['USA', 'China', 'Brazil', 'EU', 'Argentina', 'India'],
+                crosshair: true,
+                accessibility: {
+                    description: 'Countries'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '1000 metric tons (MT)'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' (1000 MT)'
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                    name: 'Corn',
+                    data: [387749, 280000, 129000, 64300, 54000, 34300]
+                },
+                {
+                    name: 'Wheat',
+                    data: [45321, 140000, 10000, 140500, 19500, 113500]
+                }
+            ]
+        });
+
+
+    }
 
 
     function getTablaEficiencia(modo) {
@@ -440,23 +711,34 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                     $(".progress-bar").each(function() {
                         //animarProgressBar($(this), parseFloat($(this).attr("avance")));
                         animarProgressBarDegradado($(this), parseFloat($(this).attr("avance")), {
-                                duracion: 1500,
-                                colores: [
-                                    { porcentaje: 0, color: '#ff0000' },   // Rojo
-                                    { porcentaje: 30, color: '#ff8000' },  // Naranja
-                                    { porcentaje: 70, color: '#ffff00' },  // Amarillo
-                                    { porcentaje: 100, color: '#28a745' }  // Verde
-                                ],
-                                onComplete: function() {
-                                    console.log('Animación completada');
-                                }
-                            });
+                            duracion: 1500,
+                            colores: [{
+                                    porcentaje: 0,
+                                    color: '#ff0000'
+                                }, // Rojo
+                                {
+                                    porcentaje: 30,
+                                    color: '#ff8000'
+                                }, // Naranja
+                                {
+                                    porcentaje: 70,
+                                    color: '#ffff00'
+                                }, // Amarillo
+                                {
+                                    porcentaje: 100,
+                                    color: '#28a745'
+                                } // Verde
+                            ],
+                            onComplete: function() {
+                                console.log('Animación completada');
+                            }
+                        });
                     });
 
                     $(".badge-por").each(function() {
                         animarBadgeDegradado($(this), $(this).attr("por"), {
                             colorInicio: '#ff0000',
-                            colorMedio: '#ff8000',  // Naranja
+                            colorMedio: '#ff8000', // Naranja
                             colorFin: '#28a745',
                             duracion: 1500
                         });
@@ -475,67 +757,67 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
     }
 
     function animarBadgeDegradado($element, porcentajeFinal, opciones = {}) {
-    const config = {
-        duracion: 2000,
-        colorInicio: '#ff0000',  // Rojo
-        colorMedio: '#ffff00',   // Amarillo
-        colorFin: '#00ff00',     // Verde
-        onComplete: null,
-        ...opciones
-    };
+        const config = {
+            duracion: 2000,
+            colorInicio: '#ff0000', // Rojo
+            colorMedio: '#ffff00', // Amarillo
+            colorFin: '#00ff00', // Verde
+            onComplete: null,
+            ...opciones
+        };
 
-    let start = null;
-    const badgeOriginal = $element.text();
-    
-    function animar(timestamp) {
-        if (!start) start = timestamp;
-        const progreso = Math.min((timestamp - start) / config.duracion, 1);
-        const porcentaje = Math.round(progreso * porcentajeFinal);
-        
-        // Actualizar texto
-        $element.text(`${porcentaje}%`);
-        
-        // Calcular color intermedio
-        let color;
-        if (porcentaje < 50) {
-            const factor = porcentaje / 50;
-            color = interpolateColor(config.colorInicio, config.colorMedio, factor);
-        } else {
-            const factor = (porcentaje - 50) / 50;
-            color = interpolateColor(config.colorMedio, config.colorFin, factor);
+        let start = null;
+        const badgeOriginal = $element.text();
+
+        function animar(timestamp) {
+            if (!start) start = timestamp;
+            const progreso = Math.min((timestamp - start) / config.duracion, 1);
+            const porcentaje = Math.round(progreso * porcentajeFinal);
+
+            // Actualizar texto
+            $element.text(`${porcentaje}%`);
+
+            // Calcular color intermedio
+            let color;
+            if (porcentaje < 50) {
+                const factor = porcentaje / 50;
+                color = interpolateColor(config.colorInicio, config.colorMedio, factor);
+            } else {
+                const factor = (porcentaje - 50) / 50;
+                color = interpolateColor(config.colorMedio, config.colorFin, factor);
+            }
+
+            // Aplicar color
+            $element.css('background-color', color);
+
+            // Continuar o finalizar
+            if (progreso < 1) {
+                requestAnimationFrame(animar);
+            } else if (typeof config.onComplete === 'function') {
+                config.onComplete();
+            }
         }
-        
-        // Aplicar color
-        $element.css('background-color', color);
-        
-        // Continuar o finalizar
-        if (progreso < 1) {
-            requestAnimationFrame(animar);
-        } else if (typeof config.onComplete === 'function') {
-            config.onComplete();
+
+        // Función para interpolar colores HEX
+        function interpolateColor(color1, color2, factor) {
+            const r1 = parseInt(color1.substring(1, 3), 16);
+            const g1 = parseInt(color1.substring(3, 5), 16);
+            const b1 = parseInt(color1.substring(5, 7), 16);
+
+            const r2 = parseInt(color2.substring(1, 3), 16);
+            const g2 = parseInt(color2.substring(3, 5), 16);
+            const b2 = parseInt(color2.substring(5, 7), 16);
+
+            const r = Math.round(r1 + (r2 - r1) * factor);
+            const g = Math.round(g1 + (g2 - g1) * factor);
+            const b = Math.round(b1 + (b2 - b1) * factor);
+
+            return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
         }
+
+        // Iniciar animación
+        requestAnimationFrame(animar);
     }
-    
-    // Función para interpolar colores HEX
-    function interpolateColor(color1, color2, factor) {
-        const r1 = parseInt(color1.substring(1, 3), 16);
-        const g1 = parseInt(color1.substring(3, 5), 16);
-        const b1 = parseInt(color1.substring(5, 7), 16);
-        
-        const r2 = parseInt(color2.substring(1, 3), 16);
-        const g2 = parseInt(color2.substring(3, 5), 16);
-        const b2 = parseInt(color2.substring(5, 7), 16);
-        
-        const r = Math.round(r1 + (r2 - r1) * factor);
-        const g = Math.round(g1 + (g2 - g1) * factor);
-        const b = Math.round(b1 + (b2 - b1) * factor);
-        
-        return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-    }
-    
-    // Iniciar animación
-    requestAnimationFrame(animar);
-}
 
     function animarProgressBarDegradado($element, objetivo, config = {}) {
         const defaults = {
