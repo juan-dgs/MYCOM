@@ -2,10 +2,11 @@
 
 /****************************DATOS PARA GRAFICA DE PASTEL*******************************/
 
+
 $qt = "SELECT c_tipo_act as cod,t.descripcion as tipo,color_hex,SUM(1) as cuantos 
                 FROM actividades as a 
                 LEFT JOIN act_c_tipos as t on t.codigo = a.c_tipo_act
-                WHERE fh_captura >= '2025-01-01' AND c_estatus !='X' 
+                WHERE fh_captura >= '$fecha_inicio' AND c_estatus !='X' 
         GROUP BY c_tipo_act 
         ORDER BY c_tipo_act;";
 
