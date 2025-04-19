@@ -1,11 +1,16 @@
 <?php
 
+$q_usu = "";
+if (USER_TYPE!='SPUS'){
+    $q_usu = " AND id_usuario_resp = '".USER_ID."' ";
+}
+
 /****************************DATOS PARA GRAFICA DE PASTEL*******************************/
 
 $qt = "SELECT c_tipo_act as cod,t.descripcion as tipo,color_hex,SUM(1) as cuantos 
                 FROM actividades as a 
                 LEFT JOIN act_c_tipos as t on t.codigo = a.c_tipo_act
-                WHERE fh_captura >= '2025-01-01' AND c_estatus !='X' 
+                WHERE fh_captura >= '2025-01-01' AND c_estatus !='X' $q_usu
         GROUP BY c_tipo_act 
         ORDER BY c_tipo_act;";
 
@@ -32,7 +37,7 @@ $q = "SELECT concat(c_tipo_act,c_clasifica_act) as cod,c_tipo_act,t.descripcion 
                 FROM actividades as a 
                 LEFT JOIN act_c_tipos as t on t.codigo = a.c_tipo_act
                 LEFT JOIN act_c_clasificacion as c on c.codigo = a.c_clasifica_act
-                WHERE fh_captura >= '2025-01-01' AND c_estatus !='X' 
+                WHERE fh_captura >= '2025-01-01' AND c_estatus !='X' $q_usu
         GROUP BY c_tipo_act,c_clasifica_act 
         ORDER BY c_tipo_act;";
 
@@ -91,7 +96,7 @@ $q_bar ="SELECT ";
                     SUM(if(horas_plan<horas_real AND MONTH(IFNULL(f_plan_i,fh_finaliza))=$indice,1,0)) as atr_$valor,";
             }
 
-    $q_bar .=" 1 as id FROM temp_base_actividades as b;";
+    $q_bar .=" 1 as id FROM temp_base_actividades as b WHERE 1=1 $q_usu;";
 
     $sql = $db->query($q_bar);
     if ($db->rows($sql) > 0) {
