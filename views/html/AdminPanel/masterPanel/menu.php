@@ -21,7 +21,7 @@ $qMenu ='SELECT m.c_modulo,m.nivel1,m.nivel2,m.nivel3,m.tipo,m.titulo,m.vinculo,
   $dt_menu=findtablaq($qMenu,"c_modulo");
 
   $html_menu="";
-  if ($qMenu != false){
+  if (!empty($dt_menu)){
     foreach ($dt_menu as $C_MODULO => $array) {
       if ($dt_menu[$C_MODULO]["nivel2"] == 0 and $dt_menu[$C_MODULO]["nivel3"] == 0){
 

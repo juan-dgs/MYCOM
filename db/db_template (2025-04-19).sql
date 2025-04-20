@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-04-2025 a las 08:13:29
+-- Tiempo de generación: 20-04-2025 a las 06:15:11
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -184,15 +184,15 @@ DELIMITER ;
 
 CREATE TABLE `actividades` (
   `id` int(11) NOT NULL,
-  `folio` varchar(9) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `c_tipo_act` varchar(4) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `folio` varchar(9) NOT NULL,
+  `c_tipo_act` varchar(4) NOT NULL,
   `id_cliente` int(11) NOT NULL,
-  `c_prioridad` varchar(1) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `c_clasifica_act` varchar(4) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `descripcion` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `comentario` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `notas` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `dispositivo` varchar(250) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `c_prioridad` varchar(1) NOT NULL,
+  `c_clasifica_act` varchar(4) NOT NULL,
+  `descripcion` text NOT NULL,
+  `comentario` text NOT NULL,
+  `notas` text NOT NULL,
+  `dispositivo` varchar(250) NOT NULL,
   `id_usuario_resp` int(11) DEFAULT NULL,
   `f_plan_i` date DEFAULT NULL,
   `f_plan_f` date DEFAULT NULL,
@@ -202,7 +202,7 @@ CREATE TABLE `actividades` (
   `id_usuario_finaliza` int(11) DEFAULT NULL,
   `calificacion` int(11) NOT NULL,
   `avance` int(3) NOT NULL DEFAULT 0,
-  `c_estatus` varchar(1) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'A'
+  `c_estatus` varchar(1) NOT NULL DEFAULT 'A'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
@@ -391,7 +391,7 @@ INSERT INTO `act_c_tipos` (`id`, `codigo`, `descripcion`, `pre`, `activo`, `fh_r
 
 CREATE TABLE `act_r_adjuntos` (
   `id` int(11) NOT NULL,
-  `folio_act` varchar(9) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `folio_act` varchar(9) NOT NULL,
   `id_u_registra` int(11) NOT NULL,
   `fh_registra` datetime NOT NULL,
   `dir` varchar(100) NOT NULL,
@@ -560,8 +560,9 @@ INSERT INTO `menu` (`id`, `c_modulo`, `nivel1`, `nivel2`, `nivel3`, `tipo`, `tit
 (11, 'CCLI', 1, 3, 0, 'CAT', 'Clientes', 'clientes', 'fas fa-hands-helping', 'catalogs/clients.php', 1, 'Clientes'),
 (12, 'ACTI', 2, 0, 0, 'MOD', 'Gestión Actividades', 'gestion_actividades', 'fas fa-people-carry', 'actividades/gestion_actividades.php', 1, 'gestion de actividades'),
 (13, 'PERF', 1, 0, 0, 'GRL', 'Perfil', 'miperfil', 'fa-solid fa-user', 'profile/my_profile.php', 1, 'Mi Perfil'),
-(14, 'CCOF', 1, 1, 4, 'CAT', 'Dias Feriados', 'Feriados', 'fas fa-calendar', 'catalogs/holidays.php', 1, 'Dias Feriados'),
-(15, 'CHLA', 1, 1, 5, 'CAT', 'Horarios Laborales', 'horarioslaborales', 'far fa-clock', 'catalogs/horarios.php', 1, 'Horarios Laborales');
+(14, 'CCOF', 1, 1, 4, 'CAT', 'Dias Feriados', 'feriados', 'fas fa-calendar', 'catalogs/holidays.php', 1, 'Dias Feriados'),
+(15, 'CHLA', 1, 1, 5, 'CAT', 'Horarios Laborales', 'horarioslaborales', 'far fa-clock', 'catalogs/horarios.php', 1, 'Horarios Laborales'),
+(16, 'MONI', 1, 0, 0, 'MOD', 'Monitoreo', 'monitor', 'far fa-dashboard', 'monitor.php', 1, 'monitoreo tiempo real');
 
 -- --------------------------------------------------------
 
@@ -585,12 +586,13 @@ INSERT INTO `menu_permission` (`id`, `c_tipo_usuario`, `c_modulo`) VALUES
 (1, 'SPUS', 'CCLA'),
 (8, 'SPUS', 'CCLI'),
 (12, 'SPUS', 'CCOF'),
-(13, 'SPUS', 'CHLA'),
 (3, 'SPUS', 'CPRI'),
 (4, 'SPUS', 'CPRO'),
 (5, 'SPUS', 'CTAC'),
 (6, 'SPUS', 'CTUS'),
-(7, 'SPUS', 'CUSU');
+(7, 'SPUS', 'CUSU'),
+(13, 'SPUS', 'CHLA'),
+(14, 'SPUS', 'MONI');
 
 -- --------------------------------------------------------
 
@@ -854,13 +856,13 @@ ALTER TABLE `core_feriados`
 -- AUTO_INCREMENT de la tabla `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `menu_permission`
 --
 ALTER TABLE `menu_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
