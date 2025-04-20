@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-04-2025 a las 06:15:11
+-- Tiempo de generación: 20-04-2025 a las 06:29:41
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -211,21 +211,21 @@ CREATE TABLE `actividades` (
 
 INSERT INTO `actividades` (`id`, `folio`, `c_tipo_act`, `id_cliente`, `c_prioridad`, `c_clasifica_act`, `descripcion`, `comentario`, `notas`, `dispositivo`, `id_usuario_resp`, `f_plan_i`, `f_plan_f`, `fh_captura`, `id_usuario_captura`, `fh_finaliza`, `id_usuario_finaliza`, `calificacion`, `avance`, `c_estatus`) VALUES
 (1, '25T030001', 'TICK', 1, 'U', 'CCTV', 'pruebas', '', '', '', 1, NULL, NULL, '2025-03-22 00:04:17', 5, NULL, 5, 0, 100, 'F'),
-(15, '25T030003', 'TICK', 1, '1', 'CCTV', '<p>ddddd</p>', '', '', '', 1, NULL, NULL, '2025-03-29 22:51:47', 1, NULL, NULL, 0, 0, 'A'),
-(21, '25T030004', 'TICK', 1, '2', 'CCTV', '<p>prueba</p>', '', '', '||', 24, NULL, NULL, '2025-03-30 12:52:20', 1, NULL, NULL, 0, 0, 'A'),
-(23, '25P030001', 'PROY', 1, '3', 'CCTV', '<p>prueba</p>', '', '', '', 23, NULL, NULL, '2025-03-30 12:55:44', 5, NULL, NULL, 0, 0, 'A'),
-(24, '25L030001', 'LEVA', 1, '2', 'REDS', '<p><font color=\"#000000\"><span style=\"background-color: rgb(255, 255, 0);\">ssdsadasdasdasd</span></font></p>', '', '', '', 5, NULL, NULL, '2025-03-30 12:57:19', 5, NULL, NULL, 0, 0, 'A'),
-(25, '25L030002', 'LEVA', 1, '1', 'CCTV', '<p>prueba</p>', '', '', '||', 5, NULL, NULL, '2025-03-30 13:00:29', 5, NULL, NULL, 0, 0, 'A'),
-(26, '25P030002', 'PROY', 1, '1', 'CCTV', '<p>prueba</p>', '', '', '', 23, NULL, NULL, '2025-03-30 13:00:59', 5, NULL, NULL, 0, 0, 'A'),
-(27, '25T030005', 'TICK', 1, '1', 'CCTV', '<p>pruebas</p>', '', '', '', 1, NULL, NULL, '2025-03-30 13:01:58', 5, NULL, NULL, 0, 0, 'A'),
-(28, '25T030006', 'TICK', 1, '1', 'CCTV', '<p>pruebas</p>', '', '', '', 5, NULL, NULL, '2025-03-30 13:08:48', 5, NULL, NULL, 0, 0, 'A'),
-(29, '25P030003', 'PROY', 1, '2', 'CCTV', '<ul><li><font face=\"Impact\">prueba desc</font></li><li><font face=\"Impact\">....</font></li></ul>', '', '<ol><li style=\"text-align: center; \"><u>Notas</u></li></ol>', '', 5, NULL, NULL, '2025-03-30 13:13:04', 5, NULL, NULL, 0, 0, 'A'),
-(30, '25P030004', 'PROY', 1, '2', 'CCTV', '<ul><li><font face=\"Impact\">prueba desc</font></li><li><font face=\"Impact\">....</font></li></ul>', '', '<ol><li style=\"text-align: center; \"><u>Notas</u></li></ol>', '', 5, NULL, NULL, '2025-03-30 13:15:44', 5, NULL, NULL, 0, 0, 'A'),
-(31, '25T030007', 'TICK', 1, '2', 'CCTV', '<p><font color=\"#000000\" style=\"background-color: rgb(255, 255, 0);\"><b>ddd</b></font></p>', '<p style=\"text-align: justify; \"><b style=\"background-color: rgb(0, 0, 255);\"><font color=\"#ffe79c\">comentarios</font></b></p>', '', '', 5, NULL, NULL, '2025-03-30 13:17:45', 5, NULL, NULL, 0, 0, 'A'),
-(32, '25T030008', 'TICK', 1, '2', 'CCTV', '<p><font color=\"#000000\" style=\"background-color: rgb(255, 255, 0);\"><b>ddd</b></font></p>', '<p style=\"text-align: justify; \"><b style=\"background-color: rgb(0, 0, 255);\"><font color=\"#ffe79c\">comentarios</font></b></p>', '', '', 5, NULL, NULL, '2025-03-30 13:18:43', 5, NULL, NULL, 0, 0, 'A'),
+(15, '25T030003', 'TICK', 1, '1', 'CCTV', '<p>ddddd</p>', '', '', '', 1, NULL, NULL, '2025-03-29 22:51:47', 1, '2025-04-19 22:26:05', 5, 0, 100, 'F'),
+(21, '25T030004', 'TICK', 1, '2', 'CCTV', '<p>prueba</p>', '', '', '||', 24, NULL, NULL, '2025-03-30 12:52:20', 1, '2025-04-19 22:26:07', 5, 0, 100, 'F'),
+(23, '25P030001', 'PROY', 1, '3', 'CCTV', '<p>prueba</p>', '', '', '', 23, NULL, NULL, '2025-03-30 12:55:44', 5, '2025-04-19 22:26:09', 5, 0, 100, 'F'),
+(24, '25L030001', 'LEVA', 1, '2', 'REDS', '<p><font color=\"#000000\"><span style=\"background-color: rgb(255, 255, 0);\">ssdsadasdasdasd</span></font></p>', '', '', '', 5, NULL, NULL, '2025-03-30 12:57:19', 5, '2025-04-19 22:25:26', 5, 0, 100, 'F'),
+(25, '25L030002', 'LEVA', 1, '1', 'CCTV', '<p>prueba</p>', '', '', '||', 5, NULL, NULL, '2025-03-30 13:00:29', 5, '2025-04-19 22:25:30', 5, 0, 100, 'F'),
+(26, '25P030002', 'PROY', 1, '1', 'CCTV', '<p>prueba</p>', '', '', '', 23, NULL, NULL, '2025-03-30 13:00:59', 5, '2025-04-19 22:25:02', 5, 0, 100, 'F'),
+(27, '25T030005', 'TICK', 1, '1', 'CCTV', '<p>pruebas</p>', '', '', '', 1, NULL, NULL, '2025-03-30 13:01:58', 5, '2025-04-19 22:24:38', 5, 0, 100, 'F'),
+(28, '25T030006', 'TICK', 1, '1', 'CCTV', '<p>pruebas</p>', '', '', '', 5, NULL, NULL, '2025-03-30 13:08:48', 5, '2025-04-19 22:24:44', 5, 0, 100, 'F'),
+(29, '25P030003', 'PROY', 1, '2', 'CCTV', '<ul><li><font face=\"Impact\">prueba desc</font></li><li><font face=\"Impact\">....</font></li></ul>', '', '<ol><li style=\"text-align: center; \"><u>Notas</u></li></ol>', '', 5, NULL, NULL, '2025-03-30 13:13:04', 5, '2025-04-19 22:24:42', 5, 0, 100, 'F'),
+(30, '25P030004', 'PROY', 1, '2', 'CCTV', '<ul><li><font face=\"Impact\">prueba desc</font></li><li><font face=\"Impact\">....</font></li></ul>', '', '<ol><li style=\"text-align: center; \"><u>Notas</u></li></ol>', '', 5, NULL, NULL, '2025-03-30 13:15:44', 5, '2025-04-19 22:24:41', 5, 0, 100, 'F'),
+(31, '25T030007', 'TICK', 1, '2', 'CCTV', '<p><font color=\"#000000\" style=\"background-color: rgb(255, 255, 0);\"><b>ddd</b></font></p>', '<p style=\"text-align: justify; \"><b style=\"background-color: rgb(0, 0, 255);\"><font color=\"#ffe79c\">comentarios</font></b></p>', '', '', 5, NULL, NULL, '2025-03-30 13:17:45', 5, '2025-04-19 22:24:39', 5, 0, 100, 'F'),
+(32, '25T030008', 'TICK', 1, '2', 'CCTV', '<p><font color=\"#000000\" style=\"background-color: rgb(255, 255, 0);\"><b>ddd</b></font></p>', '<p style=\"text-align: justify; \"><b style=\"background-color: rgb(0, 0, 255);\"><font color=\"#ffe79c\">comentarios</font></b></p>', '', '', 5, NULL, NULL, '2025-03-30 13:18:43', 5, '2025-04-19 22:24:45', 5, 0, 100, 'F'),
 (33, '25L030003', 'LEVA', 1, '2', 'CCTV', '<p>test2321</p>', '', '', '||', 5, '2025-03-01', '2025-03-01', '2025-03-30 13:21:46', 5, '2025-04-08 09:19:32', 5, 0, 100, 'F'),
-(34, '25L030004', 'LEVA', 1, '2', 'CCTV', '<p>test2321</p>', '', '', '||', 1, '2025-03-01', '2025-03-30', '2025-03-30 13:22:12', 5, NULL, NULL, 0, 0, 'A'),
-(35, '25T030009', 'TICK', 1, '3', 'CCTV', '<p>test</p>', '', '', '', 1, NULL, NULL, '2025-03-30 14:22:00', 5, NULL, NULL, 0, 0, 'A'),
+(34, '25L030004', 'LEVA', 1, '2', 'CCTV', '<p>test2321</p>', '', '', '||', 1, '2025-03-01', '2025-03-30', '2025-03-30 13:22:12', 5, '2025-04-19 22:23:22', 5, 0, 100, 'F'),
+(35, '25T030009', 'TICK', 1, '3', 'CCTV', '<p>test</p>', '', '', '', 1, NULL, NULL, '2025-03-30 14:22:00', 5, '2025-04-19 22:23:29', 5, 0, 100, 'F'),
 (36, '25P030005', 'PROY', 1, '1', 'REDS', '<p>prueba</p>', '', '', 'serie|mac|otro', 5, '2025-04-01', NULL, '2025-03-30 14:27:50', 5, '2025-04-07 19:52:45', 5, 0, 100, 'F'),
 (37, '25T040001', 'TICK', 1, '2', 'CCTV', '<ol><li>prueba 010425</li></ol>', '<h1 class=\"\"><b>comentario X</b></h1>', '<p><font color=\"#000000\" style=\"background-color: rgb(255, 255, 0);\">NOTA Y</font></p>', '100210|test|100210', 1, '2025-04-01', '2025-04-05', '2025-04-01 20:13:32', 5, NULL, NULL, 0, 15, 'X'),
 (38, '25L040001', 'LEVA', 1, '2', 'CCTV', '<p>pruebas</p>', '<p>test</p>', '', '||', 1, NULL, NULL, '2025-04-01 20:14:59', 5, NULL, NULL, 0, 0, 'X'),
@@ -240,8 +240,8 @@ INSERT INTO `actividades` (`id`, `folio`, `c_tipo_act`, `id_cliente`, `c_priorid
 (47, '25T040007', 'TICK', 1, '1', 'CCTV', 'prueba 10000', '', '', '||', 5, NULL, NULL, '2025-04-04 19:17:03', 5, NULL, NULL, 0, 0, 'X'),
 (48, '25T040008', 'TICK', 1, 'U', 'CCTV', 'prueba', '', '', '||', 23, NULL, NULL, '2025-04-07 15:53:29', 5, '2025-04-07 19:53:42', 5, 0, 100, 'F'),
 (49, '25P040004', 'PROY', 1, '2', 'REDS', 'preuab', '', '', '||', 5, NULL, NULL, '2025-04-08 09:37:19', 5, '2025-04-10 20:48:19', 5, 0, 100, 'F'),
-(50, '25C040001', 'COTI', 1, '3', 'CCTV', 'prueba', '', '', '||', 5, NULL, NULL, '2025-04-17 00:09:11', 5, NULL, NULL, 0, 0, 'A'),
-(51, '25C040002', 'COTI', 1, '2', 'ELEC', 'prueba', '', '', '||', 23, NULL, NULL, '2025-04-17 00:09:41', 5, NULL, NULL, 0, 0, 'A');
+(50, '25C040001', 'COTI', 1, '3', 'CCTV', 'prueba', '', '', '||', 5, NULL, NULL, '2025-04-17 00:09:11', 5, '2025-04-19 22:23:24', 5, 0, 100, 'F'),
+(51, '25C040002', 'COTI', 1, '2', 'ELEC', 'prueba', '', '', '||', 23, NULL, NULL, '2025-04-17 00:09:41', 5, '2025-04-19 22:23:27', 5, 0, 100, 'F');
 
 -- --------------------------------------------------------
 
@@ -422,7 +422,23 @@ CREATE TABLE `act_r_comentarios` (
 --
 
 INSERT INTO `act_r_comentarios` (`id`, `folio_act`, `id_u_registra`, `fh_registra`, `comentario`, `avance`, `visto_por`, `fh_registro`, `fh_inactivo`) VALUES
-(10, '25P040004', 5, '2025-04-10 20:48:15', 'listo', 100, '*5*', NULL, NULL);
+(10, '25P040004', 5, '2025-04-10 20:48:15', 'listo', 100, '*5*', NULL, NULL),
+(11, '25C040002', 5, '2025-04-19 22:22:45', 'listo', 100, '*5*', NULL, NULL),
+(12, '25C040001', 5, '2025-04-19 22:22:55', 'listo', 100, '*5*', NULL, NULL),
+(13, '25T030009', 5, '2025-04-19 22:23:05', 'listo', 100, '*5*', NULL, NULL),
+(14, '25L030004', 5, '2025-04-19 22:23:17', 'listo', 100, '*5*', NULL, NULL),
+(15, '25T030008', 5, '2025-04-19 22:23:41', 'listo', 100, '*5*', NULL, NULL),
+(16, '25T030007', 5, '2025-04-19 22:23:50', 'listo', 100, '*5*', NULL, NULL),
+(17, '25P030004', 5, '2025-04-19 22:24:00', 'listo', 100, '*5*', NULL, NULL),
+(18, '25P030003', 5, '2025-04-19 22:24:11', 'listo', 100, '*5*', NULL, NULL),
+(19, '25T030006', 5, '2025-04-19 22:24:22', 'listo', 100, '*5*', NULL, NULL),
+(20, '25T030005', 5, '2025-04-19 22:24:35', 'listo', 100, '*5*', NULL, NULL),
+(21, '25P030002', 5, '2025-04-19 22:24:58', 'listo', 100, '*5*', NULL, NULL),
+(22, '25L030002', 5, '2025-04-19 22:25:14', 'listo', 100, '*5*', NULL, NULL),
+(23, '25L030001', 5, '2025-04-19 22:25:24', 'listo', 100, '*5*', NULL, NULL),
+(24, '25T030004', 5, '2025-04-19 22:25:42', 'listo', 100, '*5*', NULL, NULL),
+(25, '25P030001', 5, '2025-04-19 22:25:51', 'listo', 100, '*5*', NULL, NULL),
+(26, '25T030003', 5, '2025-04-19 22:26:00', 'listo', 100, '*5*', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -832,7 +848,7 @@ ALTER TABLE `act_r_adjuntos`
 -- AUTO_INCREMENT de la tabla `act_r_comentarios`
 --
 ALTER TABLE `act_r_comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `act_r_involucrados`

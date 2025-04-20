@@ -655,26 +655,30 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                 var result = JSON.parse(datos);
                 console.log(result);
 
+                if (result[1]["pendientes"] > 0) {
+                    $('#countPendientes').contadorAnimado({
+                        target: parseInt(result[1]["pendientes"]),
+                        duration: 1000,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '',
+                        onComplete: function() {}
+                    });
 
-                $('#countPendientes').contadorAnimado({
-                    target: parseInt(result[1]["pendientes"]),
-                    duration: 1000,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '',
-                    onComplete: function() {}
-                });
+                    $("#detPendientes").contadorAnimado({
+                        target: parseInt(parseInt(result[1]["pendientes"]) / parseInt(result[1]["tot_act"]) * 100),
+                        duration: 1500,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '% ',
+                        onComplete: function() {
+                            $('#detPendientes').append(" <b title='" + result[1]["tot_act"] + "'>del Total</b>")
+                        }
+                    });
+                }else{
+                    $('#detPendientes').html(" 0% <b title='" + result[1]["tot_act"] + "'>del Total</b>")
+                }
 
-                $("#detPendientes").contadorAnimado({
-                    target: parseInt(parseInt(result[1]["pendientes"]) / parseInt(result[1]["tot_act"]) * 100),
-                    duration: 1500,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '% ',
-                    onComplete: function() {
-                        $('#detPendientes').append(" <b title='" + result[1]["tot_act"] + "'>del Total</b>")
-                    }
-                });
 
                 if (result[1]["atrasadas"] > 0) {
                     $('#countAtrasadas').contadorAnimado({
@@ -695,6 +699,8 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                             $('#detAtrasadas').append(" <b title='" + result[1]["pendientes"] + "'>del las Pendientes</b>")
                         }
                     });
+                }else{
+                    $('#detAtrasadas').append("0% <b title='" + result[1]["pendientes"] + "'>del las Pendientes</b>")
                 }
 
 
