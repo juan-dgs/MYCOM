@@ -1,17 +1,37 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>test</title>
+<!doctype html>
+<html class="no-js" lang="zxx">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Construction HTML-5 Template</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="manifest" href="site.webmanifest">
+		<link rel="shortcut icon" type="image/x-icon" href="views/web/img/favicon.ico">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+		<!-- CSS here -->
+            <link rel="stylesheet" href="views/css/web/bootstrap.min.css">
+            <link rel="stylesheet" href="views/css/web/owl.carousel.min.css">
+            <link rel="stylesheet" href="views/css/web/slicknav.css">
+            <link rel="stylesheet" href="views/css/web/animate.min.css">
+            <link rel="stylesheet" href="views/css/web/magnific-popup.css">
+            <link rel="stylesheet" href="views/css/web/fontawesome-all.min.css">
+            <link rel="stylesheet" href="views/css/web/themify-icons.css">
+            <link rel="stylesheet" href="views/css/web/slick.css">
+            <link rel="stylesheet" href="views/css/web/nice-select.css">
+            <link rel="stylesheet" href="views/css/web/style.css">
+   </head>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-    <script src="views/js/jquery-3.7.1.min.js" charset="utf-8"></script>
-
-    <link href="views\components\alertifyjs\css\alertify.css" rel="stylesheet">
-
-    <script src="views\components\alertifyjs\alertify.js" charset="utf-8"></script>
-  </head>
-  <body>
+   <body>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="views/web/img/logo/loder-logo.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preloader Start -->
