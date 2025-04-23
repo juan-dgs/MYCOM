@@ -28,6 +28,8 @@ if (!empty($dt_contadorest)) {
         );
     }
 
+
+    
     foreach ($dt_contadorest as $id => $array) {
         $data_tipo_colors[$dt_contadorest[$id]['tipo']] = $dt_contadorest[$id]['color_hex'];
     }
