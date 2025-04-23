@@ -151,7 +151,7 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3 id='countPendientes'>150</h3>
+                <h3 id='countPendientes'>0</h3>
                 <p>En Progreso</p>
             </div>
             <div class="icon">
@@ -165,7 +165,7 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3 id='countFinalizadas'>53</h3>
+                <h3 id='countFinalizadas'>0</h3>
 
                 <p>Completadas</p>
             </div>
@@ -180,7 +180,7 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3 id="countAtrasadas">44</h3>
+                <h3 id="countAtrasadas">0</h3>
 
                 <p>Atrasadas</p>
             </div>
@@ -195,7 +195,7 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3 id="coutCumplimiento">65%</h3>
+                <h3 id="coutCumplimiento">0%</h3>
 
                 <p>Cumplimiento SLA</p>
             </div>
@@ -366,22 +366,10 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
 
     }
 
-    function graphBar(datos){
-        console.log(datos);
+    function graphBar(datos) {
+        //console.log(datos);
         var meses = datos.meses;
         var series = datos.series;
-       /* meses=['ene','feb','mar']
-        series=[{
-                    name: 'Corn',
-                    data: [387749, 280000, 129000, 64300, 54000, 34300]
-                },
-                {
-                    name: 'Wheat',
-                    data: [45321, 140000, 10000, 140500, 19500, 113500]
-                }
-            ];
-            console.log(meses);
-            console.log(series);*/
 
 
         Highcharts.chart('contenedor-barras', {
@@ -409,7 +397,8 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
             },
             tooltip: {
                 shared: true, // Agrupa los valores de todas las series para la misma categoría
-                pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>'            },
+                pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>'
+            },
             plotOptions: {
                 column: {
                     pointPadding: 0.2,
@@ -487,8 +476,7 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
                                     color: '#28a745'
                                 } // Verde
                             ],
-                            onComplete: function() {
-                            }
+                            onComplete: function() {}
                         });
                     });
 
@@ -665,89 +653,111 @@ WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-
             },
             success: function(datos) {
                 var result = JSON.parse(datos);
-                //console.log(result);
+                console.log(result);
+
+                if (result[1]["pendientes"] > 0) {
+                    $('#countPendientes').contadorAnimado({
+                        target: parseInt(result[1]["pendientes"]),
+                        duration: 1000,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '',
+                        onComplete: function() {}
+                    });
+
+                    $("#detPendientes").contadorAnimado({
+                        target: parseInt(parseInt(result[1]["pendientes"]) / parseInt(result[1]["tot_act"]) * 100),
+                        duration: 1500,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '% ',
+                        onComplete: function() {
+                            $('#detPendientes').append(" <b title='" + result[1]["tot_act"] + "'>del Total</b>")
+                        }
+                    });
+                }else{
+                    $('#detPendientes').html(" 0% <b title='" + result[1]["tot_act"] + "'>del Total</b>")
+                }
 
 
-                $('#countPendientes').contadorAnimado({
-                    target: parseInt(result[1]["pendientes"]),
-                    duration: 1000,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '',
-                    onComplete: function() {}
-                });
-
-                $("#detPendientes").contadorAnimado({
-                    target: parseInt(parseInt(result[1]["pendientes"]) / parseInt(result[1]["tot_act"]) * 100),
-                    duration: 1500,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '% ',
-                    onComplete: function() {
-                        $('#detPendientes').append(" <b title='" + result[1]["tot_act"] + "'>del Total</b>")
-                    }
-                });
-
-                $('#countAtrasadas').contadorAnimado({
-                    target: parseInt(result[1]["atrasadas"]),
-                    duration: 1000,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '',
-                    onComplete: function() {}
-                });
-
-                $('#detAtrasadas').contadorAnimado({
-                    target: parseInt(parseInt(result[1]["atrasadas"]) / parseInt(result[1]["pendientes"]) * 100),
-                    duration: 1500,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '% ',
-                    onComplete: function() {
-                        $('#detAtrasadas').append(" <b title='" + result[1]["pendientes"] + "'>del las Pendientes</b>")
-                    }
-                });
-
-                $('#countFinalizadas').contadorAnimado({
-                    target: parseInt(result[1]["finalizadas"]),
-                    duration: 1000,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '',
-                    onComplete: function() {}
-                });
-
-                $('#detFinalizadas').contadorAnimado({
-                    target: parseInt(result[1]["avance_prom"]),
-                    duration: 1500,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '% ',
-                    onComplete: function() {
-                        $('#detFinalizadas').append(" Avance Promedio")
-                    }
-                });
+                if (result[1]["atrasadas"] > 0) {
+                    $('#countAtrasadas').contadorAnimado({
+                        target: parseInt(result[1]["atrasadas"]),
+                        duration: 1000,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '',
+                        onComplete: function() {}
+                    });
+                    $('#detAtrasadas').contadorAnimado({
+                        target: parseInt(parseInt(result[1]["atrasadas"]) / parseInt(result[1]["pendientes"]) * 100),
+                        duration: 1500,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '% ',
+                        onComplete: function() {
+                            $('#detAtrasadas').append(" <b title='" + result[1]["pendientes"] + "'>del las Pendientes</b>")
+                        }
+                    });
+                }else{
+                    $('#detAtrasadas').append("0% <b title='" + result[1]["pendientes"] + "'>del las Pendientes</b>")
+                }
 
 
-                $('#coutCumplimiento').contadorAnimado({
-                    target: parseInt((parseInt(result[1]["cumplimiento_SLA"]) / parseInt(result[1]["tot_act"])) * 100),
-                    duration: 1000,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '% ',
-                    onComplete: function() {}
-                });
 
-                $('#detCumplimiento').contadorAnimado({
-                    target: parseInt(parseInt(result[1]["cumplimiento_SLA"])),
-                    duration: 1500,
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '',
-                    onComplete: function() {
-                        $("#detCumplimiento").append(' SLA Cumplidos de un total de ' + result[1]["tot_act"]);
-                    }
-                });
+
+                if (result[1]["finalizadas"] > 0) {
+                    $('#countFinalizadas').contadorAnimado({
+                        target: parseInt(result[1]["finalizadas"]),
+                        duration: 1000,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '',
+                        onComplete: function() {}
+                    });
+                }
+
+                if (result[1]["avance_prom"] > 0) {
+                    $('#detFinalizadas').contadorAnimado({
+                        target: parseInt(result[1]["avance_prom"]),
+                        duration: 1500,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '% ',
+                        onComplete: function() {
+                            $('#detFinalizadas').append(" Avance Promedio")
+                        }
+                    });
+                } else {
+                    $('#detFinalizadas').html("0% de Avance")
+                }
+
+
+                if (parseInt(result[1]["cumplimiento_SLA"]) > 0) {
+                    $('#coutCumplimiento').contadorAnimado({
+                        target: parseInt((parseInt(result[1]["cumplimiento_SLA"]) / parseInt(result[1]["tot_act"])) * 100),
+                        duration: 1000,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '% ',
+                        onComplete: function() {}
+                    });
+
+                    $('#detCumplimiento').contadorAnimado({
+                        target: parseInt(parseInt(result[1]["cumplimiento_SLA"])),
+                        duration: 1500,
+                        decimals: 0,
+                        prefix: '',
+                        suffix: '',
+                        onComplete: function() {
+                            $("#detCumplimiento").append(' SLA Cumplidos de un total de ' + result[1]["tot_act"]);
+                        }
+                    });
+                } else {
+                    $("#detCumplimiento").append('0 SLA Cumplidos de un total de ' + result[1]["tot_act"]);
+
+                }
+
 
 
             }

@@ -30,6 +30,8 @@ include(HTML.'master/topnav.php');
         transition: all 0.3s;
         width: 500px;
         margin: auto;
+        margin-top: 160px;
+
         }
 
         .card2 {

@@ -5,8 +5,11 @@
     <li class="nav-item">
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
-    <li class="nav-item d-none d-sm-inline-block">
+    <!--li class="nav-item d-none d-sm-inline-block">
       <a href="panel" class="nav-link">Inicio</a>
+    </li-->
+    <li class="nav-item d-none d-sm-inline-block">
+      <a style="text-transform: uppercase;    font-weight: bold;    font-size: 120%;" class="nav-link"><?php echo TITULO_MODULO; ?></a>
     </li>
   </ul>
 

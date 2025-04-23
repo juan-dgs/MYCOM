@@ -6,11 +6,13 @@ if (USER_TYPE!='SPUS'){
 }
 
 /****************************DATOS PARA GRAFICA DE PASTEL*******************************/
+$fecha_inicio = '2025-01-01';
+
 
 $qt = "SELECT c_tipo_act as cod,t.descripcion as tipo,color_hex,SUM(1) as cuantos 
                 FROM actividades as a 
                 LEFT JOIN act_c_tipos as t on t.codigo = a.c_tipo_act
-                WHERE fh_captura >= '2025-01-01' AND c_estatus !='X' $q_usu
+                WHERE fh_captura >= '$fecha_inicio' AND c_estatus !='X' 
         GROUP BY c_tipo_act 
         ORDER BY c_tipo_act;";
 
@@ -39,7 +41,7 @@ $q = "SELECT concat(c_tipo_act,c_clasifica_act) as cod,c_tipo_act,t.descripcion 
                 FROM actividades as a 
                 LEFT JOIN act_c_tipos as t on t.codigo = a.c_tipo_act
                 LEFT JOIN act_c_clasificacion as c on c.codigo = a.c_clasifica_act
-                WHERE fh_captura >= '2025-01-01' AND c_estatus !='X' $q_usu
+                WHERE fh_captura >= '$fecha_inicio' AND c_estatus !='X' $q_usu
         GROUP BY c_tipo_act,c_clasifica_act 
         ORDER BY c_tipo_act;";
 
@@ -72,14 +74,27 @@ $pie = ([
 $series= [];
 $meses= [];
 
+$mf =12;
+$q_fechas='';
+$anio_inicio = date('Y', strtotime($fecha_inicio));
+$anio_actual = date('Y');
+
+if ($anio_inicio == $anio_actual) {
+    $mf = date('n')+1; // 'n' da el mes sin ceros iniciales (1-12)
+}else{
+    $q_fechas = " and fh_finaliza <= '$anio_inicio-12-31' ";
+}
+
 foreach ($_MESES as $indice =>  $valor) {
     if($valor!=''){
-        $meses[]=$valor;
+        if($indice<$mf+1){
+            $meses[]=$valor;
+        }
     }
 }
 
+
 try {
-    $fecha_inicio = '2025-04-01';
     $resultados = $db->callProcedure('sp_preparar_base_actividades', [$fecha_inicio]);
 
     $consulta = $db->query("SELECT * FROM temp_base_actividades");
@@ -98,7 +113,7 @@ $q_bar ="SELECT ";
                     SUM(if(horas_plan<horas_real AND MONTH(IFNULL(f_plan_i,fh_finaliza))=$indice,1,0)) as atr_$valor,";
             }
 
-    $q_bar .=" 1 as id FROM temp_base_actividades as b WHERE 1=1 $q_usu;";
+    $q_bar .=" 1 as id FROM temp_base_actividades as b WHERE 1=1 $q_usu $q_fechas;";
 
     $sql = $db->query($q_bar);
     if ($db->rows($sql) > 0) {

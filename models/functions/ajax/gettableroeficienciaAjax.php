@@ -57,7 +57,7 @@ try {
                 act_c_prioridades as p on p.codigo = a.c_prioridad
             WHERE (a.fh_captura > '2025-04-01' OR a.c_estatus ='A' OR a.fh_finaliza > '2025-04-01') AND a.c_estatus !='X' $q_usu";*/
 
-$Q_BASE =  " temp_base_actividades ";
+$Q_BASE =  " (SELECT * FROM temp_base_actividades AS a WHERE 1=1 $q_usu) ";
 
 
 $q_tablero = "";
@@ -158,7 +158,8 @@ if ($db->rows($sql) > 0) {
 }
     
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    echo $HTML;
+    echo "<br>Error: " . $e->getMessage();
     return 0;
 }
 

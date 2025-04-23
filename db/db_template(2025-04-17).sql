@@ -184,15 +184,15 @@ DELIMITER ;
 
 CREATE TABLE `actividades` (
   `id` int(11) NOT NULL,
-  `folio` varchar(9) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `c_tipo_act` varchar(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `folio` varchar(9) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `c_tipo_act` varchar(4) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `id_cliente` int(11) NOT NULL,
-  `c_prioridad` varchar(1) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `c_clasifica_act` varchar(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `descripcion` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `comentario` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `notas` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `dispositivo` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `c_prioridad` varchar(1) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `c_clasifica_act` varchar(4) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `descripcion` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `comentario` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `notas` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `dispositivo` varchar(250) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `id_usuario_resp` int(11) DEFAULT NULL,
   `f_plan_i` date DEFAULT NULL,
   `f_plan_f` date DEFAULT NULL,
@@ -202,7 +202,7 @@ CREATE TABLE `actividades` (
   `id_usuario_finaliza` int(11) DEFAULT NULL,
   `calificacion` int(11) NOT NULL,
   `avance` int(3) NOT NULL DEFAULT 0,
-  `c_estatus` varchar(1) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'A'
+  `c_estatus` varchar(1) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'A'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
@@ -256,7 +256,7 @@ CREATE TABLE `act_c_clasificacion` (
   `activo` tinyint(1) NOT NULL DEFAULT 1,
   `fh_registro` datetime DEFAULT NULL,
   `fh_inactivo` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `act_c_clasificacion`
@@ -287,7 +287,7 @@ CREATE TABLE `act_c_clientes` (
   `u_inactivo` varchar(50) NOT NULL,
   `fh_registro` datetime DEFAULT NULL,
   `dir_logo` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `act_c_clientes`
@@ -308,7 +308,7 @@ CREATE TABLE `act_c_estatus` (
   `descripcion` varchar(50) NOT NULL,
   `fh_registro` datetime DEFAULT NULL,
   `fh_inactivo` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `act_c_estatus`
@@ -336,7 +336,7 @@ CREATE TABLE `act_c_prioridades` (
   `activo` tinyint(1) NOT NULL DEFAULT 1,
   `fh_registro` datetime DEFAULT NULL,
   `fh_inactivo` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `act_c_prioridades`
@@ -371,7 +371,7 @@ CREATE TABLE `act_c_tipos` (
   `fh_registro` datetime DEFAULT NULL,
   `fh_inactivo` datetime DEFAULT NULL,
   `color_hex` varchar(7) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `act_c_tipos`
@@ -391,7 +391,7 @@ INSERT INTO `act_c_tipos` (`id`, `codigo`, `descripcion`, `pre`, `activo`, `fh_r
 
 CREATE TABLE `act_r_adjuntos` (
   `id` int(11) NOT NULL,
-  `folio_act` varchar(9) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `folio_act` varchar(9) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `id_u_registra` int(11) NOT NULL,
   `fh_registra` datetime NOT NULL,
   `dir` varchar(100) NOT NULL,
@@ -415,7 +415,7 @@ CREATE TABLE `act_r_comentarios` (
   `visto_por` text NOT NULL,
   `fh_registro` datetime DEFAULT NULL,
   `fh_inactivo` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `act_r_comentarios`
@@ -436,7 +436,7 @@ CREATE TABLE `act_r_involucrados` (
   `id_usuario` int(11) NOT NULL,
   `fh_registro` datetime DEFAULT NULL,
   `fh_inactivo` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `act_r_involucrados`
@@ -454,7 +454,7 @@ INSERT INTO `act_r_involucrados` (`id`, `folio`, `id_usuario`, `fh_registro`, `f
 CREATE TABLE `core` (
   `id` int(11) NOT NULL,
   `bloqueo` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `core`
@@ -476,7 +476,7 @@ CREATE TABLE `core_feriados` (
   `es_recurrente` tinyint(1) DEFAULT NULL,
   `fh_registro` datetime DEFAULT NULL,
   `activo` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `core_feriados`
@@ -506,7 +506,7 @@ CREATE TABLE `core_horarios_laborales` (
   `hora_fin` time NOT NULL,
   `es_laboral` tinyint(1) DEFAULT 1,
   `hr_comida` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `core_horarios_laborales`
@@ -540,7 +540,7 @@ CREATE TABLE `menu` (
   `dir` text NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT 1,
   `keywords` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `menu`
@@ -573,7 +573,7 @@ CREATE TABLE `menu_permission` (
   `id` int(11) NOT NULL,
   `c_tipo_usuario` varchar(4) NOT NULL,
   `c_modulo` varchar(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `menu_permission`
@@ -613,7 +613,7 @@ CREATE TABLE `users` (
   `f_inactivo` datetime DEFAULT NULL,
   `telefono` int(10) NOT NULL,
   `color_Hex` varchar(7) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `users`
@@ -637,7 +637,7 @@ CREATE TABLE `users_types` (
   `descripcion` varchar(50) NOT NULL,
   `fh_registro` datetime NOT NULL DEFAULT current_timestamp(),
   `activo` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `users_types`
