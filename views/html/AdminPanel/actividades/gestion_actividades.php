@@ -797,7 +797,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
 </style>
 
 <?php if (USER_TYPE == 'SPUS') {    ?>
-    <button class="btn btn-primary" type="button" onclick="newActividad();" style="    position: absolute;    z-index: 1000;"><i class="fa fa-plus"></i>Nueva Actividad</button>
+    <button class="btn btn-primary expandable-btn" type="button" onclick="newActividad();" style="    position: absolute;    z-index: 1000; "><i class="fa fa-plus" style="margin-right: 10px;"></i> Nueva Actividad</button>
 <?php } ?>
 
 <div id="contentActs">
@@ -1011,7 +1011,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                                     </span>
                                 </div>
 
-                                <button type="button" class="btn btn-default pull-left" style='margin-top: 10px;' onclick="collapse('chat-form-adjuntos,chat-form-comentarios');inicializaFileInputAdjuntos('contFI');">Adjuntos <i class="fas fa-paperclip"></i></button>
+                                <button type="button" class="btn btn-default pull-left expandable-btn" style='margin-top: 10px;' onclick="collapse('chat-form-adjuntos,chat-form-comentarios');inicializaFileInputAdjuntos('contFI');">Adjuntos <i class="fas fa-paperclip"></i></button>
 
                             </div>
 
@@ -1020,7 +1020,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
                                     <!--input id="adjuntosFI" name="archivos[]" type="file" multiple="true" class="fileinput file-loading" /-->
                                 </div>
 
-                                <button type="button" class="btn btn-default pull-left" style='margin-top: 10px;' onclick="collapse('chat-form-adjuntos,chat-form-comentarios');destruirFileInputAdjuntos();">Comentarios</button>
+                                <button type="button" class="btn btn-default pull-left expandable-btn" style='margin-top: 10px;' onclick="collapse('chat-form-adjuntos,chat-form-comentarios');destruirFileInputAdjuntos();">Comentarios</button>
                             </div>
                         </div>
                     </div>
@@ -1042,7 +1042,7 @@ $dt_usuarios = findtablaq($qUsuarios, "id");
             <div class="modal-body modal-preview row" id="contentAdjuntos">
             </div>
             <div class="modal-footer" style="display: block;">
-                <button type="button" class="btn btn-default pull-left" style='margin-top: 10px;' onclick="collapse('subir-adjuntosA');inicializaFileInputAdjuntos('contFIA');">Adjuntos <i class="fas fa-paperclip"></i></button>
+                <button type="button" class="btn btn-default pull-left expandable-btn" style='margin-top: 10px;' onclick="collapse('subir-adjuntosA');inicializaFileInputAdjuntos('contFIA');">Adjuntos <i class="fas fa-paperclip"></i></button>
 
                 <div id='subir-adjuntosA' class='collapse'>
                     <div id='contFIA'>

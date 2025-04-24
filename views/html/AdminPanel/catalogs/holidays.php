@@ -9,8 +9,8 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddHoliday">
-                    <span class="glyphicon glyphicon-plus"></span> Agregar Día Feriado
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddHoliday">
+                    <span class="fas fa-plus" style="margin-right:10px;"></span> Nuevo Día Feriado
                 </button>
 
                 <div id="contentHolidays">

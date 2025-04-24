@@ -9,8 +9,8 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddActivityType">
-                    <span class="glyphicon glyphicon-plus"></span> Agregar Tipo de Actividad
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddActivityType">
+                    <span class="fas fa-plus" style="margin-right:10px;"></span> Nuevo Tipo
                 </button>
 
                 <div id="contentActivityType">

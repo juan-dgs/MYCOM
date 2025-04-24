@@ -13,8 +13,9 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddUser">
-                    <span class="glyphicon glyphicon-plus"></span> Agregar Usuario
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddUser">
+                    <span class="fas fa-plus" style="margin-right:10px;"></span>
+                    <span class="btn-text"> Nuevo Usuario</span>
                 </button>
 
                 <div id="contentUsers">
@@ -22,14 +23,15 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
             </div>
         </div>
     </div>
-  </div>
+</div>
 
  <div id="ModalAddUser" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Usuario</h4>
+                <h4 class="modal-title"><span class="fas fa-plus" style="margin-right:10px;"></span>
+                Agregar Usuario</h4>
             </div>
             <div class="modal-body" id="userForm">
                     <div class="form-group">

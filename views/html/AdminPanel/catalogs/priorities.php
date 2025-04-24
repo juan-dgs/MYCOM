@@ -77,8 +77,8 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddPriority">
-                    <i class="fas fa-plus"></i> Agregar Prioridad
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddPriority">
+                    <i class="fas fa-plus" style="margin-right:10px;"></i> Nueva Prioridad
                 </button>
                 <div id="contentPriorities" class="mt-3">
                     <div class="loading-spinner">
