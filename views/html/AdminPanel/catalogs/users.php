@@ -149,9 +149,13 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
                     <div class="form-group">
                         <label for="codigo">Tipo Usuario:</label>
                         <select class="form-control" id="c_tipo_usuarioEdit">
-                          <?php     foreach ($dt_tiposUsuario as $codigo => $array) {
+                          <?php    
+                          
+                          if(($dt_tiposUsuario != false )){
+                          foreach ($dt_tiposUsuario as $codigo => $array) {
                               echo "<option value='".$dt_tiposUsuario[$codigo]["codigo"]."'>".$dt_tiposUsuario[$codigo]["descripcion"]."</option>";
-                          } ?>
+                          }
+                         } ?>
                         </select>
                     </div>
                     </div>
