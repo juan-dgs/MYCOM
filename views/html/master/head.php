@@ -3,11 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Construction HTML-5 Template</title>
+        <title>MyCom</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="manifest" href="site.webmanifest">
-		<link rel="shortcut icon" type="image/x-icon" href="views/web/img/favicon.ico">
+		<link rel="shortcut icon" type="image/x-icon" href="views/images/web/logos/mycom_min.ico">
 
 		<!-- CSS here -->
             <link rel="stylesheet" href="views/css/web/bootstrap.min.css">
@@ -20,6 +20,8 @@
             <link rel="stylesheet" href="views/css/web/slick.css">
             <link rel="stylesheet" href="views/css/web/nice-select.css">
             <link rel="stylesheet" href="views/css/web/style.css">
+            <link rel="stylesheet" href="views/css/web/custom.css?v=1">
+
    </head>
 
    <body>
@@ -29,7 +31,7 @@
             <div class="preloader-inner position-relative">
                 <div class="preloader-circle"></div>
                 <div class="preloader-img pere-text">
-                    <img src="views/web/img/logo/loder-logo.png" alt="">
+                    <img src="views/images/web/logos/mycom.png" alt="">
                 </div>
             </div>
         </div>
