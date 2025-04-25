@@ -14,7 +14,7 @@ if(!isset($_POST['id']) || empty($_POST['id'])) {
 $id = $db->real_escape_string($_POST['id']);
 
 // Consulta para verificar si la prioridad existe y está activa
-$query = "SELECT codigo FROM act_c_prioridades WHERE id = '$id' AND activo = 1 LIMIT 1";
+$query = "SELECT codigo,activo FROM act_c_prioridades WHERE id = '$id'  LIMIT 1";
 $result = $db->query($query);
 
 if(!$result) {
@@ -33,36 +33,37 @@ if($result->num_rows === 0) {
 $priority = $result->fetch_assoc();
 $codigo = $priority['codigo'];
 
-// Verificar si hay actividades usando esta prioridad
-$queryActivities = "SELECT id FROM actividades WHERE c_prioridad = '$codigo' AND c_estatus = 1 LIMIT 1";
-$resultActivities = $db->query($queryActivities);
-
-if(!$resultActivities) {
-    $arr['alerta'] = '<b>Error!</b> Problema al verificar actividades: '.$db->error;
-    echo json_encode($arr);
-    exit;
+$activo = $priority['activo'];
+if($activo == 1) {
+    $update = "UPDATE act_c_prioridades SET activo = 0, fh_inactivo = NOW() WHERE id = '$id'";
+    if($db->query($update)) {
+        $arr = [
+            'codigo' => 1, 
+            'alerta' => '<b>Éxito!</b> Prioridad eliminada correctamente.'
+        ];
+    } else {
+        $arr = [
+            'codigo' => 0, 
+            'alerta' => '<b>Error!</b> No se pudo eliminar la prioridad. '.$db->error
+        ];
+    }
+}else{
+    $update = "UPDATE act_c_prioridades SET activo = 1, fh_inactivo = NULL WHERE id = '$id'";
+    if($db->query($update)) {
+        $arr = [
+            'codigo' => 1, 
+            'alerta' => '<b>Éxito!</b> Prioridad Reactvada correctamente.'
+        ];
+    } else {
+        $arr = [
+            'codigo' => 0, 
+            'alerta' => '<b>Error!</b> No se pudo Reactivar la prioridad. '.$db->error
+        ];
+    }
 }
 
-if($resultActivities->num_rows > 0) {
-    $arr['alerta'] = '<b>Error!</b> No se puede eliminar la prioridad porque está siendo utilizada en actividades';
-    echo json_encode($arr);
-    exit;
-}
 
-// Eliminar (desactivar) la prioridad
-$update = "UPDATE act_c_prioridades SET activo = 0, fh_inactivo = NOW() WHERE id = '$id'";
 
-if($db->query($update)) {
-    $arr = [
-        'codigo' => 1, 
-        'alerta' => '<b>Éxito!</b> Prioridad eliminada correctamente.'
-    ];
-} else {
-    $arr = [
-        'codigo' => 0, 
-        'alerta' => '<b>Error!</b> No se pudo eliminar la prioridad. '.$db->error
-    ];
-}
 
 echo json_encode($arr);
 ?>

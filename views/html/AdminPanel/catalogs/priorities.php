@@ -593,7 +593,7 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
 
     function reactivatePriority(id) {
         $.ajax({
-            url: "ajax.php?mode=reactivatepriority",
+            url: "ajax.php?mode=deletepriority",
             type: "POST",
             data: {
                 id: id
@@ -602,6 +602,7 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
                 $('button').prop('disabled', true);
             },
             success: function(response) {
+                console.log(response);          
                 try {
                     const result = JSON.parse(response);
                     if (result.codigo == 1) {

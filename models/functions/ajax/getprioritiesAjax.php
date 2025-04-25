@@ -79,39 +79,4 @@ if($dt_priorities !== false && is_array($dt_priorities)) {
 
 echo $HTML;
 
-// En el caso para mode=reactivatepriority
-if(isset($_POST['mode']) && $_POST['mode'] == 'reactivatepriority' && isset($_POST['id'])) {
-    $id = $_POST['id'];
-    $db = new Conexion();
-    
-    try {
-        // Verificar si existe la prioridad
-        $sql = "SELECT id FROM act_c_prioridades WHERE id = ?";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$id]);
-        
-        if($stmt->rowCount() > 0) {
-            // Reactivar la prioridad
-            $sql = "UPDATE act_c_prioridades SET activo = 1 WHERE id = ?";
-            $stmt = $db->prepare($sql);
-            $stmt->execute([$id]);
-            
-            echo json_encode([
-                'codigo' => 1,
-                'alerta' => 'Prioridad reactivada correctamente'
-            ]);
-        } else {
-            echo json_encode([
-                'codigo' => 0,
-                'alerta' => 'La prioridad no existe'
-            ]);
-        }
-    } catch(PDOException $e) {
-        echo json_encode([
-            'codigo' => 0,
-            'alerta' => 'Error al reactivar la prioridad: ' . $e->getMessage()
-        ]);
-    }
-    exit;
-}
 ?>
