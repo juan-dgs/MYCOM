@@ -28,7 +28,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Clasificación</h4>
+                <h4 class="modal-title"><span class="fas fa-plus" style="margin-right:10px;"></span>Agregar Clasificación</h4>
             </div>
             <div class="modal-body" id="clasificacionForm">
                 <div class="row">
@@ -65,7 +65,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Clasificación: <span id="editClasificacionSel"></span></h4>
+                <h4 class="modal-title"><span class="fas fa-pencil" style="margin-right:10px;"></span>Editar Clasificación: <span id="editClasificacionSel"></span></h4>
             </div>
             <div class="modal-body" id="clasificacionFormEdit">
                 <input type="hidden" id="idEdit">

@@ -26,7 +26,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Día Feriado</h4>
+                <h4 class="modal-title"><span class="fas fa-plus" style="margin-right:10px;"></span>Agregar Día Feriado</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -59,7 +59,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Día Feriado</h4>
+                <h4 class="modal-title"><span class="fas fa-pencil" style="margin-right:10px;"></span>Editar Día Feriado</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="idEdit">

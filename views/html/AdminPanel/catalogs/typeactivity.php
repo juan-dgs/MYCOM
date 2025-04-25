@@ -25,7 +25,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Tipo de Actividad</h4>
+                <h4 class="modal-title"><span class="fas fa-plus" style="margin-right:10px;"></span>Agregar Tipo de Actividad</h4>
             </div>
             <div class="modal-body" id="activityForm">
                 <div class="form-group">
@@ -56,7 +56,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Tipo de Actividad</h4>
+                <h4 class="modal-title"><span class="fas fa-pencil" style="margin-right:10px;"></span>Editar Tipo de Actividad</h4>
             </div>
             <div class="modal-body" id="codigoedit">
                 <div class="form-group">
