@@ -100,40 +100,38 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 $(document).ready(function() {
     cargarHorario();
     
-  
+    // Validación para evitar horas negativas en tiempo de comida
+    $('.comida').on('input change', function() {
+        let valor = parseFloat($(this).val());
+        if (valor < 0) {
+            $(this).val(0);
+            notify("No se permiten horas negativas en tiempo de comida", 1500, "error", "top-end");
+        }
+    });
 });
 
 var _DIASSEM=['','Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-
-
-
 function cargarHorario() {
     $.ajax({
-        url: "ajax.php?mode=gethorario", // Asegúrate que coincide con el nombre real
-        type: "GET", // Cambiado a GET ya que solo estamos obteniendo datos
+        url: "ajax.php?mode=gethorario",
+        type: "GET",
         dataType: "json",
         success: function(response) {
-            console.log(response); // Para depuración
+            console.log(response);
             if(response.codigo == 1) {
                 response.data.forEach(function(diaData) {
-                    var dia = _DIASSEM[diaData.dia_semana]; // Obtener el nombre del día
+                    var dia = _DIASSEM[diaData.dia_semana];
                     
-                    // Actualizar checkbox
                     $('#laborable_' + dia).prop('checked', diaData.es_laboral == 1);
-                    
-                    // Actualizar campos de tiempo
                     $('#entrada_' + dia).val(diaData.hora_inicio || '');
                     $('#salida_' + dia).val(diaData.hora_fin || '');
                     $('#comida_' + dia).val(diaData.hr_comida || '60');
                     
-                    // Habilitar/deshabilitar campos según sea laborable
                     if(diaData.es_laboral==0){
                         toggleCamposDia(dia, diaData.es_laboral == 1);
                     }
                 });
-                
-                // Mostrar última actualización
                 updateLastSaved();
             } else {
                 notify(response.alerta, 1500, "error", "top-end");
@@ -146,9 +144,15 @@ function cargarHorario() {
     });
 }
 
-// Función para guardar el horario (ahora recibe el día que activó el cambio)
 function guardarHorario(diaCambiado) {
-    // Validar solo el día que cambió
+    // Validar tiempo de comida no negativo
+    let tiempoComida = parseFloat($('#comida_' + diaCambiado).val());
+    if (tiempoComida < 0) {
+        $('#comida_' + diaCambiado).val(0);
+        notify("No se permiten horas negativas en tiempo de comida", 1500, "error", "top-end");
+        return;
+    }
+    
     if($('#laborable_' + diaCambiado).is(':checked')) {
         var entrada = $('#entrada_' + diaCambiado).val();
         var salida = $('#salida_' + diaCambiado).val();
@@ -159,7 +163,6 @@ function guardarHorario(diaCambiado) {
         }
     }
     
-    // Preparar datos para enviar (solo el día modificado)
     var horario = {
         dia_semana: diaCambiado,
         hora_inicio: $('#entrada_' + diaCambiado).val(),
@@ -167,14 +170,14 @@ function guardarHorario(diaCambiado) {
         hr_comida: $('#comida_' + diaCambiado).val(),
         es_laboral: $('#laborable_' + diaCambiado).is(':checked') ? 1 : 0
     };
-    //console.log("Guardando horario para " + diaCambiado, horario); // Para depuración
+
     $.ajax({
         url: "ajax.php?mode=guardarhorario",
         type: "POST",
         data: {horario: JSON.stringify(horario)},
         dataType: "json",
         success: function(response) {
-            console.log(response.alerta); // Para depuración
+            console.log(response.alerta);
             if(response.codigo == 1) {
                 notify("Horario de " + diaCambiado + " actualizado correctamente", 1500, "success", "top-end");
                 updateLastSaved();
@@ -185,7 +188,6 @@ function guardarHorario(diaCambiado) {
         error: function(xhr, status, error) {
             notify("Error al guardar el horario: " + error, 1500, "error", "top-end");
             console.error("Error al guardar horario:", status, error);
-
         }
     });
 }
@@ -199,16 +201,13 @@ function toggleCamposDia(dia, esLaborable) {
         entrada.prop('disabled', false);
         salida.prop('disabled', false);
         comida.prop('disabled', false);
-        entrada.val('08:00'); // Hora de entrada predeterminada
-        salida.val('17:00'); // Hora de salida predeterminada
-        comida.val('0.0'); // Tiempo de comida predeterminado
-        
+        entrada.val('08:00');
+        salida.val('17:00');
+        comida.val('0.0');
     } else {
         entrada.prop('disabled', true);
         salida.prop('disabled', true);
         comida.prop('disabled', true);
-        
-        // Limpiar campos si no es laborable
         entrada.val('');
         salida.val('');
         comida.val('');
@@ -221,7 +220,6 @@ function updateLastSaved() {
     $('#lastSaved').html('Última actualización: ' + timeString);
 }
 
-// Evento para cambiar estado de campos cuando se marca/desmarca día laborable
 $('.laborable').change(function() {
     var dia = $(this).data('dia');
     var esLaborable = $(this).is(':checked');
