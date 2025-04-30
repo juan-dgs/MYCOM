@@ -1,3 +1,235 @@
+//userform.js
+// Este archivo contiene funciones para validar formularios, generar contraseñas y manejar eventos relacionados con la seguridad de las contraseñas.
+
+document.addEventListener("DOMContentLoaded", function () {
+  const camposSinMayusculas = ["usuario", "correo","usuarioEdit", "correoEdit"]; // Campos que convierten a minúsculas
+
+  const regexSoloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/; // Solo letras y espacios
+  const regexCorreoClave = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s@.!?#$%&*+-/=^_`{|}~]*$/; // Letras, números, espacios y caracteres especiales
+
+  const configCampos = {
+      nombres: { regex: regexSoloLetras, maxLength: 45 }, // Solo letras y espacios
+      apellido_p: { regex: regexSoloLetras, maxLength: 45 }, // Solo letras y espacios
+      apellido_m: { regex: regexSoloLetras, maxLength: 45 }, // Solo letras y espacios
+      usuario: { regex: /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s._]*$/, maxLength: 20 }, // Letras, números y espacios
+      correo: { regex: /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s@._]*$/, maxLength: 100 }, // Letras, números, espacios, "@" y "."
+      clave: { regex: /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s@.!?#$%&*+-/=^_`{|}~]*$/, maxLength: 100 }, // Letras, números, espacios y caracteres especiales
+      clave2: { regex: /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s@.!?#$%&*+-/=^_`{|}~]*$/, maxLength: 100 }, // Letras, números, espacios y caracteres especiales
+      nombresEdit: { regex: regexSoloLetras, maxLength: 45 }, // Solo letras y espacios
+      apellido_pEdit: { regex: regexSoloLetras, maxLength: 45 }, // Solo letras y espacios
+      apellido_mEdit: { regex: regexSoloLetras, maxLength: 45 }, // Solo letras y espacios
+      usuarioEdit: { regex: /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s._]*$/, maxLength: 20 }, // Letras, números y espacios
+      correoEdit: { regex: /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s@._]*$/, maxLength: 100 }, // Letras, números, espacios, "@" y "."
+  };
+
+  // Aplicar conversión a minúsculas solo a los campos correspondientes
+  camposSinMayusculas.forEach(campo => {
+      const input = document.getElementById(campo);
+      if (input) {
+          input.addEventListener("input", function () {
+              input.value = input.value.toLowerCase(); // Convierte a minúsculas
+          });
+      }
+  });
+
+  // Validar todos los campos
+  for (const [campo, config] of Object.entries(configCampos)) {
+      const input = document.getElementById(campo);
+      if (input) {
+          // Validar caracteres permitidos
+          input.addEventListener("input", function () {
+              if (!config.regex.test(input.value)) {
+                  input.value = input.value.substr(0,input.value.length-1); 
+                  notify(`Este campo solo permite: ${config.regex === regexSoloLetras ? "letras y espacios" : "letras, números y caracteres especiales"}`, 1500, "warning", "top-end");
+              }
+          });
+
+          // Validar longitud máxima
+          input.addEventListener("input", function () {
+              if (input.value.length > config.maxLength) {
+                  input.value = input.value.slice(0, config.maxLength); // Trunca el texto
+                  notify(`Este campo no puede exceder ${config.maxLength} caracteres`, 1500, "warning", "top-end");
+              }
+          });
+      }
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const campoClave = document.getElementById("clave");
+  const campoClave2 = document.getElementById("clave2");
+  const botonGenerarContraseña = document.getElementById("generarContraseña");
+  const botonMostrarContraseña = document.getElementById("mostrarContraseña");
+  const botonMostrarContraseña2 = document.getElementById("mostrarContraseña2");
+
+  let contraseñaGenerada =false; // Para rastrear si la contraseña fue generada automáticamente
+
+  // Botón para generar contraseña
+  if (botonGenerarContraseña) {
+      botonGenerarContraseña.addEventListener("click", function () {
+          const contraseña = generarContraseña();
+          if (campoClave) {
+              campoClave.value = contraseña; // Rellenar el campo de contraseña
+              campoClave2.value = contraseña; // Rellenar el campo de contraseña
+              contraseñaGenerada = true; // Marcar que la contraseña fue generada
+              campoClave.type = "text"; // Mostrar la contraseña generada
+              campoClave2.type = "text"; // Mostrar la contraseña generada
+              botonMostrarContraseña.innerHTML = "<i class='fa fa-eye'></i>"; // Cambiar a ojito abierto
+              botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye'></i>"; // Cambiar a ojito abierto
+              checkPasswordStrength('userForm','clave','password-strength-bar');
+              notify("Contraseña generada correctamente", 1500, "success", "top-end");
+          }
+      });
+  }
+
+  // Botón para mostrar/ocultar contraseña
+  if (botonMostrarContraseña) {
+      botonMostrarContraseña.addEventListener("click", function () {
+          if (campoClave) {
+              // Alternar entre tipo "password" y "text"
+              if (campoClave.type === "password") {
+                  campoClave.type = "text";
+                  botonMostrarContraseña.innerHTML = "<i class='fa fa-eye'></i>"; // Cambiar a ojito abierto
+              } else {
+                  campoClave.type = "password";
+                  botonMostrarContraseña.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado
+              }
+          }
+      });
+  }
+  if (botonMostrarContraseña2) {
+      botonMostrarContraseña2.addEventListener("click", function () {
+          if (campoClave2) {
+              // Alternar entre tipo "password" y "text"
+              if (campoClave2.type === "password") {
+                  campoClave2.type = "text";
+                  botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye'></i>"; // Cambiar a ojito abierto
+              } else {
+                  campoClave2.type = "password";
+                  botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado
+              }
+          }
+      });
+  }
+
+  // Restablecer el tipo de campo si el usuario escribe manualmente
+  if (campoClave) {
+      campoClave.addEventListener("input", function () {
+              if(campoClave.value === ""){
+                  campoClave2.value = "";
+                  campoClave.type = "password"; // Ocultar la contraseña si el usuario escribe
+                  campoClave2.type = "password"; // Ocultar la contraseña si el usuario escribe
+                  botonMostrarContraseña.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado    
+                  botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado    
+              }
+              checkPasswordStrength('userForm','clave','password-strength-bar');
+          
+      });
+  }
+  if (campoClave2) {
+      campoClave2.addEventListener("input", function () {
+              if(campoClave2.value === ""){
+                  campoClave.value = "";
+                  campoClave2.type = "password"; // Ocultar la contraseña si el usuario escribe
+                  campoClave.type = "password"; // Ocultar la contraseña si el usuario escribe
+                  botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado
+                  botonMostrarContraseña.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado    
+              }
+              checkPasswordStrength('userForm','clave','password-strength-bar');
+          
+      });
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const campoClave = document.getElementById("claveChange"); 
+  const campoClave2 = document.getElementById("claveChange2");
+  const botonGenerarContraseña = document.getElementById("generarContraseñaChange");
+  const botonMostrarContraseña = document.getElementById("mostrarContraseñaChange");
+  const botonMostrarContraseña2 = document.getElementById("mostrarContraseñaChange2");
+
+  let contraseñaGenerada =false; // Para rastrear si la contraseña fue generada automáticamente
+
+  // Botón para generar contraseña
+  if (botonGenerarContraseña) {
+      botonGenerarContraseña.addEventListener("click", function () {
+          const contraseña = generarContraseña();
+          if (campoClave) {
+              campoClave.value = contraseña; // Rellenar el campo de contraseña
+              campoClave2.value = contraseña; // Rellenar el campo de contraseña
+              contraseñaGenerada = true; // Marcar que la contraseña fue generada
+              campoClave.type = "text"; // Mostrar la contraseña generada
+              campoClave2.type = "text"; // Mostrar la contraseña generada
+              botonMostrarContraseña.innerHTML = "<i class='fa fa-eye'></i>"; // Cambiar a ojito abierto
+              botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye'></i>"; // Cambiar a ojito abierto
+              checkPasswordStrength('ChangePass','claveChange','password-strength-barChange'); 
+              notify("Contraseña generada correctamente", 1500, "success", "top-end");
+          }
+      });
+  }
+
+  // Botón para mostrar/ocultar contraseña
+  if (botonMostrarContraseña) {
+      botonMostrarContraseña.addEventListener("click", function () {
+          if (campoClave) {
+              // Alternar entre tipo "password" y "text"
+              if (campoClave.type === "password") {
+                  campoClave.type = "text";
+                  botonMostrarContraseña.innerHTML = "<i class='fa fa-eye'></i>"; // Cambiar a ojito abierto
+              } else {
+                  campoClave.type = "password";
+                  botonMostrarContraseña.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado
+              }
+          }
+      });
+  }
+  if (botonMostrarContraseña2) {
+      botonMostrarContraseña2.addEventListener("click", function () {
+          if (campoClave2) {
+              // Alternar entre tipo "password" y "text"
+              if (campoClave2.type === "password") {
+                  campoClave2.type = "text";
+                  botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye'></i>"; // Cambiar a ojito abierto
+              } else {
+                  campoClave2.type = "password";
+                  botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado
+              }
+          }
+      });
+  }
+
+  // Restablecer el tipo de campo si el usuario escribe manualmente
+  if (campoClave) {
+      campoClave.addEventListener("input", function () {
+              if(campoClave.value === ""){
+                  campoClave2.value = "";
+                  campoClave.type = "password"; // Ocultar la contraseña si el usuario escribe
+                  campoClave2.type = "password"; // Ocultar la contraseña si el usuario escribe
+                  botonMostrarContraseña.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado    
+                  botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado    
+              }
+              checkPasswordStrength('ChangePass','claveChange','password-strength-barChange');
+          
+      });
+  }
+  if (campoClave2) {
+      campoClave2.addEventListener("input", function () {
+              if(campoClave2.value === ""){
+                  campoClave.value = "";
+                  campoClave2.type = "password"; // Ocultar la contraseña si el usuario escribe
+                  campoClave.type = "password"; // Ocultar la contraseña si el usuario escribe
+                  botonMostrarContraseña2.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado
+                  botonMostrarContraseña.innerHTML = "<i class='fa fa-eye-slash'></i>"; // Cambiar a ojito cerrado    
+              }
+              checkPasswordStrength('ChangePass','claveChange','password-strength-barChange');
+          
+      });
+  }
+});
+
+
+
 //javascript para seguridad y validacion de contraseñas
 
 function checkPasswordStrength(idForm,txtId,idBar) {
@@ -157,10 +389,97 @@ function generarContraseña() {
 }
 
 
+document.addEventListener("DOMContentLoaded", function () {
+  // Configuración de validación para los campos
+  const configCampos = {
+      // Campo código - solo letras, sin espacios, máximo 4 caracteres
+      c_tipo_usuario: { 
+          regex: /^[a-zA-Z]*$/, // Solo letras (sin números)
+          maxLength: 4,
+          noSpaces: true,
+          toUpperCase: true // Convertir a mayúsculas automáticamente
+      },
+      // Campo descripción - solo letras y espacios, máximo 30 caracteres
+      descripcion: { 
+          regex: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/, // Solo letras y espacios
+          maxLength: 30
+      },
+      // Versiones de edición de los campos
+      c_tipo_usuarioEdit: { 
+          regex: /^[a-zA-Z]*$/,
+          maxLength: 4,
+          noSpaces: true,
+          toUpperCase: true
+      },
+      descripcionEdit: { 
+          regex: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/,
+          maxLength: 30
+      }
+  };
+
+  // Aplicar validaciones a todos los campos configurados
+  for (const [campo, config] of Object.entries(configCampos)) {
+      const input = document.getElementById(campo);
+      if (input) {
+          // Manejar el evento de pegar (Ctrl+V)
+          input.addEventListener('paste', function(e) {
+              e.preventDefault(); // Cancelar el pegado original
+              // Obtener texto pegado y limpiarlo
+              const textoPegado = (e.clipboardData || window.clipboardData).getData('text');
+              let textoLimpio = textoPegado.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+              
+              if (config.noSpaces) {
+                  textoLimpio = textoLimpio.replace(/\s/g, '');
+              }
+              
+              if (config.toUpperCase) {
+                  textoLimpio = textoLimpio.toUpperCase();
+              }
+              
+              // Insertar el texto limpio
+              document.execCommand('insertText', false, textoLimpio);
+          });
+
+          // Validar caracteres permitidos y longitud máxima
+          input.addEventListener("input", function () {
+              // Eliminar cualquier número o carácter no permitido
+              let valor = input.value;
+              valor = valor.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+              
+              // Aplicar configuraciones específicas
+              if (config.noSpaces) {
+                  valor = valor.replace(/\s/g, '');
+              }
+              
+              if (config.toUpperCase) {
+                  valor = valor.toUpperCase();
+              }
+              
+              // Limitar longitud máxima
+              if (valor.length > config.maxLength) {
+                  valor = valor.substring(0, config.maxLength);
+                  notify(`Máximo ${config.maxLength} caracteres permitidos`, 1500, "warning", "top-end");
+              }
+              
+              // Actualizar el valor del campo
+              input.value = valor;
+          });
+
+          // Validar al perder el foco
+          input.addEventListener("blur", function () {
+              if (!config.regex.test(input.value)) {
+                  notify(`Solo se permiten ${config.noSpaces ? 'letras (sin números ni espacios)' : 'letras y espacios (sin números)'}`, 1500, "warning", "top-end");
+              }
+          });
+      }
+  }
+});
 
 
 
-/*manejo de fechas */
+//manejo de fechas //
+// Esta función formatea una fecha en el formato YYYY-MM-DD. Si no se proporciona una fecha, se utiliza la fecha actual.
+// La función también puede sumar días a una fecha dada y devolver la nueva fecha formateada.
 function formatDate(date = new Date()) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses van de 0-11

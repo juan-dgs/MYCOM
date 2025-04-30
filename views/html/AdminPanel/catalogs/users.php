@@ -89,8 +89,9 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     
 <?php
 
-$qTipoUsuario = 'SELECT codigo,descripcion
-                  FROM users_types';
+$qTipoUsuario = 'SELECT codigo,descripcion 
+                  FROM users_types
+                  WHERE activo=1';
 
 $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
 
@@ -240,9 +241,15 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
 
 <script>
   $(document).ready(function(){
-        getUsers();
-
-  });
+    getUsers();
+    cleanFormUsers();
+    
+    // Eventos para limpiar al cerrar modales
+    $('#ModalAddUser').on('hidden.bs.modal', cleanFormUsers);
+    $('#ModalEditUser').on('hidden.bs.modal', cleanFormUsers);
+    $('#ModalChangePass').on('hidden.bs.modal', cleanFormUsers);
+    $('#ModalEditPhoto').on('hidden.bs.modal', cleanFormUsers);
+});
 
   function getUsers() {
     $.ajax({
@@ -254,6 +261,7 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
         },
         success: function(datos) {
             $("#contentUsers").html(datos);
+            cleanFormUsers();
             
             var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
                 var arrayExport = ['excel']; //'excel'
@@ -324,7 +332,6 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
                     if (respuesta["codigo"] == "1") {
                         $('#ModalAddUser').modal('hide');
                         getUsers();
-                        cleanFormUsers();
                         notify(respuesta["alerta"], 1500, "success", "top-end");
                     } else {
                         notify(respuesta["alerta"], 1500, "error", "top-end");
@@ -365,16 +372,34 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
   });
   }
 
-  function cleanFormUsers(){
+  function cleanFormUsers() {
+    // Limpiar formulario de agregar usuario
     $("#nombres").val("");
     $("#apellido_p").val("");
     $("#apellido_m").val("");
     $("#usuario").val("");
     $("#clave").val("");
+    $("#clave2").val("");
     $("#correo").val("");
     $("#c_tipo_usuario").val("SPUS");
     checkPasswordStrength('userForm','clave','password-strength-bar');
-  }
+    
+    // Limpiar formulario de editar usuario
+    $("#nombresEdit").val("");
+    $("#apellido_pEdit").val("");
+    $("#apellido_mEdit").val("");
+    $("#usuarioEdit").val("");
+    $("#correoEdit").val("");
+    
+    // Limpiar formulario de cambiar contraseña
+    $("#claveChange").val("");
+    $("#claveChange2").val("");
+    checkPasswordStrength('ChangePass','claveChange','password-strength-barChange');
+    
+    // Limpiar formulario de foto
+    $("#fotoUsuario").val("");
+    $("#previewPhoto").attr('src', 'views/images/profile/userDefault.png');
+}
 
 var _ID=0;
   function GetUser(id,nombre){
