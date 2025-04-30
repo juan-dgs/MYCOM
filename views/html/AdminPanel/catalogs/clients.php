@@ -5,7 +5,7 @@ include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
-<script src="views/js/repository.js"></script>
+<script src="views\js\forms.js"></script>
 
 <div class="row">
     <div class="col-md-12">

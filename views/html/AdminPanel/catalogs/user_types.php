@@ -6,7 +6,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 
 ?>
 
-<script src="repository.js"></script>
+<script src="views\js\forms.js"></script>
 
 <div class="row">
     <div class="col-md-4">

@@ -5,6 +5,9 @@ include(HTML . 'AdminPanel/masterPanel/menu.php');
 include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
+<script src="views\js\forms.js"></script>
+
+
 <style>
     .icon-container {
         max-height: 500px;
