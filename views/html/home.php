@@ -103,6 +103,8 @@ include(HTML.'master/topnav.php');
                             </div>
                         </div>
                     </div>
+
+                    marcas que maneja mycom
                 </div>
             </div>
         </div>
@@ -119,8 +121,7 @@ include(HTML.'master/topnav.php');
                         <span class="back-text" style="font-size: 133px;">About Us</span>
                     </div>
                     <div class="support-caption">
-                        <p class="pera-top">Mollit anim laborum duis au dolor in voluptcate velit ess cillum dolore eu lore dsu quality mollit anim laborumuis au dolor in voluptate velit cillu.</p>
-                        <p>Mollit anim laborum.Dvcuis aute iruxvfg dhjkolohr in re voluptate velit esscillumlore eu quife nrulla parihatur. Excghcepteur sfwsignjnt occa cupidatat non aute iruxvfg dhjinulpadeserunt mollitemnth incididbnt ut;o5tu layjobore mofllit anim.</p>
+                        <p class="pera-top">Somos una empresa enfocada a satisfacer todas las necesidades de nuestros clientes desde las básicas en un sentido de abastecimiento de insumos hasta aquellas más especializadas como el diseño e implementación de infraestructura IT o planeación y desarrollo de un producto o una marca desde su punto de concepción. Conformada por un grupo de profesionales que en conjunto reúnen más de 15 años de experiencia en áreas tales como soluciones IT, diseño, implementación y mantenimiento de infraestructura de sistemas, desarrollo de productos, consultaría en procesos de negocios, comercio exterior, entre otras.</p>
                         <a href="nosotros" class="btn red-btn2">Más</a>
                     </div>
                 </div>
@@ -130,8 +131,8 @@ include(HTML.'master/topnav.php');
                         <img src="views/images/web/banners/banner.jpg" alt="">
                     </div>
                     <div class="support-img-cap text-center">
-                        <span>1994</span>
-                        <p>Since</p>
+                        <span>2000</span>
+                        <p>Desde</p>
                     </div>
                 </div>
             </div>
@@ -146,9 +147,9 @@ include(HTML.'master/topnav.php');
                             <!-- Section Tittle -->
                             <div class="section-tittle section-tittle3">
                                 <div class="front-text">
-                                    <h2 class="">Our Projects</h2>
+                                    <h2 class="">Portafolio</h2>
                                 </div>
-                                <span class="back-text">Gellary</span>
+                                <span class="back-text">Proyectos</span>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -156,11 +157,11 @@ include(HTML.'master/topnav.php');
                                 <!--Nav Button  -->                                            
                                 <nav> 
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="false"> Show  all </a>
-                                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"> Intorior</a>
-                                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Recent</a>
-                                        <a class="nav-item nav-link" id="nav-last-tab" data-toggle="tab" href="#nav-last" role="tab" aria-controls="nav-contact" aria-selected="false">Big building</a>
-                                        <a class="nav-item nav-link" id="nav-technology" data-toggle="tab" href="#nav-techno" role="tab" aria-controls="nav-contact" aria-selected="false">Park</a>
+                                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="false"> Todos </a>
+                                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"> Recientes</a>
+                                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">CCTV</a>
+                                        <a class="nav-item nav-link" id="nav-last-tab" data-toggle="tab" href="#nav-last" role="tab" aria-controls="nav-contact" aria-selected="false">HIK</a>
+                                        <a class="nav-item nav-link" id="nav-technology" data-toggle="tab" href="#nav-techno" role="tab" aria-controls="nav-contact" aria-selected="false">Electrico</a>
                                     </div>
                                 </nav>
                                 <!--End Nav Button  -->
@@ -584,12 +585,13 @@ include(HTML.'master/topnav.php');
                                 <!-- Section Tittle -->
                                 <div class="section-tittle section-tittle4">
                                     <div class="front-text">
-                                        <h2 class="">Lats talk with us</h2>
+                                        <h2 class="">Politica de Calidad</h2>
                                     </div>
-                                    <span class="back-text">Lat`s chat</span>
+                                    <span class="back-text">Calidad</span>
                                 </div>
-                                <p>Mollit anim laborum.Dvcuis aute iruxvfg dhjkolohr in re voluptate velit esscillumlore eu quife nrulla parihatur. Excghcepteur sfwsignjnt occa cupidatat non aute iruxvfg dhjinulpadeserunt mollitemnth incididbnt ut;o5tu layjobore mofllit anim.</p>
-                                <a href="#" class="white-btn">read more</a>
+                                <p>Teniendo como columna vertebral el proceso de mejora continua Corporativo MyCom en cada una de sus verticales de negocio busca siempre la eficiencia en el uso de los recursos, tanto materiales, humanos y financieros, internos como de nuestros socios para superar las expectativas y lograr los objetivos planteados.</p>
+                                <p>Con una visión sustentable a largo plazo, el enfoque ecológico de la empresa es poner su granito de arena poniendo especial énfasis en el uso de productos no tóxicos para el planeta y reducir al mínimo la utilización de recursos naturales.</p>
+                                <a href="nosotros" class="white-btn">Ver Más</a>
                             </div>
                         </div>
                     </div>
@@ -600,7 +602,7 @@ include(HTML.'master/topnav.php');
         <!-- CountDown Area Start -->
         <div class="count-area">
             <div class="container">
-                <div class="count-wrapper count-bg" data-background="views/images/web/banners/banner.jpg">
+                <div class="count-wrapper count-bg" data-background="views/images/web/banners/background_server.jpg">
                     <div class="row justify-content-center" >
                         <div class="col-lg-4 col-md-4 col-sm-6">
                             <div class="count-clients">
@@ -609,8 +611,8 @@ include(HTML.'master/topnav.php');
                                         <span class="counter">34</span>
                                     </div>
                                     <div class="count-text">
-                                        <p>Machinery</p>
-                                        <h5>Tools</h5>
+                                        <p>Clientes</p>
+                                        <h5>Satisfechos</h5>
                                     </div>
                                 </div>
                             </div>
@@ -622,8 +624,8 @@ include(HTML.'master/topnav.php');
                                         <span class="counter">76</span>
                                     </div>
                                     <div class="count-text">
-                                        <p>Machinery</p>
-                                        <h5>Tools</h5>
+                                        <p>Socios de</p>
+                                        <h5>Negocio</h5>
                                     </div>
                                 </div>
                             </div>
@@ -635,8 +637,8 @@ include(HTML.'master/topnav.php');
                                         <span class="counter">08</span>
                                     </div>
                                     <div class="count-text">
-                                        <p>Machinery</p>
-                                        <h5>Tools</h5>
+                                        <p>Polizas</p>
+                                        <h5>de Servicios</h5>
                                     </div>
                                 </div>
                             </div>
@@ -654,9 +656,9 @@ include(HTML.'master/topnav.php');
                         <!-- Section Tittle -->
                         <div class="section-tittle section-tittle5 mb-50">
                             <div class="front-text">
-                                <h2 class="">Our team</h2>
+                                <h2 class="">Clientes</h2>
                             </div>
-                            <span class="back-text">exparts</span>
+                            <span class="back-text">Principales</span>
                         </div>
                     </div>
                 </div>
@@ -707,9 +709,9 @@ include(HTML.'master/topnav.php');
                         <!-- Section Tittle -->
                         <div class="section-tittle section-tittle6 mb-50">
                             <div class="front-text">
-                                <h2 class="">Testimonial</h2>
+                                <h2 class="">Testimonios</h2>
                             </div>
-                            <span class="back-text">Feedback</span>
+                            <span class="back-text">Clientes</span>
                         </div>
                     </div>
                 </div>
@@ -764,65 +766,6 @@ include(HTML.'master/topnav.php');
             </div>
         </div>
         <!-- Testimonial End -->
-        <!--latest Nnews Area start -->
-        <div class="latest-news-area section-padding30">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <!-- Section Tittle -->
-                        <div class="section-tittle section-tittle7 mb-50">
-                            <div class="front-text">
-                                <h2 class="">latest news</h2>
-                            </div>
-                            <span class="back-text">Our Blog</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6">
-                        <!-- single-news -->
-                        <div class="single-news mb-30">
-                            <div class="news-img">
-                                <img src="views/images/web/banners/banner.jpg" alt="">
-                                <div class="news-date text-center">
-                                    <span>24</span>
-                                    <p>Now</p>
-                                </div>
-                            </div>
-                            <div class="news-caption">
-                                <ul class="david-info">
-                                    <li> | &nbsp; &nbsp;  Porperties</li>
-                                </ul>
-                                <h2><a href="single-blog.html">Footprints in Time is perfect
-                                    House in Kurashiki</a></h2>
-                                <a href="single-blog.html" class="d-btn">Read more »</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6">
-                        <!-- single-news -->
-                        <div class="single-news mb-30">
-                            <div class="news-img">
-                                <img src="views/images/web/banners/banner.jpg" alt="">
-                                <div class="news-date text-center">
-                                    <span>24</span>
-                                    <p>Now</p>
-                                </div>
-                            </div>
-                            <div class="news-caption">
-                                <ul class="david-info">
-                                    <li> | &nbsp; &nbsp;  Porperties</li>
-                                </ul>
-                                <h2><a href="single-blog.html">Footprints in Time is perfect
-                                    House in Kurashiki</a></h2>
-                                <a href="single-blog.html" class="d-btn">Read more » </a>
-                            </div>
-                        </div>
-                    </div>
-               </div>
-            </div>
-        </div>
-        <!--latest News Area End -->
 
     </main>
 

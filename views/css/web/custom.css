@@ -93,3 +93,8 @@
 .header-area .header-top .header-info-right .header-social li a:hover {
     color: #38a4ff;
 }
+
+.slider-area .hero__caption .hero-text1 span::before, .slider-area .hero__caption .hero-text1 a::before, .slider-area .hero__caption .hero-text2 span::before, .slider-area .hero__caption .hero-text2 a::before {
+  
+    background: #7b7b7b;
+}

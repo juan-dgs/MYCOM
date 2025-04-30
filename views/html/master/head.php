@@ -6,7 +6,6 @@
         <title>MyCom</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="manifest" href="site.webmanifest">
 		<link rel="shortcut icon" type="image/x-icon" href="views/images/web/logos/mycom_min.ico">
 
 		<!-- CSS here -->
@@ -20,7 +19,13 @@
             <link rel="stylesheet" href="views/css/web/slick.css">
             <link rel="stylesheet" href="views/css/web/nice-select.css">
             <link rel="stylesheet" href="views/css/web/style.css">
-            <link rel="stylesheet" href="views/css/web/custom.css?v=1">
+            <link rel="stylesheet" href="views/css/web/custom.css?v=2">
+
+            <script src="views/js/jquery-3.7.1.min.js"></script>
+
+            <link rel="stylesheet" href="views/components/sweet_alert/sweetalert2.min.css">
+            <script src="views/components/sweet_alert/sweetalert2.all.min.js"></script>
+            <script src="views/js/repository.js"></script>
 
    </head>
 

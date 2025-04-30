@@ -4,9 +4,8 @@
   date_default_timezone_set('America/Mexico_City'); // Cambia por tu zona
   setlocale(LC_TIME, 'es_VE.UTF-8','esp');
 
-
   define('TITULO','MYCOM');
-  define('CYR', 'Copyright &copy; ' .date('Y',time()) );
+  define('CYR', 'Copyright &copy; todos los derechos reservados MyCom ' .date('Y',time()) );
   define('HTML', 'views/html/');
   define('PANEL', 'views/html/AdminPanel/');
   define('ADMINLTE', 'views/components/AdminLTE-3.2.0/');
@@ -17,17 +16,14 @@
   define('DB_PASS', '');
   define('DB_NAME', 'db_template');
   
-  /*define('DB_HOST', 'localhost');
-  define('DB_USER', 'contador_system');
-  define('DB_PASS', '%_OPVA-UzWS&');
-  define('DB_NAME', 'contador_mycom');*/
-
   /*
-  define('CORREO','pruebas@antaudacity.com');
-  define('PASS', '123456789');
-  define('PORT', '465');
-  define('HOST', 'localhost');
+  define('DB_HOST', 'localhost');
+  define('DB_USER', 'yukiss_');
+  define('DB_PASS', 'xnDN*3Ur%mTU');
+  define('DB_NAME', 'contador_mycom');
   */
+
+ 
 
 
   require('models/classes/class.Conexion.php');

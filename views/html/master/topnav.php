@@ -44,22 +44,15 @@
                                     <nav> 
                                         <ul id="navigation">                                                                                                                   
                                             <li><a href="home">Inicio</a></li>
-                                            <li><a href="aboutus">Nosotros</a></li>
-                                            <li><a href="#">Servicios</a>
-                                                <ul class="submenu">
-                                                    <li><a href="services1">Venta</a></li>
-                                                    <li><a href="services2">Servicios</a></li>
-                                                    <li><a href="services2">Consultoria</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="contactus">Contactanos</a></li>
+                                            <li><a href="nosotros">Nosotros</a></li>
+                                            <li><a href="servicios">Servicios</a></li>
+                                            <li><a href="contacto">contacto</a></li>
                                         </ul>
                                     </nav>
                                 </div>
                             </div>             
                             <div class="col-xl-2 col-lg-2 col-md-3">
                                 <div class="header-right-btn f-right d-none d-lg-block">
-                                    <a href="login" class="btn">Login</a>
                                 </div>
                             </div>
                             <!-- Mobile Menu -->
