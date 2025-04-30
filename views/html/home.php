@@ -14,13 +14,13 @@ include(HTML.'master/topnav.php');
                                     <div class="hero-text1">
                                         <span data-animation="fadeInUp" data-delay=".3s">hand car wash and detailing service</span>
                                     </div>
-                                    <h1 data-animation="fadeInUp" data-delay=".5s">LA INOVACIÓN ES</h1>
+                                    <h1 data-animation="fadeInUp" data-delay=".5s">advanced</h1>
                                     <div class="stock-text" data-animation="fadeInUp" data-delay=".8s">
-                                        <h2>nuestro ADN</h2>
-                                        <h2>nuestro ADN</h2>
+                                        <h2>Construction</h2>
+                                        <h2>Construction</h2>
                                     </div>
                                     <div class="hero-text2 mt-110" data-animation="fadeInUp" data-delay=".9s">
-                                       <span><a href="services.html">Our Services</a></span>
+                                       <span><a href="services.html">Nuestros servicios</a></span>
                                     </div>
                                 </div>
                             </div>

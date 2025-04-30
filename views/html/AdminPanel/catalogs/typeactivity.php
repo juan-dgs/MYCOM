@@ -5,12 +5,15 @@ include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
+<script src="views\js\forms.js"></script>
+
+
 <div class="row">
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddActivityType">
-                    <span class="glyphicon glyphicon-plus"></span> Agregar Tipo de Actividad
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddActivityType">
+                    <span class="fas fa-plus" style="margin-right:10px;"></span> Nuevo Tipo
                 </button>
 
                 <div id="contentActivityType">
@@ -25,7 +28,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Tipo de Actividad</h4>
+                <h4 class="modal-title"><span class="fas fa-plus" style="margin-right:10px;"></span>Agregar Tipo de Actividad</h4>
             </div>
             <div class="modal-body" id="activityForm">
                 <div class="form-group">
@@ -56,7 +59,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Tipo de Actividad</h4>
+                <h4 class="modal-title"><span class="fas fa-pencil" style="margin-right:10px;"></span>Editar Tipo de Actividad</h4>
             </div>
             <div class="modal-body" id="codigoedit">
                 <div class="form-group">
@@ -110,52 +113,71 @@ $(document).ready(function() {
     });
 });
 
+// Modificar la función newActivityType con validaciones reforzadas
 function newActivityType() {
-    var codigo = $("#codigo").val().toUpperCase();
-    var descripcion = $("#descripcion").val();
-    var pre = $("#pre").val().toUpperCase();
+    let codigo = $("#codigo").val().toUpperCase().replace(/[^A-Z]/g, '');
+    let descripcion = $("#descripcion").val().replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    let pre = $("#pre").val().toUpperCase().replace(/[^A-Z]/g, '');
 
-    // Resto de validaciones igual...
-    if(codigo == "") {
+    // Actualizar campos con valores limpios
+    $("#codigo").val(codigo);
+    $("#descripcion").val(descripcion);
+    $("#pre").val(pre);
+
+    // Validaciones
+    if(codigo === "") {
         $("#codigo").focus();
         notify("El campo código es obligatorio", 1500, "error", "top-end");
-    } else if(codigo.length != 4) {
+        return;
+    } else if(codigo.length !== 4) {
         $("#codigo").focus();
-        notify("El código debe tener exactamente 4 caracteres", 1500, "error", "top-end");
-    } else if(descripcion == "") {
+        notify("El código debe tener exactamente 4 letras mayúsculas", 1500, "error", "top-end");
+        return;
+    }
+    
+    if(descripcion === "") {
         $("#descripcion").focus();
         notify("El campo descripción es obligatorio", 1500, "error", "top-end");
-    } else if(pre == "") {
+        return;
+    } else if(!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(descripcion)) {
+        $("#descripcion").focus();
+        notify("La descripción solo puede contener letras y espacios", 1500, "error", "top-end");
+        return;
+    }
+    
+    if(pre === "") {
         $("#pre").focus();
         notify("El campo prefijo es obligatorio", 1500, "error", "top-end");
-    } else if(pre.length != 1 || !/^[A-Z]$/.test(pre)) {
+        return;
+    } else if(pre.length !== 1) {
         $("#pre").focus();
         notify("El prefijo debe ser exactamente 1 letra mayúscula", 1500, "error", "top-end");
-    } else { 
-        $.ajax({
-            url: "ajax.php?mode=newactivitytype",
-            type: "POST",
-            data: {
-                codigo: codigo,
-                descripcion: descripcion,
-                pre: pre
-            },
-            error: function(request, status, error) {
-                notify('Error inesperado: ' + error, 1500, "error", "top-end");
-            },
-            success: function(datos) {
-                var respuesta = JSON.parse(datos);
-                if(respuesta["codigo"] == "1") {
-                    getActivityTypes();
-                    notify(respuesta["alerta"], 1500, "success", "top-end");
-                    $("#ModalAddActivityType").modal("hide");
-                    cleanFormActivityTypes();
-                } else {
-                    notify(respuesta["alerta"], 1500, "error", "top-end");
-                }
-            }
-        });
+        return;
     }
+
+    $.ajax({
+        url: "ajax.php?mode=newactivitytype",
+        type: "POST",
+        data: {
+            codigo: codigo,
+            descripcion: descripcion,
+            pre: pre
+        },
+        error: function(request, status, error) {
+            notify('Error inesperado: ' + error, 1500, "error", "top-end");
+        },
+        success: function(datos) {
+            var respuesta = JSON.parse(datos);
+            if(respuesta["codigo"] == "1") {
+                getActivityTypes();
+                notify(respuesta["alerta"], 1500, "success", "top-end");
+                $("#ModalAddActivityType").modal("hide");
+                cleanFormActivityTypes();
+            } else {
+                notify(respuesta["alerta"], 1500, "error", "top-end");
+            }
+        }
+    });
 }
 
 
@@ -201,36 +223,45 @@ function GetRegisterActivityType(id, codigo, descripcion) {
     });
 }
 
+// Modificar la función SaveActivityType con validaciones reforzadas
 function SaveActivityType() {
-    var descripcion = $("#descripcionEdit").val();
-    var id = _ID;
+    let descripcion = $("#descripcionEdit").val().replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    let id = _ID;
     
-    if(descripcion == "") {
+    // Actualizar campo con valor limpio
+    $("#descripcionEdit").val(descripcion);
+
+    if(descripcion === "") {
         $("#descripcionEdit").focus();
         notify("El campo descripción es obligatorio", 1500, "error", "top-end");
-    } else {
-        $.ajax({
-            url: "ajax.php?mode=saveactivitytype",
-            type: "POST",
-            data: {
-                descripcion: descripcion,
-                id: id
-            },
-            error: function(request, status, error) {
-                notify('Error inesperado: ' + error, 1500, "error", "top-end");
-            },
-            success: function(datos) {
-                var respuesta = JSON.parse(datos);
-                if(respuesta["codigo"] == "1") {
-                    $("#ModalEditActivityType").modal("hide");
-                    getActivityTypes();
-                    notify(respuesta["alerta"], 1500, "success", "top-end");
-                } else {
-                    notify(respuesta["alerta"], 1500, "error", "top-end");
-                }
-            }
-        });
+        return;
+    } else if(!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(descripcion)) {
+        $("#descripcionEdit").focus();
+        notify("La descripción solo puede contener letras y espacios", 1500, "error", "top-end");
+        return;
     }
+
+    $.ajax({
+        url: "ajax.php?mode=saveactivitytype",
+        type: "POST",
+        data: {
+            descripcion: descripcion,
+            id: id
+        },
+        error: function(request, status, error) {
+            notify('Error inesperado: ' + error, 1500, "error", "top-end");
+        },
+        success: function(datos) {
+            var respuesta = JSON.parse(datos);
+            if(respuesta["codigo"] == "1") {
+                $("#ModalEditActivityType").modal("hide");
+                getActivityTypes();
+                notify(respuesta["alerta"], 1500, "success", "top-end");
+            } else {
+                notify(respuesta["alerta"], 1500, "error", "top-end");
+            }
+        }
+    });
 }
 
 function confirmDeleteActivityType(id, codigo, descripcion) {

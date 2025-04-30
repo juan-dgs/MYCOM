@@ -5,12 +5,15 @@ include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
+<script src="views\js\forms.js"></script>
+
+
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddHoliday">
-                    <span class="glyphicon glyphicon-plus"></span> Agregar Día Feriado
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddHoliday">
+                    <span class="fas fa-plus" style="margin-right:10px;"></span> Nuevo Día Feriado
                 </button>
 
                 <div id="contentHolidays">
@@ -26,7 +29,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Día Feriado</h4>
+                <h4 class="modal-title"><span class="fas fa-plus" style="margin-right:10px;"></span>Agregar Día Feriado</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -59,7 +62,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Día Feriado</h4>
+                <h4 class="modal-title"><span class="fas fa-pencil" style="margin-right:10px;"></span>Editar Día Feriado</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="idEdit">
@@ -94,10 +97,15 @@ $(document).ready(function () {
     getHolidays();
 });
 
+// Modificar las funciones de guardado para incluir validación
 function newHoliday() {
     var fecha = $("#fecha").val();
-    var nombre = $("#nombre").val();
+    var nombre = $("#nombre").val().trim(); // Limpiar espacios al inicio/fin
     var es_recurrente = $("#es_recurrente").is(":checked") ? 1 : 0;
+
+    // Validar nombre
+    nombre = nombre.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]/g, '');
+    $("#nombre").val(nombre); // Actualizar campo con valor limpio
 
     if(fecha == ""){
         $("#fecha").focus();
@@ -108,6 +116,12 @@ function newHoliday() {
     if(nombre == ""){
         $("#nombre").focus();
         notify("El campo nombre es obligatorio", 1500, "error", "top-end");
+        return;
+    }
+
+    if(!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/.test(nombre)){
+        $("#nombre").focus();
+        notify("El nombre solo puede contener letras, números y espacios", 1500, "error", "top-end");
         return;
     }
 
@@ -186,19 +200,35 @@ function updateHoliday() {
     var id = $("#idEdit").val();
     var fecha_original = $("#fecha_original").val();
     var fecha = $("#fechaEdit").val();
-    var nombre = $("#nombreEdit").val();
+    var nombre = $("#nombreEdit").val().trim(); // Limpiar espacios al inicio/fin
     var es_recurrente = $("#es_recurrenteEdit").is(":checked") ? 1 : 0;
 
+    // Validar nombre
+    nombre = nombre.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]/g, '');
+    $("#nombreEdit").val(nombre); // Actualizar campo con valor limpio
+
     // Validaciones básicas
-    if (!fecha || !nombre) {
-        notify("Todos los campos son requeridos", 1500, "error", "top-end");
+    if (!fecha) {
+        notify("La fecha es requerida", 1500, "error", "top-end");
+        return;
+    }
+    
+    if (!nombre) {
+        $("#nombreEdit").focus();
+        notify("El campo nombre es obligatorio", 1500, "error", "top-end");
+        return;
+    }
+
+    if(!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/.test(nombre)){
+        $("#nombreEdit").focus();
+        notify("El nombre solo puede contener letras, números y espacios", 1500, "error", "top-end");
         return;
     }
 
     $.ajax({
         url: "ajax.php?mode=saveholiday",
         type: "POST",
-        dataType: "json", // Esperamos JSON
+        dataType: "json",
         data: {
             id: id,
             fecha_original: fecha_original,
@@ -207,7 +237,6 @@ function updateHoliday() {
             es_recurrente: es_recurrente
         },
         success: function(response) {
-            // Verificar si la respuesta es un objeto válido
             if (typeof response === 'object' && response !== null) {
                 if (response.success) {
                     notify(response.message, 1500, "success", "top-end");

@@ -6,15 +6,16 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 
 
 ?>
-<script src="views/js/usersForm.js"></script>
+<script src="views/js/forms.js"></script>
 
 
 <div class="row">
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddUser">
-                    <span class="glyphicon glyphicon-plus"></span> Agregar Usuario
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddUser">
+                    <span class="fas fa-plus" style="margin-right:10px;"></span>
+                    <span class="btn-text"> Nuevo Usuario</span>
                 </button>
 
                 <div id="contentUsers">
@@ -22,14 +23,15 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
             </div>
         </div>
     </div>
-  </div>
+</div>
 
  <div id="ModalAddUser" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Usuario</h4>
+                <h4 class="modal-title"><span class="fas fa-plus" style="margin-right:10px;"></span>
+                Agregar Usuario</h4>
             </div>
             <div class="modal-body" id="userForm">
                     <div class="form-group">
@@ -87,8 +89,9 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     
 <?php
 
-$qTipoUsuario = 'SELECT codigo,descripcion
-                  FROM users_types';
+$qTipoUsuario = 'SELECT codigo,descripcion 
+                  FROM users_types
+                  WHERE activo=1';
 
 $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
 
@@ -116,7 +119,7 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Usuario: <span id="editNombreSel"></span></h4>
+                <h4 class="modal-title"> <span class="fas fa-pencil" style="margin-right:10px;"></span> Editar Usuario:<span id="editNombreSel"></span></h4>
             </div>
             <div class="modal-body" id="userFormEdit">
                     <div class="form-group">
@@ -147,9 +150,13 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
                     <div class="form-group">
                         <label for="codigo">Tipo Usuario:</label>
                         <select class="form-control" id="c_tipo_usuarioEdit">
-                          <?php     foreach ($dt_tiposUsuario as $codigo => $array) {
+                          <?php    
+                          
+                          if(($dt_tiposUsuario != false )){
+                          foreach ($dt_tiposUsuario as $codigo => $array) {
                               echo "<option value='".$dt_tiposUsuario[$codigo]["codigo"]."'>".$dt_tiposUsuario[$codigo]["descripcion"]."</option>";
-                          } ?>
+                          }
+                         } ?>
                         </select>
                     </div>
                     </div>
@@ -234,9 +241,15 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
 
 <script>
   $(document).ready(function(){
-        getUsers();
-
-  });
+    getUsers();
+    cleanFormUsers();
+    
+    // Eventos para limpiar al cerrar modales
+    $('#ModalAddUser').on('hidden.bs.modal', cleanFormUsers);
+    $('#ModalEditUser').on('hidden.bs.modal', cleanFormUsers);
+    $('#ModalChangePass').on('hidden.bs.modal', cleanFormUsers);
+    $('#ModalEditPhoto').on('hidden.bs.modal', cleanFormUsers);
+});
 
   function getUsers() {
     $.ajax({
@@ -248,6 +261,7 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
         },
         success: function(datos) {
             $("#contentUsers").html(datos);
+            cleanFormUsers();
             
             var arrayOrder = [];         //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
                 var arrayExport = ['excel']; //'excel'
@@ -318,7 +332,6 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
                     if (respuesta["codigo"] == "1") {
                         $('#ModalAddUser').modal('hide');
                         getUsers();
-                        cleanFormUsers();
                         notify(respuesta["alerta"], 1500, "success", "top-end");
                     } else {
                         notify(respuesta["alerta"], 1500, "error", "top-end");
@@ -359,16 +372,34 @@ $dt_tiposUsuario=findtablaq($qTipoUsuario,"codigo");
   });
   }
 
-  function cleanFormUsers(){
+  function cleanFormUsers() {
+    // Limpiar formulario de agregar usuario
     $("#nombres").val("");
     $("#apellido_p").val("");
     $("#apellido_m").val("");
     $("#usuario").val("");
     $("#clave").val("");
+    $("#clave2").val("");
     $("#correo").val("");
     $("#c_tipo_usuario").val("SPUS");
     checkPasswordStrength('userForm','clave','password-strength-bar');
-  }
+    
+    // Limpiar formulario de editar usuario
+    $("#nombresEdit").val("");
+    $("#apellido_pEdit").val("");
+    $("#apellido_mEdit").val("");
+    $("#usuarioEdit").val("");
+    $("#correoEdit").val("");
+    
+    // Limpiar formulario de cambiar contraseña
+    $("#claveChange").val("");
+    $("#claveChange2").val("");
+    checkPasswordStrength('ChangePass','claveChange','password-strength-barChange');
+    
+    // Limpiar formulario de foto
+    $("#fotoUsuario").val("");
+    $("#previewPhoto").attr('src', 'views/images/profile/userDefault.png');
+}
 
 var _ID=0;
   function GetUser(id,nombre){

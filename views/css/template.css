@@ -184,3 +184,31 @@ box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.37);
 .is-invalid ~ .invalid-feedback {
     display: block;
 }
+
+
+/* Estilos para el botón expandible*/
+.expandable-btn {
+    transition: all 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 40px; /* Ancho inicial solo para el icono */
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.expandable-btn .btn-text {
+    display: inline-block;
+    opacity: 0;
+    width: 0;
+    transition: all 0.3s ease;
+}
+
+.expandable-btn:hover {
+    width: 180px; /* Ancho cuando se expande */
+}
+
+.expandable-btn:hover .btn-text {
+    opacity: 1;
+    width: auto;
+    margin-left: 8px;
+}

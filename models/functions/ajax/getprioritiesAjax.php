@@ -64,7 +64,9 @@ if($dt_priorities !== false && is_array($dt_priorities)) {
                             '.($array['activo'] == 1 ? 
                             '<span class="fa fa-trash btn-icon" style="color:darkred; margin-left:10px;" title="Eliminar Prioridad" 
                                   onclick="confirmDeletePriority(\''.htmlspecialchars($array['id']).'\', \''.htmlspecialchars($array['codigo']).'\', \''.htmlspecialchars($array['descripcion']).'\')"></span>' 
-                            : '').'
+                            : 
+                            '<span class="fa fa-check-circle btn-icon btn-reactivate" title="Reactivar Prioridad" 
+                                  onclick="confirmReactivatePriority(\''.htmlspecialchars($array['id']).'\', \''.htmlspecialchars($array['codigo']).'\', \''.htmlspecialchars($array['descripcion']).'\')"></span>').'
                         </td>
                     </tr>';
         }
@@ -76,4 +78,5 @@ if($dt_priorities !== false && is_array($dt_priorities)) {
 }
 
 echo $HTML;
+
 ?>

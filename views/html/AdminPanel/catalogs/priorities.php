@@ -5,6 +5,9 @@ include(HTML . 'AdminPanel/masterPanel/menu.php');
 include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
+<script src="views\js\forms.js"></script>
+
+
 <style>
     .icon-container {
         max-height: 500px;
@@ -71,14 +74,19 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
         text-align: center;
         z-index: 1000;
     }
+    
+    .btn-reactivate {
+        color: #28a745;
+        margin-left: 10px;
+    }
 </style>
 
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddPriority">
-                    <i class="fas fa-plus"></i> Agregar Prioridad
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddPriority">
+                    <span class="fas fa-plus" style="margin-right:10px;"></span> Nueva Prioridad
                 </button>
                 <div id="contentPriorities" class="mt-3">
                     <div class="loading-spinner">
@@ -96,7 +104,7 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><i class="fas fa-plus-circle"></i> Agregar Nueva Prioridad</h4>
+                <h4 class="modal-title"><span class="fas fa-plus"></span> Agregar Nueva Prioridad</h4>
                 <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -126,13 +134,15 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
                             <div class="form-group">
                                 <label for="hr_min">Horas Mínimas:</label>
                                 <input type="number" class="form-control" id="hr_min"
-                                    placeholder="0.0" min="0" step="0.5" required>
+                                    placeholder="0.0" min="0" step="0.5" required
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46">
                             </div>
 
                             <div class="form-group">
                                 <label for="hr_max">Horas Máximas:</label>
                                 <input type="number" class="form-control" id="hr_max"
-                                    placeholder="0.0" min="0" step="0.5" required>
+                                    placeholder="0.0" min="0" step="0.5" required
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46">
                             </div>
 
                             <div class="form-group">
@@ -169,7 +179,7 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><i class="fas fa-edit"></i> Editar Prioridad</h4>
+                <h4 class="modal-title"><span class="fas fa-pencil"></span> Editar Prioridad</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body" id="editPriorityForm">
@@ -212,8 +222,6 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
     </div>
 </div>
 
-<!-- Incluye FontAwesome para mostrar los iconos -->
-
 <script>
     var faIcons;
     $(document).ready(function(){
@@ -226,7 +234,6 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
                 const icons = jsyaml.load(yamlData);
                 const freeIcons = [];
 
-                // Estilos gratuitos en Font Awesome (fas = solid, far = regular, fab = brands)
                 const freeStyles = {
                     'solid': 'fas',
                     'regular': 'far',
@@ -234,21 +241,16 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
                 };
 
                 Object.entries(icons).forEach(([name, iconData]) => {
-                    // Verificamos si tiene estilos gratuitos
                     if (iconData.styles && iconData.styles.some(style => freeStyles[style])) {
                         iconData.styles.forEach(style => {
-                            if (freeStyles[style]) { // Solo si es un estilo gratuito
+                            if (freeStyles[style]) {
                                 freeIcons.push(`${freeStyles[style]} fa-${name}`);
                             }
                         });
                     }
                 });
 
-                //console.log("Iconos gratuitos en formato FA:", freeIcons);
-                //console.log("Total de iconos gratuitos:", freeIcons.length);
-
                 faIcons = freeIcons;
-
             } catch (e) {
                 console.error("Error al procesar YAML:", e);
                 faIcons = false;
@@ -259,76 +261,37 @@ include(HTML . 'AdminPanel/masterPanel/breadcrumb.php');
         });
     }
 
-    //console.log(faIcons);
-
-    /*[
-        'fas fa-address-book', 'fas fa-address-card', 'fas fa-angry', 'fas fa-arrow-alt-circle-down',
-        'fas fa-arrow-alt-circle-left', 'fas fa-arrow-alt-circle-right', 'fas fa-arrow-alt-circle-up',
-        'fas fa-bell', 'fas fa-bell-slash', 'fas fa-bookmark', 'fas fa-building', 'fas fa-calendar',
-        'fas fa-calendar-alt', 'fas fa-calendar-check', 'fas fa-calendar-minus', 'fas fa-calendar-plus',
-        'fas fa-calendar-times', 'fas fa-caret-square-down', 'fas fa-caret-square-left',
-        'fas fa-caret-square-right', 'fas fa-caret-square-up', 'fas fa-chart-bar', 'fas fa-check-circle',
-        'fas fa-check-square', 'fas fa-circle', 'fas fa-clipboard', 'fas fa-clock', 'fas fa-clone',
-        'fas fa-comment', 'fas fa-comment-alt', 'fas fa-comments', 'fas fa-compass', 'fas fa-copy',
-        'fas fa-credit-card', 'fas fa-dot-circle', 'fas fa-edit', 'fas fa-envelope', 'fas fa-envelope-open',
-        'fas fa-eye', 'fas fa-eye-slash', 'fas fa-file', 'fas fa-file-alt', 'fas fa-file-archive',
-        'fas fa-file-excel', 'fas fa-file-image', 'fas fa-file-pdf', 'fas fa-file-word', 'fas fa-flag',
-        'fas fa-folder', 'fas fa-folder-open', 'fas fa-heart', 'fas fa-home', 'fas fa-hourglass',
-        'fas fa-image', 'fas fa-images', 'fas fa-key', 'fas fa-list', 'fas fa-list-alt', 'fas fa-map',
-        'fas fa-paperclip', 'fas fa-paste', 'fas fa-phone', 'fas fa-question-circle', 'fas fa-save',
-        'fas fa-search', 'fas fa-share-alt', 'fas fa-star', 'fas fa-tag', 'fas fa-tags', 'fas fa-thumbs-up',
-        'fas fa-trash-alt', 'fas fa-user', 'fas fa-user-circle', 'fas fa-users', 'fas fa-bolt'
-    ];*/
-
-    // Variables globales para manejo de íconos
     let selectedIcon = '';
     let currentIconField = '';
     let currentIconPreview = '';
 
     $(document).ready(function() {
-        // Inicializar eventos
         initIconModal();
-
-        // Cargar prioridades al iniciar
         getPriorities();
     });
 
-    // Función para inicializar el modal de íconos
-function initIconModal() {
-    // Al abrir el modal
-    $('#iconModal').on('show.bs.modal', function(e) {
-        const button = $(e.relatedTarget);
-        currentIconField = button.data('field');
-        currentIconPreview = button.data('preview');
-        selectedIcon = $('#' + currentIconField).val() || '';
-        loadIcons();
+    function initIconModal() {
+        $('#iconModal').on('show.bs.modal', function(e) {
+            const button = $(e.relatedTarget);
+            currentIconField = button.data('field');
+            currentIconPreview = button.data('preview');
+            selectedIcon = $('#' + currentIconField).val() || '';
+            loadIcons();
+            $('#iconSearch').val('').focus();
+        });
 
-        $('#iconSearch').val('').focus();
-        
-        // Remover aria-hidden cuando el modal está visible
-       // $(this).removeAttr('aria-hidden');
-    });
+        $('#iconModal').on('click', '.icon-item', function() {
+            selectedIcon = $(this).data('icon');
+            $('#' + currentIconField).val(selectedIcon);
+            updateIconPreview(currentIconPreview, selectedIcon);
+            $('#iconModal').modal('hide');
+        });
 
-    // Restaurar cuando se cierra el modal
-    /*$('#iconModal').on('hidden.bs.modal', function() {
-        $(this).attr('aria-hidden', 'true');
-    });*/
+        $('#iconSearch').on('input', function() {
+            loadIcons($(this).val());
+        });
+    }
 
-    // Selección automática al hacer click
-    $('#iconModal').on('click', '.icon-item', function() {
-        selectedIcon = $(this).data('icon');
-        $('#' + currentIconField).val(selectedIcon);
-        updateIconPreview(currentIconPreview, selectedIcon);
-        $('#iconModal').modal('hide');
-    });
-
-    // Buscar íconos
-    $('#iconSearch').on('input', function() {
-        loadIcons($(this).val());
-    });
-}
-
-    // Función para actualizar la vista previa del ícono
     function updateIconPreview(previewId, iconClass) {
         const previewElement = $('#' + previewId);
         if (iconClass) {
@@ -344,7 +307,6 @@ function initIconModal() {
         }
     }
 
-    // Función para cargar íconos en el modal
     function loadIcons(searchTerm = '') {
         const container = $('#iconContainer');
         container.empty();
@@ -367,7 +329,6 @@ function initIconModal() {
         });
     }
 
-    // Función para obtener las prioridades
     function getPriorities() {
         var mostrarInactivos = $('#mostrarInactivos').is(':checked') ? '1' : '0';
         $.ajax({
@@ -381,13 +342,10 @@ function initIconModal() {
             },
             success: function(datos) {
                 $("#contentPriorities").html(datos);
+                var arrayOrder = [];
+                var arrayExport = ['excel'];
+                datatablebase("tablaPrioridades", false, 400, true, true, arrayOrder, arrayExport);
 
-                var arrayOrder = []; //[14, 'asc'], [0, 'asc'], [3, 'asc'], [5, 'asc']
-                var arrayExport = ['excel']; //'excel'
-                datatablebase("tablaUsuarios", false, 400, true, true, arrayOrder, arrayExport);
-                //datatablebase(tableid, ffoot, scroll, order, search, arrayOrder, arrayExport)
-
-                // Configurar el evento del checkbox después de cargar la tabla
                 $('#mostrarInactivos').off('change').on('change', function() {
                     const mostrar = $(this).is(":checked") ? "1" : "0";
                     getPriorities();
@@ -400,8 +358,6 @@ function initIconModal() {
         });
     }
 
-
-    // Función para agregar nueva prioridad
     function newPriority() {
         const formData = {
             codigo: $('#codigo').val().trim().toUpperCase(),
@@ -427,6 +383,19 @@ function initIconModal() {
             notify("Por favor seleccione un ícono", 1500, "error");
             return;
         }
+        
+        if (parseFloat(formData.hr_min) < 0) {
+            notify("Las horas mínimas no pueden ser negativas", 1500, "error");
+            $('#hr_min').focus();
+            return;
+        }
+        
+        if (parseFloat(formData.hr_max) < 0) {
+            notify("Las horas máximas no pueden ser negativas", 1500, "error");
+            $('#hr_max').focus();
+            return;
+        }
+        
         if (parseFloat(formData.hr_min) > parseFloat(formData.hr_max)) {
             notify("Las horas mínimas no pueden ser mayores que las máximas", 1500, "error");
             $('#hr_min').focus();
@@ -466,114 +435,110 @@ function initIconModal() {
     }
 
     function GetRegisterPriority(id) {
-    $.ajax({
-        url: "ajax.php?mode=getpriority",
-        type: "POST",
-        data: { id: id },
-        dataType: 'json',
-        beforeSend: function() {
-            $('#editPriorityForm').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
-        },
-        success: function(response) {
-            if (response && response.success && response.html) {
-                $('#editPriorityForm').html(response.html);
-                $('#ModalEditPriority').modal('show');//.removeAttr('aria-hidden');
-                
-                // Configurar el evento cuando se cierre el modal
-                /*$('#ModalEditPriority').on('hidden.bs.modal', function() {
-                    $(this).attr('aria-hidden', 'true');
-                });*/
-
-                // Configurar el modal de íconos para edición
-                /*$('[data-target="#iconModal"]').off('click').on('click', function() {
-                    currentIconField = 'edit_icono';
-                    currentIconPreview = 'editIconPreview';
-                    selectedIcon = $('#edit_icono').val() || '';
-                    $('#iconModal').modal('show');
-                });*/
-            } else {
-                notify(response.error || "Error al cargar datos", 1500, "error");
-            }
-        },
-        error: function(xhr, status, error) {
-            notify("Error al cargar datos: " + error, 1500, "error");
-        }
-    });
-}
-
-    // Función para guardar cambios
-function savePriority() {
-    // Asegurarnos de que los elementos existen antes de acceder a ellos
-    const edit_id = document.getElementById('edit_id');
-    const edit_descripcion = document.getElementById('edit_descripcion');
-    const edit_color_hex = document.getElementById('edit_color_hex');
-    const edit_hr_min = document.getElementById('edit_hr_min');
-    const edit_hr_max = document.getElementById('edit_hr_max');
-    const edit_icono = document.getElementById('edit_icono');
-
-    // Validar que los elementos existen
-    if (!edit_id || !edit_descripcion || !edit_color_hex || !edit_hr_min || !edit_hr_max || !edit_icono) {
-        notify("Error: No se pudo acceder a los campos del formulario", 1500, "error");
-        return;
-    }
-
-    const formData = {
-        id: edit_id.value,
-        codigo: document.getElementById('edit_codigo')?.value?.trim()?.toUpperCase() || '',
-        descripcion: edit_descripcion.value.trim(),
-        color_hex: edit_color_hex.value,
-        hr_min: edit_hr_min.value,
-        hr_max: edit_hr_max.value,
-        icono: edit_icono.value
-    };
-
-    // Validaciones
-    if (!formData.descripcion) {
-        notify("La descripción es obligatoria", 1500, "error");
-        edit_descripcion.focus();
-        return;
-    }
-    if (!formData.icono) {
-        notify("Por favor seleccione un ícono", 1500, "error");
-        return;
-    }
-    if (parseFloat(formData.hr_min) > parseFloat(formData.hr_max)) {
-        notify("Las horas mínimas no pueden ser mayores que las máximas", 1500, "error");
-        edit_hr_min.focus();
-        return;
-    }
-
-    $.ajax({
-        url: "ajax.php?mode=savepriority",
-        type: "POST",
-        data: formData,
-        dataType: 'json',
-        beforeSend: function() {
-            $('button').prop('disabled', true);
-        },
-        success: function(response) {
-            try {
-                if (response && response.codigo == 1) {
-                    $('#ModalEditPriority').modal('hide');
-                    getPriorities();
-                    notify(response.alerta || "Cambios guardados correctamente", 1500, "success");
+        $.ajax({
+            url: "ajax.php?mode=getpriority",
+            type: "POST",
+            data: { id: id },
+            dataType: 'json',
+            beforeSend: function() {
+                $('#editPriorityForm').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
+            },
+            success: function(response) {
+                if (response && response.success && response.html) {
+                    $('#editPriorityForm').html(response.html);
+                    $('#ModalEditPriority').modal('show');
                 } else {
-                    notify(response.alerta || "Error al guardar los cambios", 1500, "error");
+                    notify(response.error || "Error al cargar datos", 1500, "error");
                 }
-            } catch (e) {
-                notify("Error al procesar la respuesta del servidor", 1500, "error");
+            },
+            error: function(xhr, status, error) {
+                notify("Error al cargar datos: " + error, 1500, "error");
             }
-        },
-        error: function(xhr, status, error) {
-            notify("Error de conexión: " + error, 1500, "error");
-        },
-        complete: function() {
-            $('button').prop('disabled', false);
-        }
-    });
-}
+        });
+    }
 
-    // Función para confirmar eliminación
+    function savePriority() {
+        const edit_id = document.getElementById('edit_id');
+        const edit_descripcion = document.getElementById('edit_descripcion');
+        const edit_color_hex = document.getElementById('edit_color_hex');
+        const edit_hr_min = document.getElementById('edit_hr_min');
+        const edit_hr_max = document.getElementById('edit_hr_max');
+        const edit_icono = document.getElementById('edit_icono');
+
+        if (!edit_id || !edit_descripcion || !edit_color_hex || !edit_hr_min || !edit_hr_max || !edit_icono) {
+            notify("Error: No se pudo acceder a los campos del formulario", 1500, "error");
+            return;
+        }
+
+        const formData = {
+            id: edit_id.value,
+            codigo: document.getElementById('edit_codigo')?.value?.trim()?.toUpperCase() || '',
+            descripcion: edit_descripcion.value.trim(),
+            color_hex: edit_color_hex.value,
+            hr_min: edit_hr_min.value,
+            hr_max: edit_hr_max.value,
+            icono: edit_icono.value
+        };
+
+        // Validaciones
+        if (!formData.descripcion) {
+            notify("La descripción es obligatoria", 1500, "error");
+            edit_descripcion.focus();
+            return;
+        }
+        if (!formData.icono) {
+            notify("Por favor seleccione un ícono", 1500, "error");
+            return;
+        }
+        
+        if (parseFloat(formData.hr_min) < 0) {
+            notify("Las horas mínimas no pueden ser negativas", 1500, "error");
+            edit_hr_min.focus();
+            return;
+        }
+        
+        if (parseFloat(formData.hr_max) < 0) {
+            notify("Las horas máximas no pueden ser negativas", 1500, "error");
+            edit_hr_max.focus();
+            return;
+        }
+        
+        if (parseFloat(formData.hr_min) > parseFloat(formData.hr_max)) {
+            notify("Las horas mínimas no pueden ser mayores que las máximas", 1500, "error");
+            edit_hr_min.focus();
+            return;
+        }
+
+        $.ajax({
+            url: "ajax.php?mode=savepriority",
+            type: "POST",
+            data: formData,
+            dataType: 'json',
+            beforeSend: function() {
+                $('button').prop('disabled', true);
+            },
+            success: function(response) {
+                try {
+                    if (response && response.codigo == 1) {
+                        $('#ModalEditPriority').modal('hide');
+                        getPriorities();
+                        notify(response.alerta || "Cambios guardados correctamente", 1500, "success");
+                    } else {
+                        notify(response.alerta || "Error al guardar los cambios", 1500, "error");
+                    }
+                } catch (e) {
+                    notify("Error al procesar la respuesta del servidor", 1500, "error");
+                }
+            },
+            error: function(xhr, status, error) {
+                notify("Error de conexión: " + error, 1500, "error");
+            },
+            complete: function() {
+                $('button').prop('disabled', false);
+            }
+        });
+    }
+
     function confirmDeletePriority(id, codigo, descripcion) {
         if (codigo === "ALTA") {
             notify("No se puede eliminar la prioridad ALTA", 2000, "error");
@@ -588,7 +553,6 @@ function savePriority() {
         );
     }
 
-    // Función para eliminar prioridad
     function deletePriority(id) {
         $.ajax({
             url: "ajax.php?mode=deletepriority",
@@ -621,7 +585,48 @@ function savePriority() {
         });
     }
 
-    // Función para limpiar el formulario
+    function confirmReactivatePriority(id, codigo, descripcion) {
+        notifyConfirm(
+            "¿Está seguro de reactivar esta prioridad?",
+            `Se reactivará la prioridad: ${descripcion}`,
+            "warning",
+            `reactivatePriority('${id}')`
+        );
+    }
+
+    function reactivatePriority(id) {
+        $.ajax({
+            url: "ajax.php?mode=deletepriority",
+            type: "POST",
+            data: {
+                id: id
+            },
+            beforeSend: function() {
+                $('button').prop('disabled', true);
+            },
+            success: function(response) {
+                console.log(response);          
+                try {
+                    const result = JSON.parse(response);
+                    if (result.codigo == 1) {
+                        getPriorities();
+                        notify(result.alerta, 1500, "success");
+                    } else {
+                        notify(result.alerta || "Error al reactivar", 1500, "error");
+                    }
+                } catch (e) {
+                    notify("Error al procesar la respuesta", 1500, "error");
+                }
+            },
+            error: function(xhr, status, error) {
+                notify("Error al reactivar: " + error, 1500, "error");
+            },
+            complete: function() {
+                $('button').prop('disabled', false);
+            }
+        });
+    }
+
     function cleanPriorityForm() {
         $('#addPriorityForm')[0].reset();
         $('#icono').val('');

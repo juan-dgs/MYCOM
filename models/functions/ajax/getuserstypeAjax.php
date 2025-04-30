@@ -6,7 +6,7 @@ $dt_tipo=findtablaq("SELECT t.id,t.codigo,t.descripcion
                             WHERE t.activo= 1 order by t.descripcion;",id: "codigo");
 
 $HTML ='';
-if ($dt_tipo!=false){
+if ($dt_tipo!=false && !empty($dt_tipo)) {
   $HTML .='<table id="tablaTipoDeUsuarios" class="display tab-hv dataTable table table-striped nowrap row-border hover order-column table-hover" style="width: 100%;">
             <thead>
                 <tr>

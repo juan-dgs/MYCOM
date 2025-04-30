@@ -5,14 +5,14 @@ include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
-<script src="views/js/repository.js"></script>
+<script src="views\js\forms.js"></script>
 
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#ModalAddClasificacion">
-                    <span class="glyphicon glyphicon-plus"></span> Agregar Clasificación
+                <button class="btn btn-primary expandable-btn" data-toggle="modal" data-target="#ModalAddClasificacion">
+                    <span class="fas fa-plus" style="margin-right:10px;"></span> Agregar Clasificación
                 </button>
 
                 <div id="contentClasificaciones">
@@ -28,7 +28,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Agregar Clasificación</h4>
+                <h4 class="modal-title"><span class="fas fa-plus" style="margin-right:10px;"></span>Agregar Clasificación</h4>
             </div>
             <div class="modal-body" id="clasificacionForm">
                 <div class="row">
@@ -65,7 +65,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar Clasificación: <span id="editClasificacionSel"></span></h4>
+                <h4 class="modal-title"><span class="fas fa-pencil" style="margin-right:10px;"></span>Editar Clasificación: <span id="editClasificacionSel"></span></h4>
             </div>
             <div class="modal-body" id="clasificacionFormEdit">
                 <input type="hidden" id="idEdit">
@@ -120,24 +120,45 @@ function getClasifications() {
     });
 }
 
+// =============================================
+// FUNCIÓN PARA AGREGAR NUEVA CLASIFICACIÓN
+// =============================================
 function newClasification() {
     const $btn = $("#ModalAddClasificacion").find(".btn-success");
-    const codigo = $("#codigo").val().trim();
-    const descripcion = $("#descripcion").val().trim();
+    let codigo = $("#codigo").val().trim().toUpperCase();
+    let descripcion = $("#descripcion").val().trim();
 
-    // Validaciones
-    if(!codigo) {
+    // Limpiar y validar código (4 caracteres alfanuméricos)
+    codigo = codigo.replace(/[^A-Z0-9]/g, '').substring(0, 4);
+    $("#codigo").val(codigo);
+
+    // Limpiar y validar descripción (solo letras y espacios)
+    descripcion = descripcion.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    $("#descripcion").val(descripcion);
+
+    // Validar campo código
+    if (!codigo) {
         $("#codigo").focus(); 
         notify("El campo código es obligatorio", 1500, "error", "top-end");
         return;
+    } else if (codigo.length !== 4) {
+        $("#codigo").focus(); 
+        notify("El código debe tener exactamente 4 caracteres (letras o números)", 1500, "error", "top-end");
+        return;
     }
     
-    if(!descripcion) {
+    // Validar campo descripción
+    if (!descripcion) {
         $("#descripcion").focus(); 
         notify("El campo descripción es obligatorio", 1500, "error", "top-end");
         return;
+    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(descripcion)) {
+        $("#descripcion").focus(); 
+        notify("La descripción solo puede contener letras y espacios", 1500, "error", "top-end");
+        return;
     }
 
+    $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
 
     $.ajax({
         url: "ajax.php?mode=newclasification", 
@@ -153,7 +174,7 @@ function newClasification() {
             $('#ModalAddClasificacion').modal('hide');
             cleanFormClasifications();
             notify(respuesta.alerta, 1500, "success", "top-end");
-            getClasifications(); // Nombre consistente
+            getClasifications();
         } else {
             notify(respuesta.alerta || "Error al guardar", 1500, "error", "top-end");
         }
@@ -255,20 +276,24 @@ function getRegisterClasification(id, codigo) {
     });
 }
 
+// =============================================
+// FUNCIÓN PARA GUARDAR EDICIÓN DE CLASIFICACIÓN
+// =============================================
 function saveClasification() {
     var id = $("#idEdit").val();
-    var codigo = $("#codigoEdit").val().trim();
-    var descripcion = $("#descripcionEdit").val().trim();
+    let descripcion = $("#descripcionEdit").val().trim();
 
-    if(codigo === "") {
-        $("#codigoEdit").focus();
-        notify("El campo código es obligatorio", 1500, "error", "top-end");
-        return;
-    }
-    
-    if(descripcion === "") {
+    // Limpiar y validar descripción (solo letras y espacios)
+    descripcion = descripcion.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    $("#descripcionEdit").val(descripcion);
+
+    if (!descripcion) {
         $("#descripcionEdit").focus();
         notify("El campo descripción es obligatorio", 1500, "error", "top-end");
+        return;
+    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(descripcion)) {
+        $("#descripcionEdit").focus();
+        notify("La descripción solo puede contener letras y espacios", 1500, "error", "top-end");
         return;
     }
 
@@ -281,7 +306,6 @@ function saveClasification() {
         dataType: 'json',
         data: {
             id: id,
-            codigo: codigo,
             descripcion: descripcion
         },
         success: function(respuesta) {
@@ -305,6 +329,7 @@ function saveClasification() {
         }
     });
 }
+
 </script>
 
 <?php include(HTML.'AdminPanel/masterPanel/foot.php'); ?>

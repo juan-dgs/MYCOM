@@ -9,9 +9,9 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Horario Laboral</h3>
+            <!-- <h3 class="panel-title">Horario Laboral</h3> -->
                 <div class="panel-options">
-                    <span id="lastSaved" class="text-muted small" style="margin-right: 10px;"></span>
+                    <!-- <span id="lastSaved" class="text-muted small" style="margin-right: 10px;"></span> -->
                 </div>
             </div>
             <div class="panel-body">
@@ -81,8 +81,8 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                     <?php foreach($dias as $dia): ?>
                                     <td class="text-center">
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-primary" id="guardar_<?php echo $dia; ?>" onclick="guardarHorario('<?php echo $dia; ?>')">
-                                                <i class="fas fa-save"></i> Guardar</button>
+                                            <button type="button" class="btn btn-lg btn-primary expandable-btn" id="guardar_<?php echo $dia; ?>" onclick="guardarHorario('<?php echo $dia; ?>')">
+                                                <i class="fas fa-save" style="margin-right:10px; font-size: large;"></i> Guardar</button>
                                         </div>
                                     </td>
                                     <?php endforeach; ?>
