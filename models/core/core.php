@@ -19,7 +19,7 @@
   /*
   define('DB_HOST', 'localhost');
   define('DB_USER', 'yukisscom_admin');
-  define('DB_PASS', 'xnDN*3Ur%mTU');
+  define('DB_PASS', '.M1C0m!2025');
   define('DB_NAME', 'yukisscom_mycom');
   */
 
