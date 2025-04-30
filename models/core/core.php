@@ -18,9 +18,9 @@
   
   /*
   define('DB_HOST', 'localhost');
-  define('DB_USER', 'yukiss_');
+  define('DB_USER', 'yukisscom_admin');
   define('DB_PASS', 'xnDN*3Ur%mTU');
-  define('DB_NAME', 'contador_mycom');
+  define('DB_NAME', 'yukisscom_mycom');
   */
 
  
