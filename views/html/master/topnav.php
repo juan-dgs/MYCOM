@@ -33,9 +33,9 @@
                             <div class="col-xl-2 col-lg-2 col-md-1">
                                 <div class="logo">
                                     <!-- logo-1 -->
-                                    <a href="index.html" class="big-logo"><img src="assets/img/logo/logo.png" alt=""></a>
+                                    <a href="home" class="big-logo"><img src="views/images/web/logos/mycom-nav-adn.png" alt="MyCom"></a>
                                     <!-- logo-2 -->
-                                    <a href="index.html" class="small-logo"><img src="assets/img/logo/loder-logo.png" alt=""></a>
+                                    <a href="home" class="small-logo"><img src="views/images/web/logos/mycom-nav-min.png" style="    width: 100px;" alt="MyCom"></a>
                                 </div>
                             </div>
                             <div class="col-xl-8 col-lg-8 col-md-8">
@@ -44,22 +44,15 @@
                                     <nav> 
                                         <ul id="navigation">                                                                                                                   
                                             <li><a href="home">Inicio</a></li>
-                                            <li><a href="aboutus">Nosotros</a></li>
-                                            <li><a href="#">Servicios</a>
-                                                <ul class="submenu">
-                                                    <li><a href="services1">Venta</a></li>
-                                                    <li><a href="services2">Servicios</a></li>
-                                                    <li><a href="services2">Consultoria</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="contactus">Contactanos</a></li>
+                                            <li><a href="nosotros">Nosotros</a></li>
+                                            <li><a href="servicios">Servicios</a></li>
+                                            <li><a href="contacto">contacto</a></li>
                                         </ul>
                                     </nav>
                                 </div>
                             </div>             
                             <div class="col-xl-2 col-lg-2 col-md-3">
                                 <div class="header-right-btn f-right d-none d-lg-block">
-                                    <a href="login" class="btn">Login</a>
                                 </div>
                             </div>
                             <!-- Mobile Menu -->

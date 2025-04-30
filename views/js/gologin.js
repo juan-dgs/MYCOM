@@ -15,12 +15,13 @@ function goLogin() {
   if (user==""||pass=="") {
     if (user=="") {
       var alerta  = '<p><b>Error:</b> Ingresar Usuario.</p>';
-      alertify.error(alerta);
+      notify(alerta, 1500, "error", "top-end");
+
 
       $("#UserName").focus();
     } else if (pass=="") {
       var alerta = '<p><b>Error:</b> Ingresar Contraseña.</p>';
-      alertify.error(alerta);
+      notify(alerta, 1500, "error", "top-end");
 
       $("#Password").focus();
     }
@@ -40,9 +41,12 @@ function goLogin() {
             var respuesta = JSON.parse(datos);
 
             if (respuesta["CODE"] == "1") {
+                notify("Credenciales Correctas..", 1500, "success", "top-end");
                 location.replace('panel');
+
             }else {
-                alertify.error(respuesta["ERROR"]);
+                notify(respuesta["ERROR"], 1500, "error", "top-end");
+
             }
 
           }

@@ -6,28 +6,7 @@ include(HTML.'master/topnav.php');
 <!-- slider Area Start-->
 <div class="slider-area ">
             <div class="slider-active">
-                <div class="single-slider  hero-overly slider-height d-flex align-items-center" data-background="assets/img/hero/h1_hero.jpg">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-11">
-                                <div class="hero__caption">
-                                    <div class="hero-text1">
-                                        <span data-animation="fadeInUp" data-delay=".3s">hand car wash and detailing service</span>
-                                    </div>
-                                    <h1 data-animation="fadeInUp" data-delay=".5s">MY</h1>
-                                    <div class="stock-text" data-animation="fadeInUp" data-delay=".8s">
-                                        <h2>COM</h2>
-                                        <h2>COM</h2>
-                                    </div>
-                                    <div class="hero-text2 mt-110" data-animation="fadeInUp" data-delay=".9s">
-                                       <span><a href="services.html">Nuestros servicios</a></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="single-slider  hero-overly slider-height d-flex align-items-center" data-background="assets/img/hero/h1_hero.jpg">
+                <div class="single-slider  hero-overly slider-height d-flex align-items-center" data-background="views/images/web/banners/banner.jpg">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-11">
@@ -41,7 +20,26 @@ include(HTML.'master/topnav.php');
                                         <h2>Construction</h2>
                                     </div>
                                     <div class="hero-text2 mt-110" data-animation="fadeInUp" data-delay=".9s">
-                                        <span><a href="services.html">Our Services</a></span>
+                                       <span><a href="services.html">Nuestros servicios</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-slider  hero-overly slider-height d-flex align-items-center" data-background="views/images/web/banners/banner1.jpg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-11">
+                                <div class="hero__caption">                                    
+                                    <h1 data-animation="fadeInUp" data-delay=".5s" style="    font-size: 110px;    color: #fff;">Soluciones de TI</h1>
+                                    <div class="stock-text" data-animation="fadeInUp" data-delay=".8s">
+                                        <h2>a tu medida</h2>
+                                        <h2>a tu medida</h2>
+                                    </div>
+                                    
+                                    <div class="hero-text2 mt-110" data-animation="fadeInUp" data-delay=".9s">
+                                        <span data-animation="fadeInUp" data-delay=".3s">Venta e implementación de Data Center, CCTV, Soporte ,Redes y Más</span>
                                     </div>
                                 </div>
                             </div>
@@ -59,7 +57,7 @@ include(HTML.'master/topnav.php');
                     <div class="col-lg-12">
                         <div class="section-tittle mb-55">
                             <div class="front-text">
-                                <h2 class="">Our Services</h2>
+                                <h2 class="">Nuestros Servicios</h2>
                             </div>
                             <span class="back-text">Services</span>
                         </div>
@@ -69,45 +67,44 @@ include(HTML.'master/topnav.php');
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="single-service-cap mb-30">
                             <div class="service-img">
-                                <img src="assets/img/service/servicess1.png" alt="">
+                                <img src="views/images/web/banners/banner1.jpg" alt="">
                             </div>
                             <div class="service-cap">
-                                <h4><a href="services_details.html">Engineering techniques & implementation</a></h4>
-                                <a href="services_details.html" class="more-btn">Read More <i class="ti-plus"></i></a>
+                                <h4><a href="services_details.html">MyCom.com Shop</a></h4>
+                                <a href="ventas" class="more-btn">Más<i class="ti-plus"></i></a>
                             </div>
                             <div class="service-icon">
-                                <img src="assets/img/icon/services_icon1.png" alt="">
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="single-service-cap mb-30">
                             <div class="service-img">
-                                <img src="assets/img/service/servicess2.png" alt="">
+                                <img src="views/images/web/banners/banner1.jpg" alt="">
                             </div>
                             <div class="service-cap">
-                                <h4><a href="services_details.html">Engineering techniques & implementation</a></h4>
-                                <a href="services_details.html" class="more-btn">Read More <i class="ti-plus"></i></a>
+                                <h4><a href="services_details.html">MyCom Soluciones</a></h4>
+                                <a href="soluciones" class="more-btn">Más <i class="ti-plus"></i></a>
                             </div>
                             <div class="service-icon">
-                                <img src="assets/img/icon/services_icon1.png" alt="">
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="single-service-cap mb-30">
                             <div class="service-img">
-                                <img src="assets/img/service/servicess3.png" alt="">
+                                <img src="views/images/web/banners/banner1.jpg" alt="">
                             </div>
                             <div class="service-cap">
-                                <h4><a href="services_details.htmlaa">Engineering techniques &  implementation</a></h4>
-                                <a href="services_details.html" class="more-btn">Read More <i class="ti-plus"></i></a>
+                                <h4><a href="services_details.htmlaa">MyCom Consultoria</a></h4>
+                                <a href="consultoria" class="more-btn">Más <i class="ti-plus"></i></a>
                             </div>
                             <div class="service-icon">
-                                <img src="assets/img/icon/services_icon1.png" alt="">
                             </div>
                         </div>
                     </div>
+
+                    marcas que maneja mycom
                 </div>
             </div>
         </div>
@@ -119,24 +116,23 @@ include(HTML.'master/topnav.php');
                     <!-- section tittle -->
                     <div class="section-tittle section-tittle2 mb-55">
                         <div class="front-text">
-                            <h2 class="">Who we are</h2>
+                            <h2 class="">Quienes Somos</h2>
                         </div>
-                        <span class="back-text">About us</span>
+                        <span class="back-text" style="font-size: 133px;">About Us</span>
                     </div>
                     <div class="support-caption">
-                        <p class="pera-top">Mollit anim laborum duis au dolor in voluptcate velit ess cillum dolore eu lore dsu quality mollit anim laborumuis au dolor in voluptate velit cillu.</p>
-                        <p>Mollit anim laborum.Dvcuis aute iruxvfg dhjkolohr in re voluptate velit esscillumlore eu quife nrulla parihatur. Excghcepteur sfwsignjnt occa cupidatat non aute iruxvfg dhjinulpadeserunt mollitemnth incididbnt ut;o5tu layjobore mofllit anim.</p>
-                        <a href="about.html" class="btn red-btn2">read more</a>
+                        <p class="pera-top">Somos una empresa enfocada a satisfacer todas las necesidades de nuestros clientes desde las básicas en un sentido de abastecimiento de insumos hasta aquellas más especializadas como el diseño e implementación de infraestructura IT o planeación y desarrollo de un producto o una marca desde su punto de concepción. Conformada por un grupo de profesionales que en conjunto reúnen más de 15 años de experiencia en áreas tales como soluciones IT, diseño, implementación y mantenimiento de infraestructura de sistemas, desarrollo de productos, consultaría en procesos de negocios, comercio exterior, entre otras.</p>
+                        <a href="nosotros" class="btn red-btn2">Más</a>
                     </div>
                 </div>
                 <div class="right-content">
                     <!-- img -->
                     <div class="right-img">
-                        <img src="assets/img/gallery/safe_in.png" alt="">
+                        <img src="views/images/web/banners/banner.jpg" alt="">
                     </div>
                     <div class="support-img-cap text-center">
-                        <span>1994</span>
-                        <p>Since</p>
+                        <span>2000</span>
+                        <p>Desde</p>
                     </div>
                 </div>
             </div>
@@ -151,9 +147,9 @@ include(HTML.'master/topnav.php');
                             <!-- Section Tittle -->
                             <div class="section-tittle section-tittle3">
                                 <div class="front-text">
-                                    <h2 class="">Our Projects</h2>
+                                    <h2 class="">Portafolio</h2>
                                 </div>
-                                <span class="back-text">Gellary</span>
+                                <span class="back-text">Proyectos</span>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -161,11 +157,11 @@ include(HTML.'master/topnav.php');
                                 <!--Nav Button  -->                                            
                                 <nav> 
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="false"> Show  all </a>
-                                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"> Intorior</a>
-                                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Recent</a>
-                                        <a class="nav-item nav-link" id="nav-last-tab" data-toggle="tab" href="#nav-last" role="tab" aria-controls="nav-contact" aria-selected="false">Big building</a>
-                                        <a class="nav-item nav-link" id="nav-technology" data-toggle="tab" href="#nav-techno" role="tab" aria-controls="nav-contact" aria-selected="false">Park</a>
+                                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="false"> Todos </a>
+                                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"> Recientes</a>
+                                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">CCTV</a>
+                                        <a class="nav-item nav-link" id="nav-last-tab" data-toggle="tab" href="#nav-last" role="tab" aria-controls="nav-contact" aria-selected="false">HIK</a>
+                                        <a class="nav-item nav-link" id="nav-technology" data-toggle="tab" href="#nav-techno" role="tab" aria-controls="nav-contact" aria-selected="false">Electrico</a>
                                     </div>
                                 </nav>
                                 <!--End Nav Button  -->
@@ -184,7 +180,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project1.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -196,7 +192,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project2.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -208,7 +204,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project3.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -220,7 +216,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project4.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -232,7 +228,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project5.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -244,7 +240,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project6.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -263,7 +259,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project5.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -275,7 +271,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project6.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -287,7 +283,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project1.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -299,7 +295,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project2.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -311,7 +307,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project3.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -323,7 +319,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project4.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -342,7 +338,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project3.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -354,7 +350,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project4.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -366,7 +362,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project1.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -378,7 +374,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project2.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -390,7 +386,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project5.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -402,7 +398,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project6.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -421,7 +417,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project1.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -433,7 +429,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project2.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -445,7 +441,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project3.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -457,7 +453,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project4.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -469,7 +465,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project5.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -481,7 +477,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project6.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -500,7 +496,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project1.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -512,7 +508,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project2.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -524,7 +520,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project3.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -536,7 +532,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project4.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -548,7 +544,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project5.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -560,7 +556,7 @@ include(HTML.'master/topnav.php');
                                         <div class="col-lg-4 col-md-6">
                                             <div class="single-project mb-30">
                                                 <div class="project-img">
-                                                    <img src="assets/img/gallery/project6.png" alt="">
+                                                    <img src="views/images/web/banners/banner.jpg" alt="">
                                                 </div>
                                                 <div class="project-cap">
                                                     <a href="project_details.html" class="plus-btn"><i class="ti-plus"></i></a>
@@ -580,7 +576,7 @@ include(HTML.'master/topnav.php');
         </section>
         <!-- Project Area End -->
         <!-- contact with us Start -->
-        <section class="contact-with-area" data-background="assets/img/gallery/section-bg2.jpg">
+        <section class="contact-with-area" data-background="views/images/web/banners/banner.jpg">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-8 col-lg-9 offset-xl-1 offset-lg-1">
@@ -589,12 +585,13 @@ include(HTML.'master/topnav.php');
                                 <!-- Section Tittle -->
                                 <div class="section-tittle section-tittle4">
                                     <div class="front-text">
-                                        <h2 class="">Lats talk with us</h2>
+                                        <h2 class="">Politica de Calidad</h2>
                                     </div>
-                                    <span class="back-text">Lat`s chat</span>
+                                    <span class="back-text">Calidad</span>
                                 </div>
-                                <p>Mollit anim laborum.Dvcuis aute iruxvfg dhjkolohr in re voluptate velit esscillumlore eu quife nrulla parihatur. Excghcepteur sfwsignjnt occa cupidatat non aute iruxvfg dhjinulpadeserunt mollitemnth incididbnt ut;o5tu layjobore mofllit anim.</p>
-                                <a href="#" class="white-btn">read more</a>
+                                <p>Teniendo como columna vertebral el proceso de mejora continua Corporativo MyCom en cada una de sus verticales de negocio busca siempre la eficiencia en el uso de los recursos, tanto materiales, humanos y financieros, internos como de nuestros socios para superar las expectativas y lograr los objetivos planteados.</p>
+                                <p>Con una visión sustentable a largo plazo, el enfoque ecológico de la empresa es poner su granito de arena poniendo especial énfasis en el uso de productos no tóxicos para el planeta y reducir al mínimo la utilización de recursos naturales.</p>
+                                <a href="nosotros" class="white-btn">Ver Más</a>
                             </div>
                         </div>
                     </div>
@@ -605,7 +602,7 @@ include(HTML.'master/topnav.php');
         <!-- CountDown Area Start -->
         <div class="count-area">
             <div class="container">
-                <div class="count-wrapper count-bg" data-background="assets/img/gallery/section-bg3.jpg">
+                <div class="count-wrapper count-bg" data-background="views/images/web/banners/background_server.jpg">
                     <div class="row justify-content-center" >
                         <div class="col-lg-4 col-md-4 col-sm-6">
                             <div class="count-clients">
@@ -614,8 +611,8 @@ include(HTML.'master/topnav.php');
                                         <span class="counter">34</span>
                                     </div>
                                     <div class="count-text">
-                                        <p>Machinery</p>
-                                        <h5>Tools</h5>
+                                        <p>Clientes</p>
+                                        <h5>Satisfechos</h5>
                                     </div>
                                 </div>
                             </div>
@@ -627,8 +624,8 @@ include(HTML.'master/topnav.php');
                                         <span class="counter">76</span>
                                     </div>
                                     <div class="count-text">
-                                        <p>Machinery</p>
-                                        <h5>Tools</h5>
+                                        <p>Socios de</p>
+                                        <h5>Negocio</h5>
                                     </div>
                                 </div>
                             </div>
@@ -640,8 +637,8 @@ include(HTML.'master/topnav.php');
                                         <span class="counter">08</span>
                                     </div>
                                     <div class="count-text">
-                                        <p>Machinery</p>
-                                        <h5>Tools</h5>
+                                        <p>Polizas</p>
+                                        <h5>de Servicios</h5>
                                     </div>
                                 </div>
                             </div>
@@ -659,9 +656,9 @@ include(HTML.'master/topnav.php');
                         <!-- Section Tittle -->
                         <div class="section-tittle section-tittle5 mb-50">
                             <div class="front-text">
-                                <h2 class="">Our team</h2>
+                                <h2 class="">Clientes</h2>
                             </div>
-                            <span class="back-text">exparts</span>
+                            <span class="back-text">Principales</span>
                         </div>
                     </div>
                 </div>
@@ -670,7 +667,7 @@ include(HTML.'master/topnav.php');
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-">
                         <div class="single-team mb-30">
                             <div class="team-img">
-                                <img src="assets/img/team/team1.png" alt="">
+                                <img src="views/images/web/banners/banner.jpg" alt="">
                             </div>
                             <div class="team-caption">
                                 <span>UX Designer</span>
@@ -681,7 +678,7 @@ include(HTML.'master/topnav.php');
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-">
                         <div class="single-team mb-30">
                             <div class="team-img">
-                                <img src="assets/img/team/team2.png" alt="">
+                                <img src="views/images/web/banners/banner.jpg" alt="">
                             </div>
                             <div class="team-caption">
                                 <span>UX Designer</span>
@@ -692,7 +689,7 @@ include(HTML.'master/topnav.php');
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-">
                         <div class="single-team mb-30">
                             <div class="team-img">
-                                <img src="assets/img/team/team3.png" alt="">
+                                <img src="views/images/web/banners/banner.jpg" alt="">
                             </div>
                             <div class="team-caption">
                                 <span>UX Designer</span>
@@ -712,9 +709,9 @@ include(HTML.'master/topnav.php');
                         <!-- Section Tittle -->
                         <div class="section-tittle section-tittle6 mb-50">
                             <div class="front-text">
-                                <h2 class="">Testimonial</h2>
+                                <h2 class="">Testimonios</h2>
                             </div>
-                            <span class="back-text">Feedback</span>
+                            <span class="back-text">Clientes</span>
                         </div>
                     </div>
                 </div>
@@ -769,65 +766,6 @@ include(HTML.'master/topnav.php');
             </div>
         </div>
         <!-- Testimonial End -->
-        <!--latest Nnews Area start -->
-        <div class="latest-news-area section-padding30">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <!-- Section Tittle -->
-                        <div class="section-tittle section-tittle7 mb-50">
-                            <div class="front-text">
-                                <h2 class="">latest news</h2>
-                            </div>
-                            <span class="back-text">Our Blog</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6">
-                        <!-- single-news -->
-                        <div class="single-news mb-30">
-                            <div class="news-img">
-                                <img src="assets/img/david/david_1.png" alt="">
-                                <div class="news-date text-center">
-                                    <span>24</span>
-                                    <p>Now</p>
-                                </div>
-                            </div>
-                            <div class="news-caption">
-                                <ul class="david-info">
-                                    <li> | &nbsp; &nbsp;  Porperties</li>
-                                </ul>
-                                <h2><a href="single-blog.html">Footprints in Time is perfect
-                                    House in Kurashiki</a></h2>
-                                <a href="single-blog.html" class="d-btn">Read more »</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6">
-                        <!-- single-news -->
-                        <div class="single-news mb-30">
-                            <div class="news-img">
-                                <img src="assets/img/david/david_2.png" alt="">
-                                <div class="news-date text-center">
-                                    <span>24</span>
-                                    <p>Now</p>
-                                </div>
-                            </div>
-                            <div class="news-caption">
-                                <ul class="david-info">
-                                    <li> | &nbsp; &nbsp;  Porperties</li>
-                                </ul>
-                                <h2><a href="single-blog.html">Footprints in Time is perfect
-                                    House in Kurashiki</a></h2>
-                                <a href="single-blog.html" class="d-btn">Read more » </a>
-                            </div>
-                        </div>
-                    </div>
-               </div>
-            </div>
-        </div>
-        <!--latest News Area End -->
 
     </main>
 

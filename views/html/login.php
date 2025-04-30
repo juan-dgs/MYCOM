@@ -2,198 +2,400 @@
 include(HTML.'master/head.php');
 include(HTML.'master/topnav.php');
 ?>
+	<link rel="stylesheet" type="text/css" href="views/css/Login24/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="views/css/Login24/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="views/css/Login24/css/util.css">
+	<link rel="stylesheet" type="text/css" href="views/css/Login24/css/main.css">
 
 
 
-    <style media="screen">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/easing/EasePack.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
 
-      body{
-        background:#000;
-      }
-    /* From Uiverse.io by yashasvi9199 */
-        .form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding-left: 2em;
-        padding-right: 2em;
-        padding-bottom: 0.4em;
-        background-color: #171717;
-        border-radius: 25px;
-        transition: 0.4s ease-in-out;
 
-        }
+  <script src="views/js/gologin.js?v=1" charset="utf-8"></script>
 
-        .card {
-        background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
-        border-radius: 22px;
-        transition: all 0.3s;
-        width: 500px;
-        margin: auto;
-        margin-top: 160px;
 
-        }
+<style>
 
-        .card2 {
-        border-radius: 0;
-        transition: all 0.2s;
-        }
+::-webkit-scrollbar {
+display: none;
+}
 
-        .card2:hover {
-        transform: scale(0.98);
-        border-radius: 20px;
-        }
-
-        .card:hover {
-        box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.3);
-        }
-
-        #heading {
-        text-align: center;
-        margin: 2em;
-        color: rgb(255, 255, 255);
-        font-size: 1.2em;
-        }
-
-        .field {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5em;
-        border-radius: 25px;
-        padding: 0.6em;
-        border: none;
-        outline: none;
-        color: white;
-        background-color: #171717;
-        box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
-        }
-
-        .input-icon {
-        height: 1.3em;
-        width: 1.3em;
-        fill: white;
-        }
-
-        .input-field {
-        background: none;
-        border: none;
-        outline: none;
+.login100-form-avatar {
+    width: 100%;
+     height: 100%; 
+    border-radius: 0%; 
+    overflow: hidden;
+    margin: 0 auto;
+}
+.container-login100::before {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: -1;
         width: 100%;
-        color: #d3d3d3;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: #005bea;
+        background: -webkit-linear-gradient(bottom,rgb(161 215 255), rgb(0 0 0) );
+        background: -o-linear-gradient(bottom,rgb(161 215 255), rgb(0 0 0));
+        background: -moz-linear-gradient(bottom,rgb(161 215 255), rgb(0 0 0));
+        background: linear-gradient(bottom,rgb(161 215 255), rgb(0 0 0));
+        opacity: 0.8;
+    }
+
+.login100-form-btn::before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    top: 0;
+    left: 0;
+    background: #005bea;
+    background: -webkit-linear-gradient(left, #dc3545, #820000);
+    background: -o-linear-gradient(left, #005bea, #00c6fb);
+    background: -moz-linear-gradient(left, #005bea, #00c6fb);
+    background: linear-gradient(left, #005bea, #00c6fb);
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+    opacity: 0;
+}
+
+.novisible {
+    display:none;
+}
+
+.containerX{
+    position: absolute;
+    z-index: 100;
+    RIGHT: 0;
+    TOP: 0;
+}
+
+.wrap-input100,.container-login100-form-btn {
+    z-index: 1000;
+}
+
+.modoX {
+    margin: 0;
+    line-height: 0;
+    text-align: right;
+    margin-top: -50px;
+    font-size: 40px;
+}
+
+.login100-form-btn {
+        background: #2e8fd6;
+}
+
+    .login100-form-btn::before {
+           background: -webkit-linear-gradient(left,#2e8fd6 ,rgb(26, 83, 124));
+    }
+
+    .p-b-10 {
+        padding-bottom: 80px;
+    }
+
+#Password {
+ -webkit-text-security: disc !important;
+}
+
+#UserName,#Password {
+    text-transform: uppercase;
+}
+</style>
+
+
+<div class="limiter">
+	<div class="container-login100" id="fondo-login" style="    transition: all 0.5s ease 0s;  background:#000; background-image: url('views/images/web/banners/banner1.jpg'); background-size:cover; ">
+		<div class="wrap-login100  p-b-10">
+            <div class="containerX demo-1">
+                <div id="large-header" class="large-header">
+                    <canvas id="demo-canvas"></canvas>
+                </div>
+            </div>
+           
+
+			<div id='login-form' class="login100-form validate-form" >
+				<div class="login100-form-avatar">
+					<img src="views\images\web\logos\mycom.png" alt="MyCom">
+				</div>
+
+                <span class="login100-form-title p-t-20 p-b-45 modoX">
+                </span>
+
+                <div class="wrap-input100 validate-input m-b-10">
+                    <input class="input100" type="text" id="UserName" placeholder="Usuario" autocomplete="off" spellcheck="false" />
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-user"></i>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 validate-input m-b-10">
+                    <input class="input100" type="text" id="Password" placeholder="Contraseña" autocomplete="off" spellcheck="false" />
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                </div>
+
+
+                <div class="container-login100-form-btn p-t-10">
+					<button class="login100-form-btn" type="button" onclick="GoLogin();">Entrar</button>
+				</div>
+                
+
+                <div class="container-login100-form-btn p-t-10" id="divCargando"></div>
+			</div>
+           
+		</div>
+         
+</div>
+</div>
+
+    
+    
+
+    <script>
+      (function () {
+    var width, height, largeHeader, canvas, ctx, points, target, animateHeader = true;
+    // Main
+    initHeader();
+    initAnimation();
+    addListeners();
+
+    function initHeader() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        target = { x: width / 2, y: height / 2 };
+
+        largeHeader = document.getElementById('large-header');
+        largeHeader.style.height = height + 'px';
+
+        canvas = document.getElementById('demo-canvas');
+        canvas.width = width;
+        canvas.height = height;
+        ctx = canvas.getContext('2d');
+
+        // create points
+        points = [];
+        for (var x = 0; x < width; x = x + width / 10) {
+            for (var y = 0; y < height; y = y + height / 20) {
+                var px = x + Math.random() * width / 10;
+                var py = y + Math.random() * height / 10;
+                var p = { x: px, originX: px, y: py, originY: py };
+                points.push(p);
+            }
         }
 
-        .form .btn {
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
-        margin-top: 2.5em;
+        // for each point find the 5 closest points
+        for (var i = 0; i < points.length; i++) {
+            var closest = [];
+            var p1 = points[i];
+            for (var j = 0; j < points.length; j++) {
+                var p2 = points[j]
+                if (!(p1 == p2)) {
+                    var placed = false;
+                    for (var k = 0; k < 3; k++) {
+                        if (!placed) {
+                            if (closest[k] == undefined) {
+                                closest[k] = p2;
+                                placed = true;
+                            }
+                        }
+                    }
+
+                    for (var k = 0; k < 3; k++) {
+                        if (!placed) {
+                            if (getDistance(p1, p2) < getDistance(p1, closest[k])) {
+                                closest[k] = p2;
+                                placed = true;
+                            }
+                        }
+                    }
+                }
+            }
+            p1.closest = closest;
         }
 
-        .button1 {
-        padding: 0.5em;
-        padding-left: 1.1em;
-        padding-right: 1.1em;
-        border-radius: 5px;
-        margin-right: 0.5em;
-        border: none;
-        outline: none;
-        transition: 0.4s ease-in-out;
-        background-color: #252525;
-        color: white;
+        // assign a circle to each point
+        for (var i in points) {
+            var c = new Circle(points[i], 2 + Math.random() * 2, 'rgba(255, 255, 255, 0.89)'); //background: rgb(121 184 45 / 67%);
+            points[i].circle = c;
         }
+    }
 
-        .button1:hover {
-        background-color: black;
-        color: white;
+    // Event handling
+    function addListeners() {
+        if (!('ontouchstart' in window)) {
+            window.addEventListener('mousemove', mouseMove);
         }
+        window.addEventListener('scroll', scrollCheck);
+        window.addEventListener('resize', resize);
+    }
 
-        .button2 {
-        padding: 0.5em;
-        padding-left: 2.3em;
-        padding-right: 2.3em;
-        border-radius: 5px;
-        border: none;
-        outline: none;
-        transition: 0.4s ease-in-out;
-        background-color: #252525;
-        color: white;
+    function mouseMove(e) {
+        var posx = posy = 0;
+        if (e.pageX || e.pageY) {
+            posx = e.pageX;
+            posy = e.pageY;
         }
-
-        .button2:hover {
-        background-color: black;
-        color: white;
+        else if (e.clientX || e.clientY) {
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
         }
+        target.x = posx;
+        target.y = posy;
+    }
 
-        .button3 {
-        margin-bottom: 3em;
-        padding: 0.5em;
-        border-radius: 5px;
-        border: none;
-        outline: none;
-        transition: 0.4s ease-in-out;
-        background-color: #252525;
-        color: white;
+    function scrollCheck() {
+        if (document.body.scrollTop > height) animateHeader = false;
+        else animateHeader = true;
+    }
+
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        largeHeader.style.height = height + 'px';
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    // animation
+    function initAnimation() {
+        animate();
+        for (var i in points) {
+            shiftPoint(points[i]);
         }
+    }
 
-        .button3:hover {
-        background-color: red;
-        color: white;
+    function animate() {
+        if (animateHeader) {
+            ctx.clearRect(0, 0, width, height);
+            for (var i in points) {
+                // detect points in range
+                if (Math.abs(getDistance(target, points[i])) < 4000) {
+                    points[i].active = 0.3;
+                    points[i].circle.active = 0.6;
+                } else if (Math.abs(getDistance(target, points[i])) < 20000) {
+                    points[i].active = 0.1;
+                    points[i].circle.active = 0.3;
+                } else if (Math.abs(getDistance(target, points[i])) < 40000) {
+                    points[i].active = 0.02;
+                    points[i].circle.active = 0.1;
+                } else {
+                    points[i].active = 0;
+                    points[i].circle.active = 0;
+                }
+
+                drawLines(points[i]);
+                points[i].circle.draw();
+            }
         }
+        requestAnimationFrame(animate);
+    }
 
-    </style>
+    function shiftPoint(p) {
+        TweenLite.to(p, 1 + 1 * Math.random(), {
+            x: p.originX - 50 + Math.random() * 100,
+            y: p.originY - 50 + Math.random() * 100, ease: Circ.easeInOut,
+            onComplete: function () {
+                shiftPoint(p);
+            }
+        });
+    }
 
+    // Canvas manipulation
+    function drawLines(p) {
+        if (!p.active) return;
+        for (var i in p.closest) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p.closest[i].x, p.closest[i].y);
+            ctx.strokeStyle = 'rgba(255,255,255,' + p.active + ')';
+            ctx.stroke();
+        }
+    }
 
-    <div class="card">
-      <div class="card2">
-        <div class="form">
-          <p id="heading">Login</p>
-          <div class="field">
-            <svg
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              height="16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-              class="input-icon"
-            >
-              <path
-                d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"
-              ></path>
-            </svg>
-            <input
-              type="text"
-              class="input-field"
-              placeholder="Usuario"
-              autocomplete="off"
-              id="UserName"
-            />
-          </div>
-          <div class="field">
-            <svg
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              height="16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-              class="input-icon"
-            >
-              <path
-                d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"
-              ></path>
-            </svg>
-            <input type="password" class="input-field" placeholder="Contraseña" id="Password" />
-          </div>
-            <button class="button1" type="button"  onclick="goLogin();">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ingresar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </button>
-          <button class="button3" type="button">Olvide mi Contraseña</button>
-        </div>
-      </div>
-    </div>
+    function Circle(pos, rad, color) {
+        var _this = this;
 
+        // constructor
+        (function () {
+            _this.pos = pos || null;
+            _this.radius = rad || null;
+            _this.color = color || null;
+        })();
 
-    <script src="views/js/gologin.js" charset="utf-8"></script>
+        this.draw = function () {
+            if (!_this.active) return;
+            ctx.beginPath();
+            ctx.arc(_this.pos.x, _this.pos.y, _this.radius, 0, 4 * Math.PI, false);
+            ctx.fillStyle = 'rgba(255,255,255,' + _this.active + ')';
+            ctx.fill();
+        };
+    }
 
+    // Util
+    function getDistance(p1, p2) {
+        return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
+    }
+
+})();
+
+(function () {
+    var lastTime = 0;
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
+            || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function (callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function () { callback(currTime + timeToCall); },
+                timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function (id) {
+            clearTimeout(id);
+        };
+}());
+
+function launchFullScreen(element) {
+    console.log("PANTALLA COMPLETA...");
+    if (element.requestFullScreen) {
+        element.requestFullScreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen();
+    }
+}
+
+function cancelFullScreen() {
+    if (document.cancelFullScreen) {
+        document.cancelFullScreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+    }
+}
+    </script>
 
     <?php include(HTML.'master/foot.php'); ?>
