@@ -29,7 +29,6 @@ if (!empty($dt_feriados)) {
                         <th>Fecha</th>
                         <th>Nombre</th>
                         <th>Recurrente</th>
-                        <th>Registro</th>
                         <th class="text-center" style="min-width: 160px;">Acciones</th>
                     </tr>
                 </thead>
@@ -38,13 +37,11 @@ if (!empty($dt_feriados)) {
     foreach ($dt_feriados as $fecha => $feriado) {
         $fecha_formateada = date("d/m/Y", strtotime($feriado['fecha']));
         $recurrente = $feriado['es_recurrente'] == 1 ? 'Sí' : 'No';
-        $registro_formateado = date("d/m/Y H:i", strtotime($feriado['fh_registro']));
         
         $HTML .= '<tr>
                     <td>'.$fecha_formateada.'</td>
                     <td>'.$feriado['nombre'].'</td>
                     <td>'.$recurrente.'</td>
-                    <td>'.$registro_formateado.'</td>
                     <td class="text-center" style="vertical-align: middle;min-width: 160px;">
                         <span class="fa fa-edit btn-icon" title="Editar"
                          onclick="getRegisterHoliday(\''.$feriado['fecha'].'\')">
