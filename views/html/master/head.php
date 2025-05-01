@@ -22,6 +22,8 @@
             <link rel="stylesheet" href="views/css/web/custom.css?v=2">
 
             <script src="views/js/jquery-3.7.1.min.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
             <link rel="stylesheet" href="views/components/sweet_alert/sweetalert2.min.css">
             <script src="views/components/sweet_alert/sweetalert2.all.min.js"></script>
