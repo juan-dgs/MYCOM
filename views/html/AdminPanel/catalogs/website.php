@@ -5,50 +5,50 @@ include(HTML.'AdminPanel/masterPanel/menu.php');
 include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 ?>
 
-<!-- Incluir Leaflet CSS y JS para el mapa -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 <style>
     /* Estilos generales */
     .panel-body {
-        padding: 20px;
+        padding: 15px;
     }
     
-    /* Estilos para el horario - Modificado para acordeón */
+    /* Estilos para el horario - Compactos y sin scroll */
     .schedule-container {
-        max-height: 500px;
-        overflow-y: auto;
-        padding-right: 10px;
+        padding-right: 5px;
     }
     
     .schedule-day {
-        border: 1px solid #ddd;
+        border: 1px solid #e0e0e0;
         border-radius: 4px;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         overflow: hidden;
     }
     
     .day-header {
-        padding: 12px 15px;
-        background-color: #f5f5f5;
+        padding: 6px 10px;
+        background-color: #f8f9fa;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        transition: background-color 0.2s;
     }
     
     .day-header:hover {
-        background-color: #e9e9e9;
+        background-color: #e9ecef;
     }
     
     .day-name {
-        font-weight: bold;
+        font-weight: 600;
         margin: 0;
+        font-size: 13px;
+        color: #333;
     }
     
     .day-content {
-        padding: 15px;
+        padding: 10px;
         display: none;
         background-color: #fff;
     }
@@ -60,7 +60,8 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     .time-controls {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 15px;
+        gap: 8px;
+        margin-top: 5px;
     }
     
     .time-input-group {
@@ -69,15 +70,26 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     }
     
     .time-input-group label {
-        margin-bottom: 5px;
+        margin-bottom: 3px;
         font-weight: 500;
+        font-size: 12px;
+        color: #555;
+    }
+    
+    .time-input {
+        padding: 5px 8px;
+        font-size: 12px;
+        height: 32px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
     }
     
     .switch {
         position: relative;
         display: inline-block;
-        width: 50px;
-        height: 24px;
+        width: 38px;
+        height: 18px;
+        margin-left: 8px;
     }
     
     .switch input {
@@ -94,34 +106,34 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         right: 0;
         bottom: 0;
         background-color: #ccc;
-        transition: .4s;
-        border-radius: 24px;
+        transition: .3s;
+        border-radius: 18px;
     }
     
     .slider:before {
         position: absolute;
         content: "";
-        height: 16px;
-        width: 16px;
-        left: 4px;
-        bottom: 4px;
+        height: 14px;
+        width: 14px;
+        left: 2px;
+        bottom: 2px;
         background-color: white;
-        transition: .4s;
+        transition: .3s;
         border-radius: 50%;
     }
     
     input:checked + .slider {
-        background-color: #2196F3;
+        background-color: #4285f4;
     }
     
     input:checked + .slider:before {
-        transform: translateX(26px);
+        transform: translateX(20px);
     }
     
     /* Estilos para el mapa */
     #map-container {
-        height: 350px;
-        margin-top: 15px;
+        height: 300px;
+        margin-top: 10px;
         border-radius: 4px;
         overflow: hidden;
         border: 1px solid #ddd;
@@ -133,36 +145,36 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     }
     
     .map-controls {
-        margin-top: 10px;
+        margin-top: 8px;
         display: flex;
-        gap: 10px;
+        gap: 8px;
     }
     
     /* Estilos para formularios */
     .form-section {
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
     
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
     }
     
     /* Estilos para redes sociales */
     .social-item {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
     }
     
     .btn-add-social {
-        margin-top: 10px;
+        margin-top: 8px;
     }
     
     /* Ajustes de layout */
     .left-column {
-        padding-right: 15px;
+        padding-right: 10px;
     }
     
     .right-column {
-        padding-left: 15px;
+        padding-left: 10px;
     }
     
     @media (max-width: 992px) {
@@ -179,8 +191,8 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
     
     .invalid-feedback {
         color: #dc3545;
-        font-size: 0.875em;
-        margin-top: 5px;
+        font-size: 11px;
+        margin-top: 3px;
     }
 </style>
 
@@ -206,7 +218,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                 <div class="panel-body">
                                     <div class="form-group">
                                         <label for="domicilio">Dirección Completa</label>
-                                        <textarea id="domicilio" class="form-control" name="domicilio" placeholder="Ingrese la dirección completa" rows="3" required></textarea>
+                                        <textarea id="domicilio" class="form-control" name="domicilio" placeholder="Ingrese la dirección completa" rows="2" required></textarea>
                                     </div>
                                     
                                     <div class="form-group">
@@ -268,13 +280,13 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                             <div class="day-content" id="content_lunes">
                                                 <div class="time-controls">
                                                     <div class="time-input-group">
-                                                        <label for="entrada_lunes">Hora de entrada</label>
+                                                        <label for="entrada_lunes">Entrada</label>
                                                         <input type="time" class="form-control time-input entrada" id="entrada_lunes" data-dia="lunes" value="08:00">
                                                     </div>
                                                     <div class="time-input-group">
-                                                        <label for="salida_lunes">Hora de salida</label>
+                                                        <label for="salida_lunes">Salida</label>
                                                         <input type="time" class="form-control time-input salida" id="salida_lunes" data-dia="lunes" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior a la de entrada</div>
+                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -292,13 +304,13 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                             <div class="day-content" id="content_martes">
                                                 <div class="time-controls">
                                                     <div class="time-input-group">
-                                                        <label for="entrada_martes">Hora de entrada</label>
+                                                        <label for="entrada_martes">Entrada</label>
                                                         <input type="time" class="form-control time-input entrada" id="entrada_martes" data-dia="martes" value="08:00">
                                                     </div>
                                                     <div class="time-input-group">
-                                                        <label for="salida_martes">Hora de salida</label>
+                                                        <label for="salida_martes">Salida</label>
                                                         <input type="time" class="form-control time-input salida" id="salida_martes" data-dia="martes" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior a la de entrada</div>
+                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -316,13 +328,13 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                             <div class="day-content" id="content_miercoles">
                                                 <div class="time-controls">
                                                     <div class="time-input-group">
-                                                        <label for="entrada_miercoles">Hora de entrada</label>
+                                                        <label for="entrada_miercoles">Entrada</label>
                                                         <input type="time" class="form-control time-input entrada" id="entrada_miercoles" data-dia="miercoles" value="08:00">
                                                     </div>
                                                     <div class="time-input-group">
-                                                        <label for="salida_miercoles">Hora de salida</label>
+                                                        <label for="salida_miercoles">Salida</label>
                                                         <input type="time" class="form-control time-input salida" id="salida_miercoles" data-dia="miercoles" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior a la de entrada</div>
+                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -340,13 +352,13 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                             <div class="day-content" id="content_jueves">
                                                 <div class="time-controls">
                                                     <div class="time-input-group">
-                                                        <label for="entrada_jueves">Hora de entrada</label>
+                                                        <label for="entrada_jueves">Entrada</label>
                                                         <input type="time" class="form-control time-input entrada" id="entrada_jueves" data-dia="jueves" value="08:00">
                                                     </div>
                                                     <div class="time-input-group">
-                                                        <label for="salida_jueves">Hora de salida</label>
+                                                        <label for="salida_jueves">Salida</label>
                                                         <input type="time" class="form-control time-input salida" id="salida_jueves" data-dia="jueves" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior a la de entrada</div>
+                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -364,13 +376,13 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                             <div class="day-content" id="content_viernes">
                                                 <div class="time-controls">
                                                     <div class="time-input-group">
-                                                        <label for="entrada_viernes">Hora de entrada</label>
+                                                        <label for="entrada_viernes">Entrada</label>
                                                         <input type="time" class="form-control time-input entrada" id="entrada_viernes" data-dia="viernes" value="08:00">
                                                     </div>
                                                     <div class="time-input-group">
-                                                        <label for="salida_viernes">Hora de salida</label>
+                                                        <label for="salida_viernes">Salida</label>
                                                         <input type="time" class="form-control time-input salida" id="salida_viernes" data-dia="viernes" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior a la de entrada</div>
+                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -388,13 +400,13 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                             <div class="day-content" id="content_sabado">
                                                 <div class="time-controls">
                                                     <div class="time-input-group">
-                                                        <label for="entrada_sabado">Hora de entrada</label>
+                                                        <label for="entrada_sabado">Entrada</label>
                                                         <input type="time" class="form-control time-input entrada" id="entrada_sabado" data-dia="sabado" value="08:00">
                                                     </div>
                                                     <div class="time-input-group">
-                                                        <label for="salida_sabado">Hora de salida</label>
+                                                        <label for="salida_sabado">Salida</label>
                                                         <input type="time" class="form-control time-input salida" id="salida_sabado" data-dia="sabado" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior a la de entrada</div>
+                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -412,13 +424,13 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                             <div class="day-content" id="content_domingo">
                                                 <div class="time-controls">
                                                     <div class="time-input-group">
-                                                        <label for="entrada_domingo">Hora de entrada</label>
+                                                        <label for="entrada_domingo">Entrada</label>
                                                         <input type="time" class="form-control time-input entrada" id="entrada_domingo" data-dia="domingo" value="08:00">
                                                     </div>
                                                     <div class="time-input-group">
-                                                        <label for="salida_domingo">Hora de salida</label>
+                                                        <label for="salida_domingo">Salida</label>
                                                         <input type="time" class="form-control time-input salida" id="salida_domingo" data-dia="domingo" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior a la de entrada</div>
+                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -473,7 +485,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                         </div>
                     </div>
                     
-                    <div class="form-group text-right" style="margin-top: 20px;">
+                    <div class="form-group text-right" style="margin-top: 15px;">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Guardar Cambios
                         </button>
@@ -525,11 +537,8 @@ $(document).ready(function() {
         const isChecked = $(this).is(':checked');
         const dayContainer = $(this).closest('.schedule-day');
         
-        // Habilitar/deshabilitar controles
         dayContainer.toggleClass('disabled', !isChecked);
         dayContainer.find('.entrada, .salida').prop('disabled', !isChecked);
-        
-        // Validar el horario
         validateScheduleTime(dia);
     });
     
@@ -633,7 +642,6 @@ $(document).ready(function() {
     $('#contactForm').submit(function(e) {
         e.preventDefault();
         
-        // Validar campos requeridos
         let isValid = true;
         const requiredFields = ['domicilio', 'contacto1'];
         
@@ -647,7 +655,6 @@ $(document).ready(function() {
             }
         });
         
-        // Validar URL de maps si está presente
         const mapsUrl = $('#maps_link').val().trim();
         if (mapsUrl && !isValidUrl(mapsUrl)) {
             isValid = false;
@@ -656,7 +663,6 @@ $(document).ready(function() {
             return false;
         }
         
-        // Validar horario (al menos un día debe estar marcado como laborable)
         const diasLaborables = $('.schedule-checkbox:checked').length;
         if (diasLaborables === 0) {
             isValid = false;
@@ -664,7 +670,6 @@ $(document).ready(function() {
             return false;
         }
         
-        // Validar horas en días laborables
         $('.schedule-checkbox:checked').each(function() {
             const dia = $(this).data('dia');
             const entrada = $(`#entrada_${dia}`).val();
@@ -685,11 +690,9 @@ $(document).ready(function() {
         
         if (!isValid) return;
         
-        // Preparar datos para enviar
         const formData = $(this).serializeArray();
-        
-        // Agregar horario al formData
         const horario = {};
+        
         $('.schedule-checkbox').each(function() {
             const dia = $(this).data('dia');
             const laborable = $(this).is(':checked');
@@ -707,10 +710,8 @@ $(document).ready(function() {
         
         formData.push({name: 'horario', value: JSON.stringify(horario)});
         
-        // Mostrar estado de carga
         $('#contactForm button[type="submit"]').html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
         
-        // Enviar datos al servidor
         $.ajax({
             url: "ajax.php?mode=guardarcontacto",
             type: "POST",
@@ -736,18 +737,14 @@ $(document).ready(function() {
 });
 
 function initMap() {
-    // Inicializar mapa con vista por defecto
     map = L.map('map').setView([19.4326, -99.1332], 15);
     
-    // Añadir capa de tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
     
-    // Crear marcador
     marker = L.marker(map.getCenter(), {draggable: true}).addTo(map);
     
-    // Evento al mover el marcador
     marker.on('dragend', function() {
         updateAddressFromMarker(marker.getLatLng());
     });
@@ -759,10 +756,8 @@ function updateMapLocation(latlng) {
 }
 
 function updateAddressFromMarker(latlng) {
-    // Actualizar enlace de Google Maps
     $('#maps_link').val(`https://www.google.com/maps?q=${latlng.lat},${latlng.lng}`);
     
-    // Hacer geocodificación inversa para obtener la dirección completa
     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}&addressdetails=1`)
         .then(response => response.json())
         .then(data => {
@@ -770,7 +765,6 @@ function updateAddressFromMarker(latlng) {
                 const address = data.address;
                 let fullAddress = '';
                 
-                // Construir dirección completa con número
                 if (address.road) fullAddress += address.road;
                 if (address.house_number) fullAddress += ` ${address.house_number},`;
                 if (address.neighbourhood) fullAddress += ` ${address.neighbourhood},`;
@@ -779,9 +773,7 @@ function updateAddressFromMarker(latlng) {
                 if (address.state) fullAddress += ` ${address.state},`;
                 if (address.country) fullAddress += ` ${address.country}`;
                 
-                // Limpiar comas extras
                 fullAddress = fullAddress.replace(/,+/g, ',').replace(/,\s*$/, '');
-                
                 $('#domicilio').val(fullAddress);
             }
         })
@@ -841,23 +833,19 @@ function cargarDatosContacto() {
         dataType: "json",
         success: function(response) {
             if(response.codigo == 1) {
-                // Llenar campos básicos
                 $('#domicilio').val(response.data.domicilio || '');
                 $('#maps_link').val(response.data.maps_link || '');
                 $('#contacto1').val(response.data.contacto1 || '');
                 $('#contacto2').val(response.data.contacto2 || '');
                 
-                // Llenar horario
                 if (response.data.horario) {
                     const horario = JSON.parse(response.data.horario);
                     for (const dia in horario) {
                         if (horario[dia].laborable) {
                             $(`#laborable_${dia}`).prop('checked', true).trigger('change');
-                            // Convertir de formato 12h a 24h si es necesario
                             let entrada = horario[dia].entrada_24 || horario[dia].entrada;
                             let salida = horario[dia].salida_24 || horario[dia].salida;
                             
-                            // Asegurar formato HH:MM
                             if (entrada && !entrada.includes(':')) {
                                 entrada = convertTo24Hour(entrada.split(' ')[0], entrada.split(' ')[1]);
                             }
@@ -871,7 +859,6 @@ function cargarDatosContacto() {
                     }
                 }
                 
-                // Centrar mapa si hay coordenadas
                 if (response.data.maps_link) {
                     const coords = extractCoordsFromUrl(response.data.maps_link);
                     if (coords) {
