@@ -14,122 +14,6 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
         padding: 15px;
     }
     
-    /* Estilos para el horario - Compactos y sin scroll */
-    .schedule-container {
-        padding-right: 5px;
-    }
-    
-    .schedule-day {
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        margin-bottom: 6px;
-        overflow: hidden;
-    }
-    
-    .day-header {
-        padding: 6px 10px;
-        background-color: #f8f9fa;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: background-color 0.2s;
-    }
-    
-    .day-header:hover {
-        background-color: #e9ecef;
-    }
-    
-    .day-name {
-        font-weight: 600;
-        margin: 0;
-        font-size: 13px;
-        color: #333;
-    }
-    
-    .day-content {
-        padding: 10px;
-        display: none;
-        background-color: #fff;
-    }
-    
-    .day-content.active {
-        display: block;
-    }
-    
-    .time-controls {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        margin-top: 5px;
-    }
-    
-    .time-input-group {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .time-input-group label {
-        margin-bottom: 3px;
-        font-weight: 500;
-        font-size: 12px;
-        color: #555;
-    }
-    
-    .time-input {
-        padding: 5px 8px;
-        font-size: 12px;
-        height: 32px;
-        border: 1px solid #ced4da;
-        border-radius: 3px;
-    }
-    
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 38px;
-        height: 18px;
-        margin-left: 8px;
-    }
-    
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-    
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .3s;
-        border-radius: 18px;
-    }
-    
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 14px;
-        width: 14px;
-        left: 2px;
-        bottom: 2px;
-        background-color: white;
-        transition: .3s;
-        border-radius: 50%;
-    }
-    
-    input:checked + .slider {
-        background-color: #4285f4;
-    }
-    
-    input:checked + .slider:before {
-        transform: translateX(20px);
-    }
-    
     /* Estilos para el mapa */
     #map-container {
         height: 300px;
@@ -183,17 +67,6 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
             padding: 0;
         }
     }
-    
-    /* Estilos para validación */
-    .is-invalid {
-        border-color: #dc3545;
-    }
-    
-    .invalid-feedback {
-        color: #dc3545;
-        font-size: 11px;
-        margin-top: 3px;
-    }
 </style>
 
 <div class="row">
@@ -218,12 +91,12 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                 <div class="panel-body">
                                     <div class="form-group">
                                         <label for="domicilio">Dirección Completa</label>
-                                        <textarea id="domicilio" class="form-control" name="domicilio" placeholder="Ingrese la dirección completa" rows="2" required></textarea>
+                                        <textarea id="domicilio" class="form-control" name="domicilio" placeholder="Ingrese la dirección completa" rows="2"></textarea>
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="maps_link">Enlace de Google Maps</label>
-                                        <input type="url" id="maps_link" class="form-control" name="maps_link" placeholder="https://goo.gl/maps/...">
+                                        <input type="text" id="maps_link" class="form-control" name="maps_link" placeholder="https://goo.gl/maps/...">
                                     </div>
                                     
                                     <div id="map-container">
@@ -248,12 +121,17 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                 <div class="panel-body">
                                     <div class="form-group">
                                         <label for="contacto1">Contacto Principal</label>
-                                        <input type="text" id="contacto1" class="form-control" name="contacto1" placeholder="Nombre, teléfono, email" required>
+                                        <input type="text" id="contacto1" class="form-control" name="contacto1" placeholder="Nombre, teléfono, email">
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="contacto2">Contacto Secundario</label>
                                         <input type="text" id="contacto2" class="form-control" name="contacto2" placeholder="Información adicional de contacto">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="email">Correo Electrónico</label>
+                                        <input type="text" id="email" class="form-control" name="email" placeholder="correo@ejemplo.com">
                                     </div>
                                 </div>
                             </div>
@@ -267,174 +145,9 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                     <h3 class="panel-title">Horario de Atención</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="schedule-container">
-                                        <!-- Lunes -->
-                                        <div class="schedule-day">
-                                            <div class="day-header">
-                                                <h4 class="day-name">Lunes</h4>
-                                                <label class="switch">
-                                                    <input type="checkbox" class="schedule-checkbox" id="laborable_lunes" data-dia="lunes" checked>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="day-content" id="content_lunes">
-                                                <div class="time-controls">
-                                                    <div class="time-input-group">
-                                                        <label for="entrada_lunes">Entrada</label>
-                                                        <input type="time" class="form-control time-input entrada" id="entrada_lunes" data-dia="lunes" value="08:00">
-                                                    </div>
-                                                    <div class="time-input-group">
-                                                        <label for="salida_lunes">Salida</label>
-                                                        <input type="time" class="form-control time-input salida" id="salida_lunes" data-dia="lunes" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Martes -->
-                                        <div class="schedule-day">
-                                            <div class="day-header">
-                                                <h4 class="day-name">Martes</h4>
-                                                <label class="switch">
-                                                    <input type="checkbox" class="schedule-checkbox" id="laborable_martes" data-dia="martes" checked>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="day-content" id="content_martes">
-                                                <div class="time-controls">
-                                                    <div class="time-input-group">
-                                                        <label for="entrada_martes">Entrada</label>
-                                                        <input type="time" class="form-control time-input entrada" id="entrada_martes" data-dia="martes" value="08:00">
-                                                    </div>
-                                                    <div class="time-input-group">
-                                                        <label for="salida_martes">Salida</label>
-                                                        <input type="time" class="form-control time-input salida" id="salida_martes" data-dia="martes" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Miércoles -->
-                                        <div class="schedule-day">
-                                            <div class="day-header">
-                                                <h4 class="day-name">Miércoles</h4>
-                                                <label class="switch">
-                                                    <input type="checkbox" class="schedule-checkbox" id="laborable_miercoles" data-dia="miercoles" checked>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="day-content" id="content_miercoles">
-                                                <div class="time-controls">
-                                                    <div class="time-input-group">
-                                                        <label for="entrada_miercoles">Entrada</label>
-                                                        <input type="time" class="form-control time-input entrada" id="entrada_miercoles" data-dia="miercoles" value="08:00">
-                                                    </div>
-                                                    <div class="time-input-group">
-                                                        <label for="salida_miercoles">Salida</label>
-                                                        <input type="time" class="form-control time-input salida" id="salida_miercoles" data-dia="miercoles" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Jueves -->
-                                        <div class="schedule-day">
-                                            <div class="day-header">
-                                                <h4 class="day-name">Jueves</h4>
-                                                <label class="switch">
-                                                    <input type="checkbox" class="schedule-checkbox" id="laborable_jueves" data-dia="jueves" checked>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="day-content" id="content_jueves">
-                                                <div class="time-controls">
-                                                    <div class="time-input-group">
-                                                        <label for="entrada_jueves">Entrada</label>
-                                                        <input type="time" class="form-control time-input entrada" id="entrada_jueves" data-dia="jueves" value="08:00">
-                                                    </div>
-                                                    <div class="time-input-group">
-                                                        <label for="salida_jueves">Salida</label>
-                                                        <input type="time" class="form-control time-input salida" id="salida_jueves" data-dia="jueves" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Viernes -->
-                                        <div class="schedule-day">
-                                            <div class="day-header">
-                                                <h4 class="day-name">Viernes</h4>
-                                                <label class="switch">
-                                                    <input type="checkbox" class="schedule-checkbox" id="laborable_viernes" data-dia="viernes" checked>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="day-content" id="content_viernes">
-                                                <div class="time-controls">
-                                                    <div class="time-input-group">
-                                                        <label for="entrada_viernes">Entrada</label>
-                                                        <input type="time" class="form-control time-input entrada" id="entrada_viernes" data-dia="viernes" value="08:00">
-                                                    </div>
-                                                    <div class="time-input-group">
-                                                        <label for="salida_viernes">Salida</label>
-                                                        <input type="time" class="form-control time-input salida" id="salida_viernes" data-dia="viernes" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Sábado -->
-                                        <div class="schedule-day">
-                                            <div class="day-header">
-                                                <h4 class="day-name">Sábado</h4>
-                                                <label class="switch">
-                                                    <input type="checkbox" class="schedule-checkbox" id="laborable_sabado" data-dia="sabado">
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="day-content" id="content_sabado">
-                                                <div class="time-controls">
-                                                    <div class="time-input-group">
-                                                        <label for="entrada_sabado">Entrada</label>
-                                                        <input type="time" class="form-control time-input entrada" id="entrada_sabado" data-dia="sabado" value="08:00">
-                                                    </div>
-                                                    <div class="time-input-group">
-                                                        <label for="salida_sabado">Salida</label>
-                                                        <input type="time" class="form-control time-input salida" id="salida_sabado" data-dia="sabado" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Domingo -->
-                                        <div class="schedule-day">
-                                            <div class="day-header">
-                                                <h4 class="day-name">Domingo</h4>
-                                                <label class="switch">
-                                                    <input type="checkbox" class="schedule-checkbox" id="laborable_domingo" data-dia="domingo">
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="day-content" id="content_domingo">
-                                                <div class="time-controls">
-                                                    <div class="time-input-group">
-                                                        <label for="entrada_domingo">Entrada</label>
-                                                        <input type="time" class="form-control time-input entrada" id="entrada_domingo" data-dia="domingo" value="08:00">
-                                                    </div>
-                                                    <div class="time-input-group">
-                                                        <label for="salida_domingo">Salida</label>
-                                                        <input type="time" class="form-control time-input salida" id="salida_domingo" data-dia="domingo" value="18:00">
-                                                        <div class="invalid-feedback">La hora de salida debe ser posterior</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="atencion">Horario de atención</label>
+                                        <textarea id="atencion" class="form-control" name="atencion" placeholder="Ejemplo: Lunes a Viernes de 9:00 a 18:00" rows="4"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -452,7 +165,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                                 <span class="input-group-addon">
                                                     <i class="fab fa-facebook-f"></i>
                                                 </span>
-                                                <input type="url" class="form-control" name="social[facebook]" placeholder="URL de Facebook">
+                                                <input type="text" class="form-control" name="social[facebook]" placeholder="URL de Facebook">
                                             </div>
                                         </div>
                                         
@@ -462,7 +175,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                                 <span class="input-group-addon">
                                                     <i class="fab fa-instagram"></i>
                                                 </span>
-                                                <input type="url" class="form-control" name="social[instagram]" placeholder="URL de Instagram">
+                                                <input type="text" class="form-control" name="social[instagram]" placeholder="URL de Instagram">
                                             </div>
                                         </div>
                                         
@@ -472,7 +185,7 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
                                                 <span class="input-group-addon">
                                                     <i class="fab fa-whatsapp"></i>
                                                 </span>
-                                                <input type="tel" class="form-control" name="social[whatsapp]" placeholder="Número de WhatsApp">
+                                                <input type="text" class="form-control" name="social[whatsapp]" placeholder="Número de WhatsApp">
                                             </div>
                                         </div>
                                     </div>
@@ -500,7 +213,6 @@ include(HTML.'AdminPanel/masterPanel/breadcrumb.php');
 // Mapa y geolocalización
 let map;
 let marker;
-let activeDay = null;
 
 $(document).ready(function() {
     // Inicializar el mapa
@@ -508,45 +220,6 @@ $(document).ready(function() {
     
     // Cargar datos existentes
     cargarDatosContacto();
-    
-    // Manejar el comportamiento de acordeón para los días
-    $('.day-header').click(function() {
-        const dayContent = $(this).next('.day-content');
-        const dia = $(this).find('.schedule-checkbox').data('dia');
-        
-        // Si ya está activo, cerrarlo
-        if (dayContent.hasClass('active')) {
-            dayContent.removeClass('active');
-            activeDay = null;
-            return;
-        }
-        
-        // Cerrar el día activo si hay uno
-        if (activeDay) {
-            $(`#content_${activeDay}`).removeClass('active');
-        }
-        
-        // Abrir el día seleccionado
-        dayContent.addClass('active');
-        activeDay = dia;
-    });
-    
-    // Mostrar/ocultar campos de horario según checkbox
-    $('.schedule-checkbox').change(function() {
-        const dia = $(this).data('dia');
-        const isChecked = $(this).is(':checked');
-        const dayContainer = $(this).closest('.schedule-day');
-        
-        dayContainer.toggleClass('disabled', !isChecked);
-        dayContainer.find('.entrada, .salida').prop('disabled', !isChecked);
-        validateScheduleTime(dia);
-    });
-    
-    // Validar horas cuando cambian
-    $('.entrada, .salida').on('change input', function() {
-        const dia = $(this).closest('.day-content').attr('id').replace('content_', '');
-        validateScheduleTime(dia);
-    });
     
     // Configurar evento click en el mapa
     map.on('click', function(e) {
@@ -557,11 +230,6 @@ $(document).ready(function() {
     // Buscar dirección en el mapa
     $('#findAddress').click(function() {
         const address = $('#domicilio').val().trim();
-        if (!address) {
-            notify("Ingrese una dirección para buscar", 1500, "error", "top-end");
-            return;
-        }
-        
         geocodeAddress(address);
     });
     
@@ -578,11 +246,9 @@ $(document).ready(function() {
                     updateAddressFromMarker(latlng);
                 },
                 error => {
-                    notify("Error al obtener la ubicación: " + error.message, 1500, "error", "top-end");
+                    console.error("Error al obtener la ubicación:", error);
                 }
             );
-        } else {
-            notify("Geolocalización no soportada por tu navegador", 1500, "error", "top-end");
         }
     });
     
@@ -638,77 +304,11 @@ $(document).ready(function() {
         icon.attr('class', iconClass);
     });
     
-    // Validar y enviar formulario
+    // Enviar formulario
     $('#contactForm').submit(function(e) {
         e.preventDefault();
         
-        let isValid = true;
-        const requiredFields = ['domicilio', 'contacto1'];
-        
-        requiredFields.forEach(field => {
-            const value = $(`#${field}`).val().trim();
-            if (!value) {
-                isValid = false;
-                notify(`El campo ${field} es requerido`, 1500, "error", "top-end");
-                $(`#${field}`).focus();
-                return false;
-            }
-        });
-        
-        const mapsUrl = $('#maps_link').val().trim();
-        if (mapsUrl && !isValidUrl(mapsUrl)) {
-            isValid = false;
-            notify('Ingrese un URL válido para Google Maps', 1500, "error", "top-end");
-            $('#maps_link').focus();
-            return false;
-        }
-        
-        const diasLaborables = $('.schedule-checkbox:checked').length;
-        if (diasLaborables === 0) {
-            isValid = false;
-            notify('Debe seleccionar al menos un día laborable', 1500, "error", "top-end");
-            return false;
-        }
-        
-        $('.schedule-checkbox:checked').each(function() {
-            const dia = $(this).data('dia');
-            const entrada = $(`#entrada_${dia}`).val();
-            const salida = $(`#salida_${dia}`).val();
-            
-            if (!entrada || !salida) {
-                isValid = false;
-                notify(`Debe completar las horas para ${dia}`, 1500, "error", "top-end");
-                return false;
-            }
-            
-            if (entrada >= salida) {
-                isValid = false;
-                notify(`La hora de entrada debe ser anterior a la de salida (${dia})`, 1500, "error", "top-end");
-                return false;
-            }
-        });
-        
-        if (!isValid) return;
-        
         const formData = $(this).serializeArray();
-        const horario = {};
-        
-        $('.schedule-checkbox').each(function() {
-            const dia = $(this).data('dia');
-            const laborable = $(this).is(':checked');
-            const entrada = $(`#entrada_${dia}`).val();
-            const salida = $(`#salida_${dia}`).val();
-            
-            horario[dia] = {
-                laborable: laborable,
-                entrada: entrada,
-                salida: salida,
-                entrada_24: entrada,
-                salida_24: salida
-            };
-        });
-        
-        formData.push({name: 'horario', value: JSON.stringify(horario)});
         
         $('#contactForm button[type="submit"]').html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
         
@@ -721,12 +321,9 @@ $(document).ready(function() {
                 if(response.codigo == 1) {
                     notify("Datos actualizados correctamente", 1500, "success", "top-end");
                     updateLastSaved();
-                } else {
-                    notify(response.alerta || "Error al guardar los datos", 1500, "error", "top-end");
                 }
             },
             error: function(xhr, status, error) {
-                notify("Error al conectar con el servidor", 1500, "error", "top-end");
                 console.error("Error:", error);
             },
             complete: function() {
@@ -783,6 +380,8 @@ function updateAddressFromMarker(latlng) {
 }
 
 function geocodeAddress(address) {
+    if (!address) return;
+    
     fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
         .then(response => response.json())
         .then(data => {
@@ -793,107 +392,173 @@ function geocodeAddress(address) {
                 };
                 updateMapLocation(latlng);
                 updateAddressFromMarker(latlng);
-            } else {
-                notify("No se encontró la dirección", 1500, "error", "top-end");
             }
         })
         .catch(error => {
-            notify("Error al buscar la dirección", 1500, "error", "top-end");
             console.error("Error:", error);
         });
 }
 
-function validateScheduleTime(dia) {
-    if (!$(`#laborable_${dia}`).is(':checked')) {
-        $(`#salida_${dia}`).removeClass('is-invalid');
-        return true;
-    }
-    
-    const entrada = $(`#entrada_${dia}`).val();
-    const salida = $(`#salida_${dia}`).val();
-    
-    if (!entrada || !salida) {
-        $(`#salida_${dia}`).addClass('is-invalid');
-        return false;
-    }
-    
-    if (entrada >= salida) {
-        $(`#salida_${dia}`).addClass('is-invalid');
-        return false;
-    } else {
-        $(`#salida_${dia}`).removeClass('is-invalid');
-        return true;
-    }
-}
-
+// Función para cargar datos
 function cargarDatosContacto() {
     $.ajax({
         url: "ajax.php?mode=getcontacto",
         type: "GET",
         dataType: "json",
         success: function(response) {
-            if(response.codigo == 1) {
+            if(response.codigo === 1 && response.data) {
                 $('#domicilio').val(response.data.domicilio || '');
                 $('#maps_link').val(response.data.maps_link || '');
                 $('#contacto1').val(response.data.contacto1 || '');
                 $('#contacto2').val(response.data.contacto2 || '');
+                $('#email').val(response.data.email || '');
+                $('#atencion').val(response.data.atencion || '');
                 
-                if (response.data.horario) {
-                    const horario = JSON.parse(response.data.horario);
-                    for (const dia in horario) {
-                        if (horario[dia].laborable) {
-                            $(`#laborable_${dia}`).prop('checked', true).trigger('change');
-                            let entrada = horario[dia].entrada_24 || horario[dia].entrada;
-                            let salida = horario[dia].salida_24 || horario[dia].salida;
-                            
-                            if (entrada && !entrada.includes(':')) {
-                                entrada = convertTo24Hour(entrada.split(' ')[0], entrada.split(' ')[1]);
-                            }
-                            if (salida && !salida.includes(':')) {
-                                salida = convertTo24Hour(salida.split(' ')[0], salida.split(' ')[1]);
-                            }
-                            
-                            $(`#entrada_${dia}`).val(entrada || '08:00');
-                            $(`#salida_${dia}`).val(salida || '18:00');
-                        }
-                    }
+                // Redes sociales
+                if(response.data.social) {
+                    $('input[name="social[facebook]"]').val(response.data.social.facebook || '');
+                    $('input[name="social[instagram]"]').val(response.data.social.instagram || '');
+                    $('input[name="social[whatsapp]"]').val(response.data.social.whatsapp || '');
                 }
                 
-                if (response.data.maps_link) {
+                // Mapa
+                if(response.data.maps_link) {
                     const coords = extractCoordsFromUrl(response.data.maps_link);
-                    if (coords) {
-                        updateMapLocation(coords);
-                    }
+                    if(coords) updateMapLocation(coords);
                 }
                 
                 updateLastSaved();
-            } else {
-                notify(response.alerta || "Error al cargar los datos", 1500, "error", "top-end");
             }
         },
         error: function(xhr, status, error) {
-            notify("Error al cargar los datos de contacto", 1500, "error", "top-end");
-            console.error("Error:", error);
+            console.error("Error al cargar datos:", error);
         }
     });
 }
 
-function convertTo24Hour(time, ampm) {
-    if (!time) return '';
-    
-    let [hours, minutes] = time.split(':');
-    hours = parseInt(hours);
-    
-    if (ampm === 'PM' && hours < 12) {
-        hours += 12;
-    } else if (ampm === 'AM' && hours === 12) {
-        hours = 0;
-    }
-    
-    return `${hours.toString().padStart(2, '0')}:${minutes}`;
+// Función para cargar datos
+function cargarDatosContacto() {
+    $.ajax({
+        url: "ajax.php?mode=getcontacto",
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            console.log("Respuesta del servidor:", response); // Para depuración
+            
+            if(response && response.codigo === 1 && response.data) {
+                // Campos básicos
+                $('#domicilio').val(response.data.domicilio || '');
+                $('#maps_link').val(response.data.maps_link || '');
+                $('#contacto1').val(response.data.contacto1 || '');
+                $('#contacto2').val(response.data.contacto2 || '');
+                $('#email').val(response.data.email || '');
+                $('#atencion').val(response.data.atencion || '');
+                
+                // Redes sociales (con compatibilidad hacia atrás)
+                const socialData = response.data.social || {
+                    facebook: response.data['social[facebook]'] || '',
+                    instagram: response.data['social[instagram]'] || '',
+                    whatsapp: response.data['social[whatsapp]'] || ''
+                };
+                
+                $('input[name="social[facebook]"]').val(socialData.facebook || '');
+                $('input[name="social[instagram]"]').val(socialData.instagram || '');
+                $('input[name="social[whatsapp]"]').val(socialData.whatsapp || '');
+                
+                // Mapa
+                if(response.data.maps_link) {
+                    const coords = extractCoordsFromUrl(response.data.maps_link);
+                    if(coords) updateMapLocation(coords);
+                }
+                
+                updateLastSaved();
+            } else {
+                console.error("Respuesta inesperada del servidor:", response);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en la solicitud:", {
+                status: status,
+                error: error,
+                responseText: xhr.responseText
+            });
+            
+            // Mostrar error al usuario
+            notify("Error al cargar datos. Por favor recarga la página.", 3000, "error");
+        }
+    });
 }
 
+// Función para guardar datos
+$('#contactForm').submit(function(e) {
+    e.preventDefault();
+    
+    const submitBtn = $(this).find('button[type="submit"]');
+    submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+
+    // Preparar datos
+    const formData = {
+        domicilio: $('#domicilio').val().trim(),
+        contacto1: $('#contacto1').val().trim(),
+        contacto2: $('#contacto2').val().trim(),
+        email: $('#email').val().trim(),
+        atencion: $('#atencion').val().trim(),
+        maps_link: $('#maps_link').val().trim(),
+        social: {
+            facebook: $('input[name="social[facebook]"]').val().trim(),
+            instagram: $('input[name="social[instagram]"]').val().trim(),
+            whatsapp: $('input[name="social[whatsapp]"]').val().trim()
+        }
+    };
+
+    // Enviar datos
+    $.ajax({
+        url: "ajax.php?mode=guardarcontacto",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        dataType: "json",
+        success: function(response) {
+            console.log("Respuesta de guardado:", response); // Para depuración
+            
+            if(response && response.codigo === 1) {
+                notify("Datos guardados correctamente", 2000, "success");
+                updateLastSaved();
+            } else {
+                const errorMsg = response?.alerta || "Error desconocido al guardar";
+                notify(errorMsg, 3000, "error");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en la solicitud:", {
+                status: status,
+                error: error,
+                responseText: xhr.responseText
+            });
+            
+            let errorMsg = "Error de conexión con el servidor";
+            
+            // Intentar extraer mensaje de error si viene en JSON
+            try {
+                const serverResponse = JSON.parse(xhr.responseText);
+                if(serverResponse && serverResponse.alerta) {
+                    errorMsg = serverResponse.alerta;
+                }
+            } catch(e) {
+                console.error("No se pudo parsear la respuesta del servidor:", e);
+            }
+            
+            notify(errorMsg, 3000, "error");
+        },
+        complete: function() {
+            submitBtn.prop('disabled', false).html('<i class="fas fa-save"></i> Guardar Cambios');
+        }
+    });
+});
+
+
 function extractCoordsFromUrl(url) {
+    if (!url) return null;
     const match = url.match(/q=([-+]?\d*\.\d+|\d+),([-+]?\d*\.\d+|\d+)/);
     if (match && match.length >= 3) {
         return {
@@ -904,19 +569,25 @@ function extractCoordsFromUrl(url) {
     return null;
 }
 
-function isValidUrl(string) {
-    try {
-        new URL(string);
-        return true;
-    } catch (_) {
-        return false;
-    }
-}
-
 function updateLastSaved() {
     const now = new Date();
     const timeString = now.toLocaleTimeString();
     $('#lastSaved').html('Última actualización: ' + timeString);
+}
+
+function notify(message, duration, type, position) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: position || 'top-end',
+        showConfirmButton: false,
+        timer: duration || 3000,
+        timerProgressBar: true
+    });
+    
+    Toast.fire({
+        icon: type || 'success',
+        title: message
+    });
 }
 </script>
 
